@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+    namespace="red.semipro.domain.repository.seminar.SeminarRepository">
+
+    <resultMap id="seminarResultMap" type="red.semipro.domain.model.Seminar">
+        <result property="id" column="id" />
+        <result property="providerId" column="provider_id" />
+        <result property="providerSeminarId" column="provider_seminar_id" />
+        <result property="seminarType" column="seminar_type" />
+        <result property="title" column="title" />
+        <result property="summary" column="summary" />
+        <result property="contents" column="contents" />
+        <result property="imagePath" column="image_path" />
+        <result property="startedAt" column="started_at" />
+        <result property="endedAt" column="ended_at" />
+        <result property="openedAt" column="opened_at" />
+        <result property="entryStartedAt" column="entry_started_at" />
+        <result property="entryEndedAt" column="entry_ended_at" />
+        <result property="cancelAt" column="cancel_at" />
+        <result property="capacity" column="capacity" />
+        <result property="providerSeminarUrl" column="provider_seminar_url" />
+        <result property="referenceUrl" column="reference_url" />
+        <result property="cancelPolicy" column="cancel_policy" />
+        <result property="address" column="address" />
+        <result property="place" column="place" />
+        <result property="lat" column="lat" />
+        <result property="lng" column="lng" />
+        <result property="accepted" column="accepted" />
+        <result property="waiting" column="waiting" />
+        <result property="embedCode" column="embed_code" />
+        <result property="minimumNumberHosts" column="minimum_number_hosts" />
+        <result property="updatedAt" column="updated_at" />
+        <result property="prefecture.id" column="prefecture_id" />
+        <result property="prefecture.name" column="prefecture_name" />
+    </resultMap>
+
+    <select id="findAll" resultMap="seminarResultMap">
+        <include refid="baseSelectSection" />
+        <include refid="baseFromSection" />
+        where
+            s.ended_at >= current_timestamp
+        order by s.started_at
+    </select>
+    
+    <select id="findOneByProviderIdAndProviderSeminarId" resultMap="seminarResultMap">
+        <include refid="baseSelectSection" />
+        <include refid="baseFromSection" />
+        where
+            s.provider_id = #{providerId}
+            and s.provider_seminar_id = #{providerSeminarId}
+    </select>
+
+    <sql id="baseSelectSection">
+        select
+            s.id,
+            s.provider_id,
+            s.provider_seminar_id,
+            s.seminar_type,
+            s.title,
+            s.summary,
+            s.contents,
+            s.image_path,
+            s.started_at,
+            s.ended_at,
+            s.opened_at,
+            s.entry_started_at,
+            s.entry_ended_at,
+            s.cancel_at,
+            s.capacity,
+            s.provider_seminar_url,
+            s.reference_url,
+            s.cancel_policy,
+            s.address,
+            s.place,
+            s.lat,
+            s.lng,
+            s.accepted,
+            s.waiting,
+            s.embed_code,
+            s.minimum_number_hosts,
+            s.updated_at,
+            s.prefecture_id,
+            p.name prefecture_name
+    </sql>
+
+    <sql id="baseFromSection">
+        from seminar s
+        inner join prefecture p on s.prefecture_id = p.id
+    </sql>
+    
+    <select id="findOneWithDetails" resultMap="seminarResultMap">
+        <include refid="baseSelectSection" />
+        <include refid="baseFromSection" />
+        where
+            s.id = #{id}
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into seminar (
+            provider_id,
+            provider_seminar_id,
+            seminar_type,
+            title,
+            summary,
+            contents,
+            image_path,
+            started_at,
+            ended_at,
+            opened_at,
+            entry_started_at,
+            entry_ended_at,
+            cancel_at,
+            capacity,
+            provider_seminar_url,
+            reference_url,
+            cancel_policy,
+            prefecture_id,
+            address,
+            place,
+            lat,
+            lng,
+            accepted,
+            waiting,
+            embed_code,
+            minimum_number_hosts,
+            created_at,
+            updated_at
+            )
+        values (
+            #{providerId.value},
+            #{providerSeminarId},
+            #{seminarType},
+            #{title},
+            #{summary},
+            #{contents},
+            #{imagePath},
+            #{startedAt},
+            #{endedAt},
+            #{openedAt},
+            #{entryStartedAt},
+            #{entryEndedAt},
+            #{cancelAt},
+            #{capacity},
+            #{providerSeminarUrl},
+            #{referenceUrl},
+            #{cancelPolicy},
+            #{prefecture.id},
+            #{address},
+            #{place},
+            #{lat},
+            #{lng},
+            #{accepted},
+            #{waiting},
+            #{embedCode},
+            #{minimumNumberHosts},
+            current_timestamp,
+            <if test="updatedAt != null">
+                #{updatedAt}
+            </if>
+            <if test="updatedAt == null">
+                current_timestamp
+            </if>
+            )
+    </insert>
+    
+    <update id="update">
+        update seminar set
+            <if test="updatedAt != null">
+                updated_at = #{updatedAt}
+            </if>
+            <if test="updatedAt == null">
+                updated_at = current_timestamp
+            </if>
+    </update>
+
+    <!-- 
+    <update id="update">
+        UPDATE SEMINAR SET
+        update seminar set
+            PROVIDER_ID = #{},
+            PROVIDER_SEMINAR_ID = #{},
+            SEMINAR_TYPE = #{},
+            TITLE = #{},
+            SUMMARY = #{},
+            CONTENTS = #{},
+            IMAGE_PATH = #{},
+            STARTED_AT = #{},
+            ENDED_AT = #{},
+            OPENED_AT = #{},
+            ENTRY_STARTED_AT = #{},
+            ENTRY_ENDED_AT = #{},
+            CANCEL_AT = #{},
+            CAPACITY = #{},
+            PROVIDER_SEMINAR_URL = #{},
+            REFERENCE_URL = #{},
+            CANCEL_POLICY = #{},
+            PREFECTURE_ID = #{},
+            ADDRESS = #{},
+            PLACE = #{},
+            LAT = #{},
+            LNG = #{},
+            ACCEPTED = #{},
+            WAITING = #{},
+            EMBED_CODE = #{},
+            MINIMUM_NUMBER_HOSTS = #{},
+            <if test="updatedAt != null">
+                UPDATED_AT = #{updatedAt}
+            </if>
+            <if test="updatedAt == null">
+                UPDATED_AT = CURRENT_TIMESTAMP
+            </if>
+    </update>
+    -->
+</mapper>

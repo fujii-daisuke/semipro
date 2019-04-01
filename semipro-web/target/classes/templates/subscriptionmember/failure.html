@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+    <title>会員録完了</title>
+    <meta name="keywords" content="content1" />
+    <meta name="description" content="content1" />
+</head>
+
+<body class="grey lighten-3">
+
+    <!--Main layout-->
+    <main class="mt-5 pt-4" layout:fragment="content">
+        <div class="container">
+            <div class="my-5 h2 text-center">会員登録完了</div>
+            <div class="row justify-content-md-center">
+                <div class="col-md-8 mb-4">
+                  <div class="card">
+                    <div class="card-body">
+                      会員登録を完了できませんでした。<br />
+                      再度、お手続きをお願いします。<br />
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!--Main layout-->
+
+</body>
+
+</html>
