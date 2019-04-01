@@ -2,6 +2,8 @@ package red.semipro.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenInterceptor;
@@ -62,5 +64,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //        messageSource.setBasename("mail/Messages");
 //        return messageSource;
 //    }
-    
+    @Bean
+    public TaskScheduler taskScheduler() {
+        return new ConcurrentTaskScheduler(); //single threaded by default
+    }
 }
