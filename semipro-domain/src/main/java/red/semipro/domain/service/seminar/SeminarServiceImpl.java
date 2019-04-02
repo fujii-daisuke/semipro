@@ -1,8 +1,12 @@
 package red.semipro.domain.service.seminar;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +17,7 @@ import red.semipro.domain.model.eventon.Response;
 import red.semipro.domain.repository.seminar.SeminarOwnerRepository;
 import red.semipro.domain.repository.seminar.SeminarPaymentTypeRepository;
 import red.semipro.domain.repository.seminar.SeminarRepository;
+import red.semipro.domain.repository.seminar.SeminarSearchCriteria;
 import red.semipro.domain.repository.seminar.SeminarTicketRepository;
 
 @Transactional
@@ -28,6 +33,21 @@ public class SeminarServiceImpl implements SeminarService {
     private SeminarTicketRepository seminarTicketRepository;
     @Autowired
     private SeminarOwnerRepository seminarOwnerRepository;
+    
+    @Override
+    public Page<Seminar> searchSeminar(SeminarSearchCriteria criteria, Pageable pageable) {
+
+        long total = seminarRepository.countByCriteria(criteria);
+        List<Seminar> content;
+        if (0 < total) {
+            content = seminarRepository.findPageByCriteria(criteria, pageable);
+        } else {
+            content = Collections.emptyList();
+        }
+
+        Page<Seminar> page = new PageImpl<Seminar>(content, pageable, total);
+        return page;
+    }
     
     public List<Seminar> findAll() {
         return seminarRepository.findAll();
