@@ -38,65 +38,92 @@
         <result property="prefecture.name" column="prefecture_name" />
     </resultMap>
 
-    <select id="findAll" resultMap="seminarResultMap">
-        <include refid="baseSelectSection" />
-        <include refid="baseFromSection" />
+    <sql id="findPageByCriteriaWherePhrase">
+        <![CDATA[
         where
-            s.ended_at >= current_timestamp
-        order by s.started_at
+            seminar.ended_at >= current_timestamp
+        ]]>
+    </sql>
+
+    <select id="countByCriteria" resultType="_long">
+        SELECT
+            COUNT(*)
+        FROM
+            seminar
+        <include refid="findPageByCriteriaWherePhrase" />
+    </select>
+
+    <select id="findPageByCriteria" resultMap="seminarResultMap">
+        <include refid="baseSelectPhrase" />
+        <include refid="baseFromPhrase" />
+        <include refid="findPageByCriteriaWherePhrase" />
+        ORDER BY
+            #{pageable.sort}
+        LIMIT
+            #{pageable.pageSize}
+        OFFSET
+            #{pageable.offset}
+    </select>
+
+    <select id="findAll" resultMap="seminarResultMap">
+        <include refid="baseSelectPhrase" />
+        <include refid="baseFromPhrase" />
+        where
+            seminar.ended_at >= current_timestamp
+        order by seminar.started_at
     </select>
     
     <select id="findOneByProviderIdAndProviderSeminarId" resultMap="seminarResultMap">
-        <include refid="baseSelectSection" />
-        <include refid="baseFromSection" />
+        <include refid="baseSelectPhrase" />
+        <include refid="baseFromPhrase" />
         where
-            s.provider_id = #{providerId}
-            and s.provider_seminar_id = #{providerSeminarId}
+            seminar.provider_id = #{providerId}
+            and seminar.provider_seminar_id = #{providerSeminarId}
     </select>
 
-    <sql id="baseSelectSection">
+    <sql id="baseSelectPhrase">
         select
-            s.id,
-            s.provider_id,
-            s.provider_seminar_id,
-            s.seminar_type,
-            s.title,
-            s.summary,
-            s.contents,
-            s.image_path,
-            s.started_at,
-            s.ended_at,
-            s.opened_at,
-            s.entry_started_at,
-            s.entry_ended_at,
-            s.cancel_at,
-            s.capacity,
-            s.provider_seminar_url,
-            s.reference_url,
-            s.cancel_policy,
-            s.address,
-            s.place,
-            s.lat,
-            s.lng,
-            s.accepted,
-            s.waiting,
-            s.embed_code,
-            s.minimum_number_hosts,
-            s.updated_at,
-            s.prefecture_id,
-            p.name prefecture_name
+            seminar.id,
+            seminar.provider_id,
+            seminar.provider_seminar_id,
+            seminar.seminar_type,
+            seminar.title,
+            seminar.summary,
+            seminar.contents,
+            seminar.image_path,
+            seminar.started_at,
+            seminar.ended_at,
+            seminar.opened_at,
+            seminar.entry_started_at,
+            seminar.entry_ended_at,
+            seminar.cancel_at,
+            seminar.capacity,
+            seminar.provider_seminar_url,
+            seminar.reference_url,
+            seminar.cancel_policy,
+            seminar.address,
+            seminar.place,
+            seminar.lat,
+            seminar.lng,
+            seminar.accepted,
+            seminar.waiting,
+            seminar.embed_code,
+            seminar.minimum_number_hosts,
+            seminar.updated_at,
+            seminar.prefecture_id,
+            prefecture.name prefecture_name
     </sql>
 
-    <sql id="baseFromSection">
-        from seminar s
-        inner join prefecture p on s.prefecture_id = p.id
+    <sql id="baseFromPhrase">
+        from seminar
+        inner join prefecture on seminar.prefecture_id = prefecture.id
     </sql>
     
     <select id="findOneWithDetails" resultMap="seminarResultMap">
-        <include refid="baseSelectSection" />
-        <include refid="baseFromSection" />
+        <include refid="baseSelectPhrase" />
+        <include refid="baseFromPhrase" />
         where
-            s.id = #{id}
+            seminar.id = #{id}
     </select>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
