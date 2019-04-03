@@ -28,11 +28,6 @@ public class SearchSeminarController {
     @Autowired
     private ModelMapper modelMapper;
     
-//    @ModelAttribute("seminarList")
-//    public List<Seminar> getSeminarList() {
-//        return seminarService.findAll();
-//    }
-    
     @GetMapping
     public ModelAndView search(SearchSeminarForm form,
             BindingResult result,

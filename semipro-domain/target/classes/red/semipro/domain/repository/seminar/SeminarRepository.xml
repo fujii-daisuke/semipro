@@ -65,14 +65,6 @@
             #{pageable.offset}
     </select>
 
-    <select id="findAll" resultMap="seminarResultMap">
-        <include refid="baseSelectPhrase" />
-        <include refid="baseFromPhrase" />
-        where
-            seminar.ended_at >= current_timestamp
-        order by seminar.started_at
-    </select>
-    
     <select id="findOneByProviderIdAndProviderSeminarId" resultMap="seminarResultMap">
         <include refid="baseSelectPhrase" />
         <include refid="baseFromPhrase" />
