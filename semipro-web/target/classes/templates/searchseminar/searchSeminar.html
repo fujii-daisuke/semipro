@@ -16,10 +16,20 @@
       <div th:if="${page != null and !#lists.isEmpty(page.content)}" th:remove="tag">
         <ul class="list-unstyled">
           <li class="media py-5 border-bottom" th:each="seminar, parentStat:${page.content}">
-            <img class="d-flex mr-3" th:src="${seminar.imagePath}" width="350" height="200" th:alt="${seminar.title}">
+            <a th:href="@{/seminars/{seminarId}/detail(seminarId=${seminar.id})}">
+                <img class="d-flex mr-3" th:src="${seminar.imagePath}" width="350" height="200" th:alt="${seminar.title}">
+            </a>
             <div class="media-body">
-              <h5 class="mt-0 mb-1 font-weight-bold" th:text="${seminar.title}">title</h5>
+              <h5 class="mt-0 mb-1 font-weight-bold">
+                <a th:href="@{/seminars/{seminarId}/detail(seminarId=${seminar.id})}" th:text="${seminar.title}">title</a>
+              </h5>
               <p th:text="${seminar.summary}">summary</p>
+              <h5 class="font-weight-bold">残席状況：<span th:text="${seminar.remainingStatus()}">remain</span></h5>
+              <div>開催日時：<span th:text="${#temporals.format(seminar.startedAt, 'yyyy/MM/dd HH:mm')}">startedAt</span></div>
+              <div>申し込み期限：<span th:text="${#temporals.format(seminar.entryEndedAt, 'yyyy/MM/dd HH:mm')}">entryEndedAt</span></div>
+              <a th:href="@{/seminars/{seminarId}/detail(seminarId=${seminar.id})}" class="btn btn-primary btn-md">詳細
+                  <i class="fas fa-play ml-2"></i>
+              </a>
             </div>
           </li>
         </ul>
