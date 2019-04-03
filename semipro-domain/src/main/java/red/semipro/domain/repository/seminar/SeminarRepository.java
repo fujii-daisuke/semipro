@@ -18,8 +18,6 @@ public interface SeminarRepository {
             @Param("criteria") SeminarSearchCriteria criteria,
             @Param("pageable") Pageable pageable);
     
-    List<Seminar> findAll();
-
     Seminar findOneByProviderIdAndProviderSeminarId(@Param("providerId") Integer providerId,
             @Param("providerSeminarId") Integer providerSeminarId);
     
