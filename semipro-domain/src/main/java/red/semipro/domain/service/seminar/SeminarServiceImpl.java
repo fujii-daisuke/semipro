@@ -49,10 +49,6 @@ public class SeminarServiceImpl implements SeminarService {
         return page;
     }
     
-    public List<Seminar> findAll() {
-        return seminarRepository.findAll();
-    }
-    
     public Seminar findOneWithDetails(Long id) {
         Seminar seminar = seminarRepository.findOneWithDetails(id);
         if (seminar != null) {
