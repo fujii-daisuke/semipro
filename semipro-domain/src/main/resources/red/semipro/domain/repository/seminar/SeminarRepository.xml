@@ -188,8 +188,6 @@
     
     <update id="update">
         update seminar set
-            provider_id = #{providerId},
-            provider_seminar_id = #{providerSeminarId},
             seminar_type = #{seminarType},
             title = #{title},
             summary = #{summary},
