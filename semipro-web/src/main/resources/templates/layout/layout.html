@@ -3,18 +3,27 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE">セミプロ</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-    <!-- Bootstrap core CSS -->
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-    <!-- Material Design Bootstrap -->
-    <link th:href="@{/css/mdb.min.css}" rel="stylesheet">
-    <!-- Your custom styles (optional) -->
-    <link th:href="@{/css/style.css}" rel="stylesheet">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-73761172-4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'UA-73761172-4');
+  </script>
+  <title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE">セミプロ</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link th:href="@{/css/mdb.min.css}" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
+  <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body>
     <div layout:replace="~{layout/header::header}"></div>
