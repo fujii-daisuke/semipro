@@ -188,50 +188,39 @@
     
     <update id="update">
         update seminar set
+            provider_id = #{providerId},
+            provider_seminar_id = #{providerSeminarId},
+            seminar_type = #{seminarType},
+            title = #{title},
+            summary = #{summary},
+            contents = #{contents},
+            image_path = #{imagePath},
+            started_at = #{startedAt},
+            ended_at = #{endedAt},
+            opened_at = #{openedAt},
+            entry_started_at = #{entryStartedAt},
+            entry_ended_at = #{entryEndedAt},
+            cancel_at = #{cancelAt},
+            capacity = #{capacity},
+            provider_seminar_url = #{providerSeminarUrl},
+            reference_url = #{referenceUrl},
+            cancel_policy = #{cancelPolicy},
+            prefecture_id = #{prefecture.id},
+            address = #{address},
+            place = #{place},
+            lat = #{lat},
+            lng = #{lng},
+            accepted = #{accepted},
+            waiting = #{waiting},
+            embed_code = #{embedCode},
+            minimum_number_hosts = #{minimumNumberHosts},
             <if test="updatedAt != null">
                 updated_at = #{updatedAt}
             </if>
             <if test="updatedAt == null">
                 updated_at = current_timestamp
             </if>
+        where
+            id = #{id}
     </update>
-
-    <!-- 
-    <update id="update">
-        UPDATE SEMINAR SET
-        update seminar set
-            PROVIDER_ID = #{},
-            PROVIDER_SEMINAR_ID = #{},
-            SEMINAR_TYPE = #{},
-            TITLE = #{},
-            SUMMARY = #{},
-            CONTENTS = #{},
-            IMAGE_PATH = #{},
-            STARTED_AT = #{},
-            ENDED_AT = #{},
-            OPENED_AT = #{},
-            ENTRY_STARTED_AT = #{},
-            ENTRY_ENDED_AT = #{},
-            CANCEL_AT = #{},
-            CAPACITY = #{},
-            PROVIDER_SEMINAR_URL = #{},
-            REFERENCE_URL = #{},
-            CANCEL_POLICY = #{},
-            PREFECTURE_ID = #{},
-            ADDRESS = #{},
-            PLACE = #{},
-            LAT = #{},
-            LNG = #{},
-            ACCEPTED = #{},
-            WAITING = #{},
-            EMBED_CODE = #{},
-            MINIMUM_NUMBER_HOSTS = #{},
-            <if test="updatedAt != null">
-                UPDATED_AT = #{updatedAt}
-            </if>
-            <if test="updatedAt == null">
-                UPDATED_AT = CURRENT_TIMESTAMP
-            </if>
-    </update>
-    -->
 </mapper>
