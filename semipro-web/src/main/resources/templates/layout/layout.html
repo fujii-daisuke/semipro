@@ -14,7 +14,7 @@
     <!-- Material Design Bootstrap -->
     <link th:href="@{/css/mdb.min.css}" rel="stylesheet">
     <!-- Your custom styles (optional) -->
-    <link th:href="@{/css/style.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body>
     <div layout:replace="~{layout/header::header}"></div>
@@ -30,5 +30,8 @@
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
     <!-- MDB core JavaScript -->
     <script type="text/javascript" th:src="@{/js/mdb.min.js}"></script>
+    <script>
+      new WOW().init();
+    </script>
 </body>
 </html>
