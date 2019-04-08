@@ -13,7 +13,7 @@
  * Included libraries:
  *   DataTables 1.10.18
  */
- table.dataTable thead {
+table.dataTable thead {
   cursor: pointer; }
   table.dataTable thead > tr > th:active, table.dataTable thead > tr > td:active {
     outline: none; }

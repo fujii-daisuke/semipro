@@ -17,7 +17,7 @@
         <ul class="list-unstyled">
           <li class="media py-5 border-bottom" th:each="seminar, parentStat:${page.content}">
             <a th:href="@{/seminars/{seminarId}/detail(seminarId=${seminar.id})}">
-                <img class="d-flex mr-3" th:src="${seminar.imagePath}" width="350" height="200" th:alt="${seminar.title}">
+                <img class="d-flex mr-3" th:src="${seminar.imagePath}" width="300" th:alt="${seminar.title}" style="max-width: 300px; max-height: 300px;">
             </a>
             <div class="media-body">
               <h5 class="mt-0 mb-1 font-weight-bold">
