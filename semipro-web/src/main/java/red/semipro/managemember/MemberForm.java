@@ -1,4 +1,4 @@
-package red.semipro.registrationmember;
+package red.semipro.managemember;
 
 import java.io.Serializable;
 
@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RegistrationMemberForm implements Serializable {
+public class MemberForm implements Serializable {
 
     private static final long serialVersionUID = 1L;
     

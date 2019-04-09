@@ -1,4 +1,4 @@
-package red.semipro.registrationmember;
+package red.semipro.managemember;
 
 import java.util.Locale;
 
@@ -27,9 +27,9 @@ import red.semipro.domain.model.Member;
 import red.semipro.domain.service.member.MemberService;
 
 @Controller
-@RequestMapping(value = "members/registration")
+@RequestMapping(value = "members")
 @TransactionTokenCheck(value = "members")
-public class RegistrationMemberController {
+public class ManageMemberController {
     
     @Autowired
     MemberService memberService;
@@ -41,60 +41,60 @@ public class RegistrationMemberController {
     MessageSource messageSource;
     
     @Autowired
-    RegistrationMemberFormValidator registrationMemberFormValidator;
+    MemberFormValidator memberFormValidator;
     
-    @InitBinder("registrationMemberForm")
+    @InitBinder("memberForm")
     public void initBinder(WebDataBinder webDataBinder) {
-        webDataBinder.addValidators(registrationMemberFormValidator);
+        webDataBinder.addValidators(memberFormValidator);
     }
     
-    @ModelAttribute("registrationMemberForm")
-    public RegistrationMemberForm setupRegistrationMemberForm() {
-        return new RegistrationMemberForm();
+    @ModelAttribute("memberForm")
+    public MemberForm setupMemberForm() {
+        return new MemberForm();
     }
     
     @GetMapping
     public ModelAndView clearSessionAtStart(SessionStatus sesseionStatus, ModelAndView model) {
         sesseionStatus.setComplete();
-        model.setViewName("forward:/members/registration/input");
+        model.setViewName("forward:/members/create");
         return model;
     }
     
-    @GetMapping(value = "input")
+    @GetMapping(value = "create")
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.BEGIN)
     public ModelAndView input(ModelAndView model) {
-        model.setViewName("registrationmember/input");
+        model.setViewName("managemember/createForm");
         return model;
     }
     
-    @PostMapping(value = "register")
+    @PostMapping(value = "create")
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.IN)
-    public ModelAndView register(@Validated RegistrationMemberForm registrationMemberForm, 
+    public ModelAndView register(@Validated MemberForm memberForm, 
             BindingResult result,
             ModelAndView model) throws Exception {
         
         if (result.hasErrors()) {
-            model.setViewName("registrationmember/input");
+            model.setViewName("managemember/createForm");
             return model;
         }
         
         Member member = Member.builder()
-            .email(registrationMemberForm.getEmail())
-            .username(registrationMemberForm.getUsername())
-            .password(registrationMemberForm.getPassword())
+            .email(memberForm.getEmail())
+            .username(memberForm.getUsername())
+            .password(memberForm.getPassword())
             .registerStatus(RegisterStatus.PRE)
             .build();
         
         memberService.register(member);
         sendMail(member);
         
-        model.setViewName("redirect:/members/completed");
+        model.setViewName("redirect:/members/create?complete");
         return model;
     }
     
-    @GetMapping(value = "completed")
-    public ModelAndView completed(ModelAndView model) {
-        model.setViewName("registrationmember/completed");
+    @GetMapping(value = "create", params = "complete")
+    public ModelAndView createComplete(ModelAndView model) {
+        model.setViewName("managemember/createComplete");
         return model;
     }
     
