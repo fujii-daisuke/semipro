@@ -36,7 +36,6 @@
         from member
         where
             username = #{username}
-            and register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR.value}
     </select>
 
     <select id="findByEmail" resultMap="member">
@@ -59,7 +58,7 @@
         where
             id != #{id}
             and (email = #{email} or username = #{username})
-            and register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR}
+            and register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR.value}
     </select>
     
     <select id="isExistsEmail" resultType="boolean">
@@ -77,7 +76,7 @@
         from member
         where
             username = #{username}
-            and register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR}
+            and register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR.value}
     </select>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
