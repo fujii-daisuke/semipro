@@ -2,7 +2,7 @@ package red.semipro.domain.enums;
 
 public enum RegisterStatus {
 
-    PRE(1), REGULAR(2);
+    PRE(0), REGULAR(1);
 
     private int value;
 

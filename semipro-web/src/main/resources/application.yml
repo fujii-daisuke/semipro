@@ -64,6 +64,11 @@ mybatis:
 #  mapperLocations: classpath:sqlMapper/*.xml
   type-handlers-package: red.semipro.domain.typehandler
 
-# 秒/分/時/日/月/曜日
-cron:
-  eventon: 0 0 3 * * *
+# application settings
+custom:
+  application:
+  # 秒/分/時/日/月/曜日
+    cron:
+      eventon: 0 0 3 * * *
+    email:
+      fromEmail: d.ziifuu@gmail.com
