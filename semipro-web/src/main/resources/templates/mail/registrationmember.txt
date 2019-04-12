@@ -1,9 +1,0 @@
-[# th:text="${member.username}" /]様
-
-この度は、セミプロ会員へご登録ありがとうございます。
-以下、URLにアクセスし会員登録を完了させて下さい。
-http://localhost:8080/members/[# th:text="${registerKey}" /]/subscription
-
-----------------------------------------------
-セミプロ
-http://semipro.red
