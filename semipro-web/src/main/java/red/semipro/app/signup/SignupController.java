@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -33,13 +34,15 @@ import red.semipro.domain.service.member.MemberService;
 public class SignupController {
     
     @Autowired
-    MemberService memberService;
+    private MemberService memberService;
     @Autowired
-    EmailService emailService;
+    private EmailService emailService;
     @Autowired
-    SignupFormValidator signupFormValidator;
+    private SignupFormValidator signupFormValidator;
     @Value("${custom.application.email.fromEmail}")
-    String fromEmail;
+    private String fromEmail;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     
     @InitBinder("signupForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -80,7 +83,7 @@ public class SignupController {
         Member member = Member.builder()
             .email(signupForm.getEmail())
             .username(signupForm.getUsername())
-            .password(signupForm.getPassword())
+            .password(passwordEncoder.encode(signupForm.getPassword()))
             .registerStatus(RegisterStatus.PRE)
             .build();
         
