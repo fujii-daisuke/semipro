@@ -7,18 +7,16 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class SignupForm implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     @NotBlank
     @Size(min=4, max=12)
-    @Pattern(regexp = "[0-9a-zA-Z]+")
+    @Pattern(regexp = "[0-9a-zA-Z-]+")
     private String username;
 
     @NotBlank

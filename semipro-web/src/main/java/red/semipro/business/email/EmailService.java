@@ -28,25 +28,25 @@ public class EmailService {
     private MailSender mailSender;
 
     public void sendMail(
-            final EmailDocument emailDocument,
-            final Map<String, Object> variableMap,
-            final String recipientEmail,
-            final String fromEmail,
-            final Locale locale)
-            throws MessagingException {
+        final EmailDocument emailDocument,
+        final Map<String, Object> variableMap,
+        final String recipientEmail,
+        final String fromEmail,
+        final Locale locale)
+        throws MessagingException {
 
-            final Context ctx = new Context(locale);
-            variableMap.forEach((key,value) -> {
-                ctx.setVariable(key, value);
-            });
+        final Context ctx = new Context(locale);
+        variableMap.forEach((key,value) -> {
+            ctx.setVariable(key, value);
+        });
 
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(fromEmail);
-            message.setTo(recipientEmail);
-            message.setSubject(emailMessageProperty.get(emailDocument.getKey() + ".subject"));
-            message.setText(emailTemplateEngine().process("text/" + emailDocument.getKey(), ctx));
-            
-            this.mailSender.send(message);
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);
+        message.setTo(recipientEmail);
+        message.setSubject(emailMessageProperty.get(emailDocument.getKey() + ".subject"));
+        message.setText(emailTemplateEngine().process("text/" + emailDocument.getKey(), ctx));
+        
+        this.mailSender.send(message);
     }
     
     private ResourceBundleMessageSource emailMessageSource() {
