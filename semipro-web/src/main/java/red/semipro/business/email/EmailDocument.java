@@ -1,8 +1,8 @@
 package red.semipro.business.email;
 
 public enum EmailDocument {
-    MEMBER_REGISTER("memberRegister"),
-    MEMBER_ACTIVATION("memberActivation");
+    SIGNUPED("signuped"),
+    ACTIVATED("activated");
     
     private String key;
 

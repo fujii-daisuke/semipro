@@ -50,8 +50,8 @@ public class MemberServiceImpl implements MemberService,UserDetailsService {
     
     @Transactional
     @Override
-    public void subscription(Member member) {
-        memberRepository.subscription(member);
+    public void activation(Member member) {
+        memberRepository.activation(member);
     }
 
     @Override

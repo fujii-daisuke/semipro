@@ -105,7 +105,7 @@ public class SignupController {
         variableMap.put("member", member);
         variableMap.put("activationKey", (new Crypto()).encrypto(member.getId().toString()));
         emailService.sendMail(
-                EmailDocument.MEMBER_REGISTER,
+                EmailDocument.SIGNUPED,
                 variableMap, 
                 member.getEmail(), 
                 fromEmail, 

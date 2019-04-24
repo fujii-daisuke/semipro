@@ -94,9 +94,9 @@
         )
     </insert>
     
-    <insert id="subscription">
+    <insert id="activation">
         update member set
-            register_status = 2,
+            register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR.value},
             updated_at = current_timestamp
         where
             id = #{id}
