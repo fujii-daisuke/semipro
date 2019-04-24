@@ -10,6 +10,6 @@ public interface MemberService {
     boolean isExistsUsername(String username);
     void register(Member member);
     boolean isExists(Member member);
-    void subscription(Member member);
+    void activation(Member member);
 
 }

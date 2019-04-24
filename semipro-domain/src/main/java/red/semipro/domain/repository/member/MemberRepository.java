@@ -14,5 +14,5 @@ public interface MemberRepository {
     boolean isExistsUsername(String username);
     int insert(Member member);
     boolean isExists(Member member);
-    int subscription(Member member);
+    int activation(Member member);
 }
