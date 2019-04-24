@@ -1,4 +1,4 @@
-package red.semipro.app.subscriptionmember;
+package red.semipro.app.activation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,41 +12,41 @@ import red.semipro.domain.enums.RegisterStatus;
 import red.semipro.domain.model.Member;
 import red.semipro.domain.service.member.MemberService;
 
-@RequestMapping(value = "members")
+@RequestMapping(value = "activation")
 @Controller
-public class SubscriptionMemberController {
+public class ActivationController {
 
     @Autowired
     MemberService memberService;
     
-    @GetMapping(value="{registerKey}/subscription")
-    public ModelAndView register(@PathVariable("registerKey") String registerKey,
+    @GetMapping(value="{activationKey}/register")
+    public ModelAndView register(@PathVariable("activationKey") String activationKey,
             ModelAndView model) throws Exception {
         
         Crypto crypto = new Crypto();
-        String memberId = crypto.decrypto(registerKey);
+        String memberId = crypto.decrypto(activationKey);
         Member member = memberService.findOne(Long.valueOf(memberId));
         if (member == null 
                 || RegisterStatus.REGULAR.equals(member.getRegisterStatus())
                 || memberService.isExists(member)) {
             
-            model.setViewName("redirect:/members/subscription/failure");
+            model.setViewName("redirect:/activation/failure");
             return model;
         }
-        memberService.subscription(member);
-        model.setViewName("redirect:/members/subscription/completed");
+        memberService.activation(member);
+        model.setViewName("redirect:/activation/completed");
         return model;
     }
     
-    @GetMapping(value = "subscription/failure")
+    @GetMapping(value = "failure")
     public ModelAndView failure(ModelAndView model) {
-        model.setViewName("subscriptionmember/failure");
+        model.setViewName("activation/failure");
         return model;
     }
     
-    @GetMapping(value = "subscription/completed")
+    @GetMapping(value = "completed")
     public ModelAndView completed(ModelAndView model) {
-        model.setViewName("subscriptionmember/completed");
+        model.setViewName("activation/completed");
         return model;
     }
 
