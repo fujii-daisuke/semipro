@@ -51,7 +51,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .passwordParameter("password")
             .defaultSuccessUrl("/")
             .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
-            .failureUrl("/login/failure")
+            .failureForwardUrl("/login/failure?error")
             .permitAll()
             .and()
             .logout()
