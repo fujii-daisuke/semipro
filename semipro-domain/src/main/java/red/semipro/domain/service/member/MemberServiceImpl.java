@@ -1,21 +1,17 @@
 package red.semipro.domain.service.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import red.semipro.domain.model.Member;
 import red.semipro.domain.repository.member.MemberRepository;
 
 @Service
-public class MemberServiceImpl implements MemberService,UserDetailsService {
+public class MemberServiceImpl implements MemberService {
     
     @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
     
     @Override
     public boolean isExistsEmail(String email) {
@@ -30,7 +26,6 @@ public class MemberServiceImpl implements MemberService,UserDetailsService {
     @Transactional
     @Override
     public void register(Member member) {
-        //DB登録
         memberRepository.insert(member);
     }
 
@@ -43,27 +38,14 @@ public class MemberServiceImpl implements MemberService,UserDetailsService {
     public Member findOne(Long id) {
         return memberRepository.findOne(id);
     }
-
-    public Member findByUsername(String username) {
-        return null;
-    }
     
     @Transactional
     @Override
     public void activation(Member member) {
         memberRepository.activation(member);
     }
-
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        if (StringUtils.isEmpty(email)) {
-            throw new UsernameNotFoundException("email is null or empry.");
-          }
-          Member member = memberRepository.findByEmail(email);
-          if (member == null) {
-            throw new UsernameNotFoundException("email not found.");
-          }
-          return member;
-    }
     
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email);
+    }
 }

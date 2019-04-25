@@ -4,12 +4,12 @@ import red.semipro.domain.model.Member;
 
 public interface MemberService {
 
-    Member findOne(Long id);
-    Member findByUsername(String username);
-    boolean isExistsEmail(String email);
-    boolean isExistsUsername(String username);
-    void register(Member member);
-    boolean isExists(Member member);
-    void activation(Member member);
+    public Member findOne(Long id);
+    public Member findByEmail(String email);
+    public boolean isExistsEmail(String email);
+    public boolean isExistsUsername(String username);
+    public void register(Member member);
+    public boolean isExists(Member member);
+    public void activation(Member member);
 
 }
