@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import red.semipro.domain.enums.RegisterStatus;
 import red.semipro.domain.model.Member;
 
 public class AccountUserDetails implements UserDetails {
@@ -58,7 +59,7 @@ public class AccountUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return member != null && RegisterStatus.REGULAR.equals(member.getRegisterStatus());
     }
 
 }
