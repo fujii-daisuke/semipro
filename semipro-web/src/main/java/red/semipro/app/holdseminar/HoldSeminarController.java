@@ -1,4 +1,4 @@
-package red.semipro.app.registrationseminar;
+package red.semipro.app.holdseminar;
 
 import java.time.LocalDateTime;
 
@@ -23,60 +23,58 @@ import red.semipro.domain.model.Seminar;
 import red.semipro.domain.service.seminar.SeminarService;
 
 @Controller
-@RequestMapping("seminars/registration")
-@TransactionTokenCheck(value = "seminars")
-public class RegistrationSeminarController {
+@RequestMapping("holds")
+@TransactionTokenCheck(value = "holds")
+public class HoldSeminarController {
     
     @Autowired
-    SeminarService seminarService;
+    private SeminarService seminarService;
     @Autowired
-    RegistrationSeminarFormValidator registrationSeminarFormValidator;
+    private HoldSeminarFormValidator holdSeminarFormValidator;
 
-    @InitBinder("registrationSeminarForm")
+    @InitBinder("holdSeminarForm")
     public void initBinder(WebDataBinder webDataBinder) {
-        webDataBinder.addValidators(registrationSeminarFormValidator);
+        webDataBinder.addValidators(holdSeminarFormValidator);
     }
     
-    @ModelAttribute("registrationSeminarForm")
-    public RegistrationSeminarForm setupRegistrationSeminarForm() {
-        return new RegistrationSeminarForm();
+    @ModelAttribute("holdSeminarForm")
+    public HoldSeminarForm setupHoldSeminarForm() {
+        return new HoldSeminarForm();
     }
     
     @GetMapping
     public ModelAndView clearSessionAtStart(SessionStatus sesseionStatus, ModelAndView model) {
         sesseionStatus.setComplete();
-        model.setViewName("forward:/seminars/registration/input");
+        model.setViewName("forward:/holds/input");
         return model;
     }
     
     @GetMapping(value = "input")
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.BEGIN)
     public ModelAndView input(ModelAndView model) {
-        model.setViewName("registrationseminar/input");
+        model.setViewName("holdseminar/input");
         return model;
     }
     
     @PostMapping(value = "register")
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.IN)
-    public ModelAndView register(@Validated RegistrationSeminarForm form, 
+    public ModelAndView register(@Validated HoldSeminarForm form, 
             BindingResult result,
             ModelAndView model) throws Exception {
         
         if (result.hasErrors()) {
-            model.setViewName("registrationseminar/input");
+            model.setViewName("holdseminar/input");
             return model;
         }
         
         Seminar seminar = Seminar.builder()
             .openingStatus(OpeningStatus.DRAFT)
-            .seminarType(SeminarType.valueOf(form.getSeminarType()))
             .title(form.getTitle())
-            .startedAt(LocalDateTime.of(form.getStartedAtYear(), form.getStartedAtMonth(), form.getStartedAtDay(), form.getStartedAtHour(), form.getStartedAtMinute()))
-            .endedAt(LocalDateTime.of(form.getEndedAtYear(), form.getEndedAtMonth(), form.getEndedAtDay(), form.getEndedAtHour(), form.getEndedAtMinute()))
+            .seminarType(SeminarType.valueOf(form.getSeminarType()))
             .build();
         
         seminar = seminarService.register(seminar);
-        model.setViewName("redirect:/seminar/" + seminar.getId() + "/update");
+        model.setViewName("redirect:/holds/" + seminar.getId() + "/detail");
         return model;
     }
     

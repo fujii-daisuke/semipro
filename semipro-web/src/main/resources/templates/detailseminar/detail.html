@@ -43,7 +43,7 @@
               <div class="card-body card-body-cascade text-center">
                 <h2><a><strong th:text="${seminar.title}">title</strong></a></h2>
                 <p class="card-text" th:text="${seminar.summary}">summary</p>
-                <p>[[${#temporals.format(seminar.startedAt, 'yyyy年MM月dd日 HH時mm分')}]] 開催</p>
+                <p>[[${#temporals.format(seminar.startingAt, 'yyyy年MM月dd日 HH時mm分')}]] 開催</p>
 
                 <!--Social shares-->
                 <!-- 
@@ -110,7 +110,7 @@
           <hr>
           <div class="text-center">
             <span class="mr-4">受付期間</span>
-            <span class="h5 font-weight-bold">[[${#temporals.format(seminar.entryStartedAt, 'yyyy年MM月dd日 HH時mm分')}]] 〜 [[${#temporals.format(seminar.entryEndedAt, 'yyyy年MM月dd日 HH時mm分')}]]</span>
+            <span class="h5 font-weight-bold">[[${#temporals.format(seminar.entryStartingAt, 'yyyy年MM月dd日 HH時mm分')}]] 〜 [[${#temporals.format(seminar.entryEndingAt, 'yyyy年MM月dd日 HH時mm分')}]]</span>
           </div>
         </div>
 
@@ -125,7 +125,7 @@
           <hr>
           <div class="row mb-3">
             <div class="offset-md-1 col-md-1">開催日時</div>
-            <div class="col">[[${#temporals.format(seminar.startedAt, 'yyyy年MM月dd日 HH時mm分')}]] 〜 [[${#temporals.format(seminar.endedAt, 'yyyy年MM月dd日 HH時mm分')}]]</div>
+            <div class="col">[[${#temporals.format(seminar.startingAt, 'yyyy年MM月dd日 HH時mm分')}]] 〜 [[${#temporals.format(seminar.endingAt, 'yyyy年MM月dd日 HH時mm分')}]]</div>
           </div>
           <div class="row mb-3">
             <div class="offset-md-1 col-md-1">開催地</div>
@@ -184,6 +184,6 @@
     </div>
   </main>
   <!--Main layout-->
+  <th:block th:fragment="script"></th:block>
 </body>
-
 </html>

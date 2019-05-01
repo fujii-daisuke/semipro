@@ -25,7 +25,7 @@
   <!-- Your custom styles (optional) -->
   <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
     <div layout:replace="~{layout/header::header}"></div>
     <div layout:fragment="content"></div>
     <div layout:replace="~{layout/footer::footer}"></div>
@@ -42,5 +42,6 @@
     <script>
       new WOW().init();
     </script>
+    <th:block th:insert="${#execInfo.processedTemplateName} :: script"></th:block>
 </body>
 </html>

@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public enum SeminarType {
 
-    OFFLINE(1), ONLINE(2);
+    OFFLINE(1), ONLINE(2), BOTH(3);
 
     private int value;
 
