@@ -50,15 +50,15 @@ public class Seminar implements Serializable {
     /** 画像リンク */
     private String imagePath;
     /** 開催開始日時 */
-    private LocalDateTime startedAt;
+    private LocalDateTime startingAt;
     /** 開催終了時間 */
-    private LocalDateTime endedAt;
+    private LocalDateTime endingAt;
     /** 入場可能日時 */
-    private LocalDateTime openedAt;
+    private LocalDateTime openingAt;
     /** 申し込み開始日時 */
-    private LocalDateTime entryStartedAt;
+    private LocalDateTime entryStartingAt;
     /** 申し込み終了日時 */
-    private LocalDateTime entryEndedAt;
+    private LocalDateTime entryEndingAt;
     /** キャンセル可能日時 */
     private LocalDateTime cancelAt;
     /** 定員 */
@@ -109,19 +109,19 @@ public class Seminar implements Serializable {
         this.contents = event.getContents();
         this.imagePath = event.getImage_path();
         if (!StringUtils.isEmpty(event.getStarted_at())) {
-            this.startedAt = LocalDateTime.parse(event.getStarted_at(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+            this.startingAt = LocalDateTime.parse(event.getStarted_at(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         }
         if (!StringUtils.isEmpty(event.getEnded_at())) {
-            this.endedAt = LocalDateTime.parse(event.getEnded_at(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+            this.endingAt = LocalDateTime.parse(event.getEnded_at(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         }
         if (!StringUtils.isEmpty(event.getOpened_at())) {
-            this.openedAt = LocalDateTime.parse(event.getOpened_at(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+            this.openingAt = LocalDateTime.parse(event.getOpened_at(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         }
         if (!StringUtils.isEmpty(event.getEntry_started_at())) {
-            this.entryStartedAt = LocalDateTime.parse(event.getEntry_started_at(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+            this.entryStartingAt = LocalDateTime.parse(event.getEntry_started_at(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         }
         if (!StringUtils.isEmpty(event.getEntry_ended_at())) {
-            this.entryEndedAt = LocalDateTime.parse(event.getEntry_ended_at(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+            this.entryEndingAt = LocalDateTime.parse(event.getEntry_ended_at(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         }
         if (!StringUtils.isEmpty(event.getCancel_at())) {
             this.cancelAt = LocalDateTime.parse(event.getCancel_at(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
@@ -181,10 +181,10 @@ public class Seminar implements Serializable {
      * @return 受付中: true / false
      */
     public boolean isAccepting() {
-        if (this.entryStartedAt != null) {
-            return LocalDateTime.now().isAfter(this.entryStartedAt) && this.entryEndedAt.isAfter(LocalDateTime.now());
+        if (this.entryStartingAt != null) {
+            return LocalDateTime.now().isAfter(this.entryStartingAt) && this.entryEndingAt.isAfter(LocalDateTime.now());
         }
-        return this.entryEndedAt.isBefore(LocalDateTime.now());
+        return this.entryEndingAt.isBefore(LocalDateTime.now());
     }
     
     public String remainingStatus() {

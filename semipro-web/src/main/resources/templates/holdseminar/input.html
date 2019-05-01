@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+  <title>セミナー開催情報登録</title>
+</head>
+<body>
+  <!--Main Navigation-->
+  <main layout:fragment="content">
+    <section class="view">
+      <div class="container h-100 w-75 justify-content-center align-items-center">
+        <div class="row  py-5 my-3">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <h2 class="font-weight-bold my-4 text-center mb-5 mt-4 font-weight-bold">
+                  <strong>セミナー開催情報登録</strong>
+                </h2>
+                <hr>
+                <div class="row mt-3">
+                  <div class="col">
+                    <form th:action="@{/holds/register}" th:object="${holdSeminarForm}" method="post">
+                      <div class="md-form">
+                        <input type="text" id="holdSeminarForm-title" class="form-control is-invalid" th:field="*{title}">
+                        <label for="holdSeminarForm-title">セミナータイトル</label>
+                        <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="invalid-feedback ml-5">error</div>
+                      </div>
+                      <div class="my-3">
+                        <span class="text-muted">セミナータイプ</span>
+                        <div class="form-check">
+                          <input type="radio" class="form-check-input" id="offlineSeminar" name="groupOfSeminarType" th:field="*{seminarType}" value="1">
+                          <label class="form-check-label" for="offlineSeminar">オフラインセミナー</label>
+                        </div>
+                        <div class="form-check">
+                          <input type="radio" class="form-check-input" id="onlineSeminar" name="groupOfSeminarType" th:field="*{seminarType}" value="2">
+                          <label class="form-check-label" for="onlineSeminar">オンラインセミナー</label>
+                        </div>
+                        <div class="form-check">
+                          <input type="radio" class="form-check-input" id="offlineAndOnlineSeminar" name="groupOfSeminarType" th:field="*{seminarType}" value="3">
+                          <label class="form-check-label" for="offlineAndOnlineSeminar">オンライン＆オフラインセミナー</label>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <!--Grid column-->
+                        <div class="col-md-4">
+                          <div class="md-form">
+                            <input type="date" id="startingDate" class="form-control" th:field="*{startingDate}">
+                            <label for="startingDate">開催日</label>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="md-form">
+                            <input type="time" id="startingTime" class="form-control" th:field="*{startingTime}">
+                            <label for="startingTime">時間</label>
+                          </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                          <div class="md-form">
+                            <input type="date" id="endingDate" class="form-control" th:field="*{endingDate}">
+                            <label for="endingDate">終了日</label>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="md-form">
+                            <input type="time" id="endingTime" class="form-control" th:field="*{endingTime}">
+                            <label for="endingTime">時間</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="text-center">
+                        <button class="btn btn-indigo btn-rounded mt-5" type="submit">登 録</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!--Main Navigation-->
+  <th:block th:fragment="script"></th:block>
+</body>
+
+</html>
