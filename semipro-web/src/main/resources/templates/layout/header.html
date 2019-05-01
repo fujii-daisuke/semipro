@@ -19,6 +19,7 @@
       </button>
        -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+        <a sec:authorize="isAuthenticated()" th:href="@{/holds}">セミナーを開催する</a>
         <!-- 
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
@@ -71,5 +72,6 @@
     <!--/.Navbar -->
   </header>
   <!--Main Navigation-->
+  
 </body>
 </html>

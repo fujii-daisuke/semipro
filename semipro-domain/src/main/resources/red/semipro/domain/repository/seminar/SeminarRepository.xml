@@ -15,11 +15,11 @@
         <result property="summary" column="summary" />
         <result property="contents" column="contents" />
         <result property="imagePath" column="image_path" />
-        <result property="startedAt" column="started_at" />
-        <result property="endedAt" column="ended_at" />
-        <result property="openedAt" column="opened_at" />
-        <result property="entryStartedAt" column="entry_started_at" />
-        <result property="entryEndedAt" column="entry_ended_at" />
+        <result property="startingAt" column="starting_at" />
+        <result property="endingAt" column="ending_at" />
+        <result property="openingAt" column="opening_at" />
+        <result property="entryStartingAt" column="entry_starting_at" />
+        <result property="entryEndingAt" column="entry_ending_at" />
         <result property="cancelAt" column="cancel_at" />
         <result property="capacity" column="capacity" />
         <result property="providerSeminarUrl" column="provider_seminar_url" />
@@ -41,7 +41,7 @@
     <sql id="findPageByCriteriaWherePhrase">
         <![CDATA[
         where
-            seminar.ended_at >= current_timestamp
+            seminar.ending_at >= current_timestamp
         ]]>
     </sql>
 
@@ -83,11 +83,11 @@
             seminar.summary,
             seminar.contents,
             seminar.image_path,
-            seminar.started_at,
-            seminar.ended_at,
-            seminar.opened_at,
-            seminar.entry_started_at,
-            seminar.entry_ended_at,
+            seminar.starting_at,
+            seminar.ending_at,
+            seminar.opening_at,
+            seminar.entry_starting_at,
+            seminar.entry_ending_at,
             seminar.cancel_at,
             seminar.capacity,
             seminar.provider_seminar_url,
@@ -127,11 +127,11 @@
             summary,
             contents,
             image_path,
-            started_at,
-            ended_at,
-            opened_at,
-            entry_started_at,
-            entry_ended_at,
+            starting_at,
+            ending_at,
+            opening_at,
+            entry_starting_at,
+            entry_ending_at,
             cancel_at,
             capacity,
             provider_seminar_url,
@@ -157,11 +157,11 @@
             #{summary},
             #{contents},
             #{imagePath},
-            #{startedAt},
-            #{endedAt},
-            #{openedAt},
-            #{entryStartedAt},
-            #{entryEndedAt},
+            #{startingAt},
+            #{endingAt},
+            #{openingAt},
+            #{entryStartingAt},
+            #{entryEndingAt},
             #{cancelAt},
             #{capacity},
             #{providerSeminarUrl},
@@ -193,11 +193,11 @@
             summary = #{summary},
             contents = #{contents},
             image_path = #{imagePath},
-            started_at = #{startedAt},
-            ended_at = #{endedAt},
-            opened_at = #{openedAt},
-            entry_started_at = #{entryStartedAt},
-            entry_ended_at = #{entryEndedAt},
+            starting_at = #{startingAt},
+            ending_at = #{endingAt},
+            opening_at = #{openingAt},
+            entry_starting_at = #{entryStartingAt},
+            entry_ending_at = #{entryEndingAt},
             cancel_at = #{cancelAt},
             capacity = #{capacity},
             provider_seminar_url = #{providerSeminarUrl},
