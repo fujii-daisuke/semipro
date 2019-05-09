@@ -108,7 +108,7 @@
 
     <sql id="baseFromPhrase">
         from seminar
-        inner join prefecture on seminar.prefecture_id = prefecture.id
+        left outer join prefecture on seminar.prefecture_id = prefecture.id
     </sql>
     
     <select id="findOneWithDetails" resultMap="seminarResultMap">

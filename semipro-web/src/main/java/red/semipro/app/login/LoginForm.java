@@ -1,7 +1,7 @@
 package red.semipro.app.login;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
@@ -9,11 +9,11 @@ import lombok.Data;
 @Data
 public class LoginForm {
 
-    @NotBlank
+    @NotNull
     @Email
     private String email;
     
-    @NotBlank
+    @NotNull
     @Size(min=8, max=20)
     private String password;
 }

@@ -8,7 +8,7 @@ public interface MemberService {
     public Member findByEmail(String email);
     public boolean isExistsEmail(String email);
     public boolean isExistsUsername(String username);
-    public void register(Member member);
+    public Member register(Member member);
     public boolean isExists(Member member);
     public void activation(Member member);
 

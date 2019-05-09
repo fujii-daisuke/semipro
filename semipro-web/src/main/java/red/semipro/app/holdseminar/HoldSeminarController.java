@@ -1,8 +1,12 @@
 package red.semipro.app.holdseminar;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenCheck;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenType;
 
-import red.semipro.domain.enums.OpeningStatus;
+import red.semipro.business.account.AccountUserDetails;
+import red.semipro.domain.enums.ProviderId;
 import red.semipro.domain.enums.SeminarType;
 import red.semipro.domain.model.Seminar;
 import red.semipro.domain.service.seminar.SeminarService;
@@ -52,35 +57,28 @@ public class HoldSeminarController {
     @GetMapping(value = "input")
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.BEGIN)
     public ModelAndView input(ModelAndView model) {
-        model.setViewName("holdseminar/input");
+        model.setViewName("holdseminar/base/input");
         return model;
     }
     
     @PostMapping(value = "register")
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.IN)
-    public ModelAndView register(@Validated HoldSeminarForm form, 
+    public ModelAndView register(@AuthenticationPrincipal AccountUserDetails account,
+            @Validated HoldSeminarForm form, 
             BindingResult result,
             ModelAndView model) throws Exception {
         
         if (result.hasErrors()) {
-            model.setViewName("holdseminar/input");
+            model.setViewName("holdseminar/base/input");
             return model;
         }
-        
-        Seminar seminar = Seminar.builder()
-            .openingStatus(OpeningStatus.DRAFT)
-            .title(form.getTitle())
-            .seminarType(SeminarType.valueOf(form.getSeminarType()))
-            .build();
-        
-        seminar = seminarService.register(seminar);
-        model.setViewName("redirect:/holds/" + seminar.getId() + "/detail");
-        return model;
-    }
-    
-    @GetMapping(value = "completed")
-    public ModelAndView completed(ModelAndView model) {
-        model.setViewName("registrationseminar/completed");
+        Seminar seminar = new Seminar(ProviderId.SEMIPRO,
+                                        form.getTitle(),
+                                        SeminarType.valueOf(form.getSeminarType()),
+                                        LocalDateTime.of(LocalDate.parse(form.getStartingDate()), LocalTime.parse(form.getStartingTime())), 
+                                        LocalDateTime.of(LocalDate.parse(form.getEndingDate()), LocalTime.parse(form.getEndingTime())));
+        seminar = seminarService.basicRegister(seminar, account.getMember());
+        model.setViewName("redirect:/holds/detail/" + seminar.getId() + "/input");
         return model;
     }
 }
