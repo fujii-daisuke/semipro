@@ -11,19 +11,19 @@ import red.semipro.domain.model.Seminar;
 @Mapper
 public interface SeminarRepository {
 
-    long countByCriteria(
+    public long countByCriteria(
             @Param("criteria") SeminarSearchCriteria criteria);
 
-    List<Seminar> findPageByCriteria(
+    public List<Seminar> findPageByCriteria(
             @Param("criteria") SeminarSearchCriteria criteria,
             @Param("pageable") Pageable pageable);
     
-    Seminar findOneByProviderIdAndProviderSeminarId(@Param("providerId") Integer providerId,
+    public Seminar findOneByProviderIdAndProviderSeminarId(@Param("providerId") Integer providerId,
             @Param("providerSeminarId") Integer providerSeminarId);
     
-    Seminar findOneWithDetails(Long id);
+    public Seminar findOneWithDetails(Long id);
     
-    int insert(Seminar seminar);
+    public int insert(Seminar seminar);
     
-    int update(Seminar seminar);
+    public int update(Seminar seminar);
 }

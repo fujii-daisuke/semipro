@@ -25,8 +25,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void register(Member member) {
+    public Member register(Member member) {
         memberRepository.insert(member);
+        return member;
     }
 
     @Override

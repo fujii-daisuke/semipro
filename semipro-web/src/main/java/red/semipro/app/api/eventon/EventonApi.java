@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 import red.semipro.common.HttpUrlConnector;
+import red.semipro.domain.model.Seminar;
+import red.semipro.domain.model.eventon.Event;
 import red.semipro.domain.model.eventon.Response;
 import red.semipro.domain.service.seminar.SeminarServiceImpl;
 
@@ -35,7 +37,11 @@ public class EventonApi {
             log.debug("start: " + response.getStart());
             log.debug("limit: " + response.getLimit());
             log.debug("size: " + response.getEvents().size());
-            seminarService.eventonRegister(response);
+            for (Event event: response.getEvents()) {
+                Seminar seminar = new Seminar(event);
+                log.debug("seminar_id: " + seminar.getProviderSeminarId());
+                seminarService.registerByProvider(seminar);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {

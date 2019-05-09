@@ -24,7 +24,6 @@ import org.terasoluna.gfw.web.token.transaction.TransactionTokenType;
 import red.semipro.business.email.EmailDocument;
 import red.semipro.business.email.EmailService;
 import red.semipro.common.Crypto;
-import red.semipro.domain.enums.RegisterStatus;
 import red.semipro.domain.model.Member;
 import red.semipro.domain.service.member.MemberService;
 
@@ -80,14 +79,7 @@ public class SignupController {
             return model;
         }
         
-        Member member = Member.builder()
-            .email(signupForm.getEmail())
-            .username(signupForm.getUsername())
-            .password(passwordEncoder.encode(signupForm.getPassword()))
-            .registerStatus(RegisterStatus.PRE)
-            .build();
-        
-        memberService.register(member);
+        Member member = memberService.register(new Member(signupForm.getEmail(),signupForm.getUsername(), passwordEncoder.encode(signupForm.getPassword())));
         sendMail(member, locale);
         
         model.setViewName("redirect:/signup/completed");
