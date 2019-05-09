@@ -9,11 +9,11 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
-public class HoldSeminarFormValidator implements Validator {
+public class HoldDetailSeminarFormValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return (HoldSeminarForm.class).isAssignableFrom(clazz);
+        return (HoldDetailSeminarForm.class).isAssignableFrom(clazz);
     }
 
     @Override
@@ -22,11 +22,11 @@ public class HoldSeminarFormValidator implements Validator {
             return;
         }
         
-        HoldSeminarForm form = (HoldSeminarForm)target;
-        LocalDateTime startingDateTime = null;
-        LocalDateTime endingDateTime = null;
+        HoldDetailSeminarForm form = (HoldDetailSeminarForm)target;
+        LocalDateTime entryStartingDateTime = null;
+        LocalDateTime entryEndingDateTime = null;
         try {
-            startingDateTime = LocalDateTime.of(LocalDate.parse(form.getStartingDate()), LocalTime.parse(form.getStartingTime()));
+            entryStartingDateTime = LocalDateTime.of(LocalDate.parse(form.getEntryStartingDate()), LocalTime.parse(form.getEntryStartingTime()));
         } catch (Exception e) {
             errors.rejectValue("startingDateTime",
                     "IncorrectDate.datetime",
@@ -34,7 +34,7 @@ public class HoldSeminarFormValidator implements Validator {
         }
 
         try {
-            endingDateTime = LocalDateTime.of(LocalDate.parse(form.getEndingDate()), LocalTime.parse(form.getEndingTime()));
+            entryEndingDateTime = LocalDateTime.of(LocalDate.parse(form.getEntryEndingDate()), LocalTime.parse(form.getEntryEndingTime()));
         } catch (Exception e) {
             errors.rejectValue("endingDateTime",
                     "IncorrectDate.datetime",
@@ -45,11 +45,10 @@ public class HoldSeminarFormValidator implements Validator {
             return;
         }
         
-        if (startingDateTime.isAfter(endingDateTime)) {
+        if (entryStartingDateTime.isAfter(entryEndingDateTime)) {
             errors.rejectValue("endingDateTime",
                     "IncorrectDate.datetime",
                     "Incorrect date was entered.");
         }
     }
-
 }

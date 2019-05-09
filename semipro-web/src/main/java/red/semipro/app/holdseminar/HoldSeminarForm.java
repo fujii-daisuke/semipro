@@ -2,7 +2,8 @@ package red.semipro.app.holdseminar;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.Data;
 
@@ -11,17 +12,18 @@ public class HoldSeminarForm implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotBlank
+    @NotNull
+    @Size(max=50)
     private String title;
-    @NotBlank
+    @NotNull
     private Integer seminarType;
-    @NotBlank
+    @NotNull
     private String startingDate;
-    @NotBlank
-    private Integer startingTime;
-    @NotBlank
-    private Integer endingDate;
-    @NotBlank
-    private Integer endingTime;
+    @NotNull
+    private String startingTime;
+    @NotNull
+    private String endingDate;
+    @NotNull
+    private String endingTime;
 
 }

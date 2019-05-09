@@ -8,8 +8,6 @@ import java.util.List;
 
 import org.springframework.util.StringUtils;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import red.semipro.domain.enums.OpeningStatus;
@@ -24,10 +22,8 @@ import red.semipro.domain.model.eventon.Ticket;
  * セミナーモデル
  * @author fujiidaisuke
  */
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
 public class Seminar implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -95,12 +91,22 @@ public class Seminar implements Serializable {
     /** 更新日時 */
     private LocalDateTime updatedAt;
     
+    public Seminar(ProviderId providerId, String title, SeminarType seminarType, LocalDateTime startingAt, LocalDateTime endingAt) {
+        this.openingStatus = OpeningStatus.DRAFT;
+        this.providerId = providerId;
+        this.title = title;
+        this.seminarType = seminarType;
+        this.startingAt = startingAt;
+        this.endingAt = endingAt;
+    }
+    
     /**
      * コンストラクタ
      * EventonApiより取得したデータからセミナーモデルを構築します
      * @param event
      */
     public Seminar(Event event) {
+        this.openingStatus = OpeningStatus.OPENING;
         this.providerId = ProviderId.EVENTON;
         this.providerSeminarId = event.getEvent_id();
         this.seminarType = SeminarType.OFFLINE;
@@ -134,20 +140,20 @@ public class Seminar implements Serializable {
             for (String paymentTypeName: event.getPayment_types()) {
                 PaymentType paymentType = PaymentType.nameOf(paymentTypeName);
                 if (paymentType != null) {
-                    this.seminarPaymentTypes.add(SeminarPaymentType.builder().paymentType(paymentType).build());
+                    this.seminarPaymentTypes.add(new SeminarPaymentType(paymentType));
                 }
             }
         }
         if (event.getTickets() != null && event.getTickets().size() > 0) {
             this.seminarTickets = new ArrayList<SeminarTicket>();
             for (Ticket ticket: event.getTickets()) {
-                this.seminarTickets.add(SeminarTicket.builder().name(ticket.getName()).price(ticket.getPrice()).build());
+                this.seminarTickets.add(new SeminarTicket(ticket.getName(), ticket.getPrice()));
             }
         }
         
         this.cancelPolicy = event.getCancel_policy();
         if (event.getPrefecture_id() != null) {
-            this.prefecture = Prefecture.builder().id(event.getPrefecture_id()).build();
+            this.prefecture = new Prefecture(event.getPrefecture_id());
         }
         this.address = event.getAddress();
         this.place = event.getPlace();
@@ -158,10 +164,7 @@ public class Seminar implements Serializable {
         if (event.getOwners() != null && event.getOwners().size() > 0) {
             this.seminarOwners = new ArrayList<>();
             for (Owner owner: event.getOwners()) {
-                this.seminarOwners.add(SeminarOwner.builder()
-                                .providerOwnerId(owner.getId())
-                                .name(owner.getName())
-                                .url(owner.getUrl()).build());
+                this.seminarOwners.add(new SeminarOwner(owner.getId(), owner.getName(), owner.getUrl()));
             }
         }
         this.embedCode = event.getEmbed_code();
