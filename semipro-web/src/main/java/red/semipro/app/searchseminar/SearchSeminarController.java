@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import red.semipro.common.PageWrapper;
 import red.semipro.domain.model.Seminar;
-import red.semipro.domain.repository.seminar.SeminarSearchCriteria;
+import red.semipro.domain.model.SeminarSearchCriteria;
 import red.semipro.domain.service.seminar.SeminarServiceImpl;
 
 @RequestMapping(value = "/")

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+  <title>セミナー開催 基本情報登録</title>
+</head>
+<body>
+  <!--Main Navigation-->
+  <main layout:fragment="content">
+    <section class="view">
+      <div class="container h-100 w-75 justify-content-center align-items-center">
+        <div class="row  py-5 my-3">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <ul class="nav md-pills pills-deep-orange nav-justified">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#!">基本情報</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!">詳細</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!">チケット</a>
+                  </li>
+                </ul>
+                <hr>
+                <form th:action="@{/holds/basic/save}" th:object="${manageHoldBasicForm}" method="post">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="md-form">
+                        <input type="text" id="holdSeminarForm-title" class="form-control" th:field="*{title}">
+                        <label for="holdSeminarForm-title">タイトル</label>
+                        <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="md-form">
+                    <div class="text-muted">セミナータイプ</div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" id="offlineSeminar" name="groupOfSeminarType" th:field="*{seminarType}" value="1">
+                      <label class="form-check-label" for="offlineSeminar">オフラインセミナー</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" id="onlineSeminar" name="groupOfSeminarType" th:field="*{seminarType}" value="2">
+                      <label class="form-check-label" for="onlineSeminar">オンラインセミナー</label>
+                    </div>
+                    <div th:if="${#fields.hasErrors('seminarType')}" th:errors="*{seminarType}" class="invalid-feedback d-block">error</div>
+                  </div>
+                  <div class="row mt-5">
+                    <div class="col-md-4">
+                      <div class="md-form">
+                        <input type="date" id="startingDate" class="form-control" th:field="*{startingDate}">
+                        <label for="startingDate">開催日</label>
+                        <div th:if="${#fields.hasErrors('startingDate')}" th:errors="*{startingDate}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="md-form">
+                        <input type="time" id="startingTime" class="form-control" th:field="*{startingTime}">
+                        <label for="startingTime">時間</label>
+                        <div th:if="${#fields.hasErrors('startingTime')}" th:errors="*{startingTime}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="md-form">
+                        <input type="date" id="endingDate" class="form-control" th:field="*{endingDate}">
+                        <label for="endingDate">終了日</label>
+                        <div th:if="${#fields.hasErrors('endingDate')}" th:errors="*{endingDate}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="md-form">
+                        <input type="time" id="endingTime" class="form-control" th:field="*{endingTime}">
+                        <label for="endingTime">時間</label>
+                        <div th:if="${#fields.hasErrors('endingTime')}" th:errors="*{endingTime}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="my-3">
+                    <div class="text-muted">会場</div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" id="semiproSupport" name="placeSupported" th:field="*{placeSupported}" value="true">
+                      <label class="form-check-label" for="semiproSupport">セミプロに任せる</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" id="placeByMySelf" name="placeSupported" th:field="*{placeSupported}" value="false">
+                      <label class="form-check-label" for="placeByMySelf">自分で手配する</label>
+                    </div>
+                    <div th:if="${#fields.hasErrors('placeSupported')}" th:errors="*{placeSupported}" class="invalid-feedback d-block">error</div>
+                    <div class="place-input-area d-none">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <select class="mdb-select md-form" th:field="*{prefectureId}">
+                            <option th:each="pref:${prefectures}" th:value="${pref.id}">[[${pref.name}]]</option>
+                          </select>
+                          <label class="mdb-main-label">都道府県</label>
+                        </div>
+                        <div class="col-md-2">
+                          <select class="mdb-select md-form" th:field="*{cityId}">
+                            <option th:each="city:${cities}" th:value="${city.id}">[[${city.name}]]</option>
+                          </select>
+                          <label class="mdb-main-label">市区町村</label>
+                        </div>
+                        <div class="col-md-8">
+                          <div class="md-form">
+                            <input type="text" id="holdSeminarForm-address" class="form-control" th:field="*{address}">
+                            <label for="holdSeminarForm-address">以降の住所</label>
+                            <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="invalid-feedback d-block">error</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="md-form">
+                        <input type="text" id="holdSeminarForm-place" class="form-control" th:field="*{place}">
+                        <label for="holdSeminarForm-place">会場名</label>
+                        <div th:if="${#fields.hasErrors('place')}" th:errors="*{place}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-center">
+                    <button class="btn btn-yellow btn-rounded mt-5" type="submit">登 録</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!--Main Navigation-->
+  <th:block th:fragment="script">
+  <script type="text/javascript">
+    $(document).ready(function() {
+      // Material Select Initialization
+      $('.mdb-select').materialSelect();
+      
+      $('[name=placeSupported]').on('change', function() {
+        if ($('input[name=placeSupported]:checked').val() === 'false') {
+          $('.place-input-area').removeClass('d-none').addClass('d-block');
+        } else {
+          $('.place-input-area').removeClass('d-block').addClass('d-none');
+        }
+      });
+      
+      $('#prefectureId').on('change',function(){
+        $.ajax({
+          type: "GET",
+          url: location.pathname + "/searchCityList",
+          dataType : 'json',
+          data: {'prefectureId': $('#prefectureId').val()}
+        }).done (function(data, textStatus, jqXHR) {
+            $('#cityId').html('');//一度select内を空に
+            for(var i in data){
+              $('#cityId').append($('<option></option>')
+                      .val(data[i].id)
+                      .text(data[i].name));
+          }
+        }).fail (function(jqXHR, textStatus, errorThrown) {
+          console.log(textStatus);
+        });
+      });
+      
+    });
+  </script>
+  </th:block>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+    namespace="red.semipro.domain.repository.city.CityRepository">
+    
+    <resultMap id="cityResultMap" type="red.semipro.domain.model.City">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="prefecture.id" column="prefecture_id" />
+        <result property="prefecture.name" column="prefecture_name" />
+    </resultMap>
+
+    <select id="findAllByPrefectureId" resultMap="cityResultMap">
+        select
+            city.id,
+            city.prefecture_id,
+            city.name,
+            prefecture.name prefecture_name
+        from city
+        inner join prefecture on city.prefecture_id = prefecture.id
+        where
+            prefecture_id = #{prefectureId}
+        order by id
+    </select>
+    
+</mapper>
