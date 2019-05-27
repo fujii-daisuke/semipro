@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+    namespace="red.semipro.domain.repository.seminar.SeminarOptionRepository">
+    
+    <resultMap id="seminarOptionResultMap" type="red.semipro.domain.model.SeminarOption">
+        <result property="id" column="id" />
+        <result property="seminarId" column="seminar_id" />
+        <result property="placeSupported" column="place_supported" />
+        <result property="shootingSupported" column="shooting_supported" />
+        <result property="shootingEditSupported" column="shooting_edit_supported" />
+        <result property="movieSalesSupported" column="movie_sales_supported" />
+    </resultMap>
+
+    <select id="findOne" resultMap="seminarOptionResultMap">
+        select
+            id,
+            seminar_id,
+            place_supported,
+            shooting_supported,
+            shooting_edit_supported,
+            movie_sales_supported
+        from seminar_option
+        where
+            id = #{id}
+    </select>
+
+    <select id="findBySeminarId" resultMap="seminarOptionResultMap">
+        select
+            id,
+            seminar_id,
+            place_supported,
+            shooting_supported,
+            shooting_edit_supported,
+            movie_sales_supported
+        from seminar_option
+        where
+            seminar_id = #{seminarId}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into seminar_option (
+            seminar_id,
+            place_supported,
+            shooting_supported,
+            shooting_edit_supported,
+            movie_sales_supported,
+            created_at,
+            updated_at
+            )
+        values (
+            #{seminarId},
+            #{placeSupported},
+            #{shootingSupported},
+            #{shootingEditSupported},
+            #{movieSalesSupported},
+            current_timestamp,
+            current_timestamp
+        )
+    </insert>
+    
+    <update id="update">
+        update seminar_option set
+            place_supported = #{placeSupported},
+            shooting_supported = #{shootingSupported},
+            shooting_edit_supported = #{shootingEditSupported},
+            movie_sales_supported = #{movieSalesSupported},
+            updated_at = current_timestamp
+        where
+            id = #{id}
+    </update>
+    
+    <delete id="delete">
+        delete from seminar_option
+            where
+                id = #{id}
+    </delete>
+    
+</mapper>

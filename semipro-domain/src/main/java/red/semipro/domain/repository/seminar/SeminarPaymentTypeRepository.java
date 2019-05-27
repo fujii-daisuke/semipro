@@ -10,7 +10,7 @@ import red.semipro.domain.model.SeminarPaymentType;
 @Mapper
 public interface SeminarPaymentTypeRepository {
 
-    public List<SeminarPaymentType> findAll(@Param("seminarId")Long seminarId);
-    public int insert(@Param("paymentTypes")List<SeminarPaymentType> seminarPaymentTypes);
-    public int delete(@Param("seminarId")Long seminarId);
+    List<SeminarPaymentType> findAll(@Param("seminarId")Long seminarId);
+    int insert(@Param("paymentTypes")List<SeminarPaymentType> seminarPaymentTypes);
+    int delete(@Param("seminarId")Long seminarId);
 }

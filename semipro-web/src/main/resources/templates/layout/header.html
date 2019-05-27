@@ -7,10 +7,10 @@
   <!--Main Navigation-->
   <header layout:fragment="header">
     <!--Navbar -->
-    <nav class="mb-1 navbar navbar-expand-lg navbar-dark teal darken-4">
+    <nav class="mb-1 navbar navbar-expand-lg navbar-light white">
       <a class="navbar-brand" th:href="@{/}">セミプロ</a>
       <span class="navbar-text mr-auto">
-        誰でもノーリスクでセミナーが開催できるサービス
+        誰でもノーリスクでセミナーが開催できるサイト
       </span>
       <!-- 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
@@ -19,41 +19,16 @@
       </button>
        -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
-        <a sec:authorize="isAuthenticated()" th:href="@{/holds}">セミナーを開催する</a>
-        <!-- 
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Pricing</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">Dropdown
-            </a>
-            <div class="dropdown-menu dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>
-        </ul>
-         -->
+        <a sec:authorize="isAuthenticated()" th:href="@{/holds}" class="btn btn-deep-orange btn-sm ml-auto">セミナーを開催する</a>
         <ul class="navbar-nav ml-auto" sec:authorize="!isAuthenticated()">
           <li class="nav-item">
-            <a class="nav-link" th:href="@{/signup}">会員登録</a>
+            <a th:href="@{/signup}" class="btn btn-deep-orange btn-rounded btn-sm">会員登録</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" th:href="@{/login}">ログイン</a>
+            <a th:href="@{/login}" class="btn btn-deep-orange btn-rounded btn-sm">ログイン</a>
           </li>
         </ul>
-        <ul class="navbar-nav ml-auto nav-flex-icons" sec:authorize="isAuthenticated()">
+        <ul class="navbar-nav nav-flex-icons" sec:authorize="isAuthenticated()">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
