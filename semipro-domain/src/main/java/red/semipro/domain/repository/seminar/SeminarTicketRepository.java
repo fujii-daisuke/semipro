@@ -10,8 +10,8 @@ import red.semipro.domain.model.SeminarTicket;
 @Mapper
 public interface SeminarTicketRepository {
     
-    public List<SeminarTicket> findAll(@Param("seminarId")Long seminarId);
-    public int insert(@Param("tickets")List<SeminarTicket> seminarTickets);
-    public int delete(@Param("seminarId")Long seminarId);
+    List<SeminarTicket> findAll(@Param("seminarId")Long seminarId);
+    int insert(@Param("tickets")List<SeminarTicket> seminarTickets);
+    int delete(@Param("seminarId")Long seminarId);
 
 }

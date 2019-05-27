@@ -11,19 +11,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
 import red.semipro.domain.model.Member;
 import red.semipro.domain.model.Seminar;
 import red.semipro.domain.model.SeminarOwner;
+import red.semipro.domain.model.SeminarSearchCriteria;
 import red.semipro.domain.repository.seminar.SeminarOwnerRepository;
 import red.semipro.domain.repository.seminar.SeminarPaymentTypeRepository;
 import red.semipro.domain.repository.seminar.SeminarRepository;
-import red.semipro.domain.repository.seminar.SeminarSearchCriteria;
 import red.semipro.domain.repository.seminar.SeminarTicketRepository;
 
 @Transactional
 @Service
-@Slf4j
 public class SeminarServiceImpl implements SeminarService {
 
     @Autowired
@@ -102,17 +100,26 @@ public class SeminarServiceImpl implements SeminarService {
         }
     }
 
-    @Override
     @Transactional
-    public Seminar basicRegister(Seminar seminar, Member member) {
-        seminarRepository.insert(seminar);
-        List<SeminarOwner> owners = new ArrayList<SeminarOwner>();
-        owners.add(new SeminarOwner(seminar, member));
-        seminarOwnerRepository.insert(owners);
+    public Seminar saveBasic(Seminar seminar, Member member) {
+        if (seminar.getId() == null) {
+            seminarRepository.insert(seminar);
+            List<SeminarOwner> owners = new ArrayList<SeminarOwner>();
+            owners.add(new SeminarOwner(seminar, member));
+            seminarOwnerRepository.insert(owners);
+        } else {
+            seminarRepository.update(seminar);
+        }
         return seminar;
     }
     
+    @Transactional
     public void update(Seminar seminar) {
         seminarRepository.update(seminar);
+    }
+
+    @Override
+    public List<Seminar> findAllByOwner(Long memberId) {
+        return seminarRepository.findAllByOwner(memberId);
     }
 }

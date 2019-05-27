@@ -42,7 +42,7 @@ server:
 logging:
   level:
     root: info
-    org.springframework: info
+    org.springframework.web: debug
     red.semipro: debug
     red.semipro.domain.repository: debug
 

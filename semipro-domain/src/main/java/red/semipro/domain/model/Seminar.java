@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.springframework.util.StringUtils;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import red.semipro.domain.enums.OpeningStatus;
@@ -24,6 +26,8 @@ import red.semipro.domain.model.eventon.Ticket;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Seminar implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -70,6 +74,8 @@ public class Seminar implements Serializable {
     private String cancelPolicy;
     /** 都道府県 */
     private Prefecture prefecture;
+    /** 市区町村 */
+    private City city;
     /** 開催場所 */
     private String address;
     /** 会場名 */
@@ -88,16 +94,42 @@ public class Seminar implements Serializable {
     private String embedCode;
     /** 最低開催人数定員 */
     private Integer minimumNumberHosts;
+    /** 会場手配サポート */
+    private boolean placeSupported;
+    /** 撮影サポート */
+    private boolean shootingSupported;
+    /** 編集サポート */
+    private boolean shootingEditSupported;
+    /** 動画販売サポート */
+    private boolean movieSalesSupported;
     /** 更新日時 */
     private LocalDateTime updatedAt;
     
-    public Seminar(ProviderId providerId, String title, SeminarType seminarType, LocalDateTime startingAt, LocalDateTime endingAt) {
+    public Seminar(Long id,
+            ProviderId providerId, 
+            String title, 
+            SeminarType seminarType, 
+            LocalDateTime startingAt, 
+            LocalDateTime endingAt, 
+            boolean placeSupported,
+            Integer prefectureId,
+            Integer cityId,
+            String address,
+            String place) {
+        this.id = id;
         this.openingStatus = OpeningStatus.DRAFT;
         this.providerId = providerId;
         this.title = title;
         this.seminarType = seminarType;
         this.startingAt = startingAt;
         this.endingAt = endingAt;
+        this.placeSupported = placeSupported;
+        if (!placeSupported) {
+            this.prefecture = new Prefecture(prefectureId);
+            this.city = new City(cityId);
+            this.address = address;
+            this.place = address;
+        }
     }
     
     /**

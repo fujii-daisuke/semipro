@@ -101,6 +101,10 @@
             seminar.waiting,
             seminar.embed_code,
             seminar.minimum_number_hosts,
+            seminar.place_supported,
+            seminar.shooting_supported,
+            seminar.shooting_edit_supported,
+            seminar.movie_sales_supported,
             seminar.updated_at,
             seminar.prefecture_id,
             prefecture.name prefecture_name
@@ -146,6 +150,10 @@
             waiting,
             embed_code,
             minimum_number_hosts,
+            place_supported,
+            shooting_supported,
+            shooting_edit_supported,
+            movie_sales_supported,
             created_at,
             updated_at
             )
@@ -176,6 +184,10 @@
             #{waiting},
             #{embedCode},
             #{minimumNumberHosts},
+            #{placeSupported},
+            #{shootingSupported},
+            #{shootingEditSupported},
+            #{movieSalesSupported},
             current_timestamp,
             <if test="updatedAt != null">
                 #{updatedAt}
@@ -212,6 +224,10 @@
             waiting = #{waiting},
             embed_code = #{embedCode},
             minimum_number_hosts = #{minimumNumberHosts},
+            place_supported = #{placeSupported},
+            shooting_supported = #{shootingSupported},
+            shooting_edit_supported = #{shootingEditSupported},
+            movie_sales_supported = #{movieSalesSupported},
             <if test="updatedAt != null">
                 updated_at = #{updatedAt}
             </if>
@@ -221,4 +237,16 @@
         where
             id = #{id}
     </update>
+    
+    
+    <select id="findAllByOwner" resultMap="seminarResultMap">
+        <include refid="baseSelectPhrase" />
+        <include refid="baseFromPhrase" />
+        inner join seminar_owner on seminar.id = seminar_owner.seminar_id
+        where
+            seminar_owner.member_id = #{memberId}
+        order by
+            seminar.created_at desc
+    </select>
+    
 </mapper>

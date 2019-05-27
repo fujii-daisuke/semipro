@@ -23,7 +23,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     
     private static final String[] authenticateActionArray = 
         {
-                "/holds"
+                "/holds/**",
         };
     
     @Override
