@@ -9,7 +9,7 @@
     <meta name="keywords" content="セミナー一覧" />
     <meta name="description" content="誰でもノーリスクでセミナーが開催できるサービス" />
 </head>
-<body class="bg-white">
+<body>
   <!--Main layout-->
   <main class="mt-5" layout:fragment="content">
     <div class="container">
@@ -34,7 +34,7 @@
                 <h4 class="mb-4"><strong th:text="${seminar.title}">title</strong></h4>
                 <p th:text="${seminar.summary}">summary</p>
                 <p><strong class="mr-3" th:text="${seminar.remainingStatus()}">remaining status</strong> [[${#temporals.format(seminar.startingAt, 'yyyy年MM月dd日')}]] 開催</p>
-                <a th:href="@{/seminars/{seminarId}/detail(seminarId=${seminar.id})}" class="btn btn-primary">詳 細</a>
+                <a th:href="@{/seminars/{seminarId}/reserve(seminarId=${seminar.id})}" class="btn btn-primary">詳 細</a>
               </div>
             </div>
             <hr class="mb-5">

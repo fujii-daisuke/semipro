@@ -69,6 +69,19 @@ public class ManageHoldController {
         return new ManageHoldAdvancedForm();
     }
     
+    @Autowired
+    private ManageHoldTicketFormValidator manageHoldTicketFormValidator;
+
+    @InitBinder("manageHoldTicketForm")
+    public void initManageHoldTicketBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(manageHoldTicketFormValidator);
+    }
+    
+    @ModelAttribute("manageHoldTicketForm")
+    public ManageHoldTicketForm setupManageHoldTicketForm() {
+        return new ManageHoldTicketForm();
+    }
+    
     @ModelAttribute("prefectures")
     public List<Prefecture> setupPrefectureList() {
         return prefectureService.findAll();
@@ -123,7 +136,7 @@ public class ManageHoldController {
                                     form.getCityId(),
                                     form.getAddress(),
                                     form.getPlace());
-        seminar = seminarService.saveBasic(seminar, account.getMember());
+        seminar = seminarService.save(seminar, account.getMember());
         
         model.setViewName("redirect:/holds/" + seminar.getId() + "/advanced/input");
         return model;
@@ -131,7 +144,7 @@ public class ManageHoldController {
     
     @GetMapping(value="{seminarId}/advanced/input")
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.BEGIN)
-    public ModelAndView input(@PathVariable("seminarId") String seminarId,
+    public ModelAndView inputAdvanced(@PathVariable("seminarId") String seminarId,
                 ModelAndView model) {
         model.addObject("seminarId", seminarId);
         model.setViewName("managehold/advancedForm");
@@ -140,7 +153,7 @@ public class ManageHoldController {
     
     @PostMapping(value = "{seminarId}/advanced/save")
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.IN)
-    public ModelAndView register(@AuthenticationPrincipal AccountUserDetails account,
+    public ModelAndView saveAdvanced(@AuthenticationPrincipal AccountUserDetails account,
             @PathVariable("seminarId") String seminarId,
             @Validated ManageHoldAdvancedForm form, 
             BindingResult result,
@@ -151,19 +164,34 @@ public class ManageHoldController {
             model.setViewName("managehold/advancedForm");
             return model;
         }
+        manageHoldHelper.saveAdvanced(Long.valueOf(seminarId), form);
+        model.setViewName("redirect:/holds/" + seminarId + "/ticket/input");
+        return model;
+    }
+    
+    @GetMapping(value="{seminarId}/ticket/input")
+    @TransactionTokenCheck(value = "create", type = TransactionTokenType.BEGIN)
+    public ModelAndView inputTicket(@PathVariable("seminarId") String seminarId,
+                ModelAndView model) {
+        model.addObject("seminarId", seminarId);
+        model.setViewName("managehold/ticketForm");
+        return model;
+    }
+    
+    @PostMapping(value = "{seminarId}/ticket/save")
+    @TransactionTokenCheck(value = "create", type = TransactionTokenType.IN)
+    public ModelAndView saveTicket(@AuthenticationPrincipal AccountUserDetails account,
+            @PathVariable("seminarId") String seminarId,
+            @Validated ManageHoldTicketForm form, 
+            BindingResult result,
+            ModelAndView model) throws IOException{
         
-        Seminar seminar = seminarService.findOneWithDetails(Long.valueOf(seminarId));
-        seminar.setSummary(form.getSummary());
-        seminar.setContents(form.getContents());
-        seminar.setEntryStartingAt(LocalDateTime.of(LocalDate.parse(form.getEntryStartingDate()), LocalTime.parse(form.getEntryStartingTime())));
-        seminar.setEntryEndingAt(LocalDateTime.of(LocalDate.parse(form.getEntryEndingDate()), LocalTime.parse(form.getEntryEndingTime())));
-        seminar.setCapacity(form.getCapacity());
-        seminar.setMinimumNumberHosts(form.getMinimumNumberHosts());
-        seminar.setShootingSupported(form.getShootingEditSupported());
-        seminar.setShootingEditSupported(form.getShootingEditSupported());
-        seminar.setUpdatedAt(LocalDateTime.now());
-        manageHoldHelper.advancedRegistration(seminar, form.getMainImage());
-        
+        if (result.hasErrors()) {
+            model.addObject("seminarId", seminarId);
+            model.setViewName("managehold/ticketForm");
+            return model;
+        }
+        manageHoldHelper.saveTicket(Long.valueOf(seminarId), form);
         model.setViewName("redirect:/holds/" + seminarId + "/preview");
         return model;
     }

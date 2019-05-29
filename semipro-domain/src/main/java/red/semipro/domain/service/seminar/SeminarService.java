@@ -14,7 +14,7 @@ public interface SeminarService {
     public Page<Seminar> searchSeminar(SeminarSearchCriteria criteria, Pageable pageable);
     public Seminar findOneWithDetails(Long id);
     public void registerByProvider(Seminar seminar);
-    public Seminar saveBasic(Seminar seminar, Member member);
+    public Seminar save(Seminar seminar, Member member);
     public void update(Seminar seminar);
     public List<Seminar> findAllByOwner(Long memberId);
 }
