@@ -8,10 +8,7 @@ import java.util.List;
 
 import org.springframework.util.StringUtils;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import red.semipro.domain.enums.OpeningStatus;
 import red.semipro.domain.enums.PaymentType;
 import red.semipro.domain.enums.ProviderId;
@@ -25,9 +22,6 @@ import red.semipro.domain.model.eventon.Ticket;
  * @author fujiidaisuke
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Seminar implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -104,6 +98,9 @@ public class Seminar implements Serializable {
     private boolean movieSalesSupported;
     /** 更新日時 */
     private LocalDateTime updatedAt;
+    
+    public Seminar() {
+    }
     
     public Seminar(Long id,
             ProviderId providerId, 

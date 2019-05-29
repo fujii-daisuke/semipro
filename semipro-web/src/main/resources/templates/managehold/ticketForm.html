@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+  <title>セミナー開催 詳細情報登録</title>
+  <link th:href="@{/css/wysiwyg.min.css}" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <!--Main Navigation-->
+  <main layout:fragment="content">
+    <section class="view">
+      <div class="container h-100 w-75 justify-content-center align-items-center">
+        <div class="row  py-5 my-3">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <ul class="nav md-pills pills-deep-orange nav-justified">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!">基本情報</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!">詳細</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#!">チケット</a>
+                  </li>
+                </ul>
+                <hr>
+                <form th:action="@{/holds/__${seminarId}__/ticket/save}" th:object="${manageHoldTicketForm}" method="post">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="md-form">
+                        <input type="text" id="" class="form-control" th:field="*{capacity}">
+                        <label for="capacity">定員</label>
+                        <div th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="md-form">
+                        <input type="text" id="minimumNumberHosts" class="form-control" th:field="*{minimumNumberHosts}">
+                        <label for="minimumNumberHosts">最低開催人数</label>
+                        <div th:if="${#fields.hasErrors('minimumNumberHosts')}" th:errors="*{minimumNumberHosts}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="md-form">
+                        <input type="text" id="ticket-name0" class="form-control" th:field="*{tickets[0].name}">
+                        <label for="ticket-name0">チケット名</label>
+                        <div th:if="${#fields.hasErrors('tickets[0].name')}" th:errors="*{tickets[0].name}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="md-form">
+                        <input type="text" id="ticket-price0" class="form-control" th:field="*{tickets[0].price}">
+                        <label for="ticket-price0">価格</label>
+                        <div th:if="${#fields.hasErrors('tickets[0].price')}" th:errors="*{tickets[0].price}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="md-form">
+                        <input type="text" id="ticket-num0" class="form-control" th:field="*{tickets[0].num}">
+                        <label for="ticket-num0">枚数</label>
+                        <div th:if="${#fields.hasErrors('tickets[0].num')}" th:errors="*{tickets[0].num}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-5">
+                    <div class="col-md-4">
+                      <div class="md-form">
+                        <input type="date" id="entryStartingDate" class="form-control" th:field="*{entryStartingDate}">
+                        <label for="entryStartingDate">申し込み開始日</label>
+                        <div th:if="${#fields.hasErrors('entryStartingDate')}" th:errors="*{entryStartingDate}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="md-form">
+                        <input type="time" id="entryStartingTime" class="form-control" th:field="*{entryStartingTime}">
+                        <label for="entryStartingTime">時間</label>
+                        <div th:if="${#fields.hasErrors('entryStartingTime')}" th:errors="*{entryStartingTime}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="md-form">
+                        <input type="date" id="entryEndingDate" class="form-control" th:field="*{entryEndingDate}">
+                        <label for="entryEndingDate">終了日</label>
+                        <div th:if="${#fields.hasErrors('entryEndingDate')}" th:errors="*{entryEndingDate}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="md-form">
+                        <input type="time" id="entryEndingTime" class="form-control" th:field="*{entryEndingTime}">
+                        <label for="endingTime">時間</label>
+                        <div th:if="${#fields.hasErrors('entryEndingTime')}" th:errors="*{entryEndingTime}" class="invalid-feedback d-block">error</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-center">
+                    <button class="btn btn-indigo btn-rounded mt-5" type="submit">登 録</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!--Main Navigation-->
+  <th:block th:fragment="script">
+  <script type="text/javascript" th:src="@{/js/wysiwyg.min.js}"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+    });
+  </script>
+  </th:block>
+</body>
+
+</html>

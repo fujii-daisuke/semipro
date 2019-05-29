@@ -18,7 +18,8 @@
             id,
             seminar_id,
             name,
-            price
+            price,
+            num
         from seminar_ticket
         where
             seminar_id = #{seminarId}
@@ -30,12 +31,13 @@
             seminar_id,
             name,
             price,
+            num,
             created_at,
             updated_at
             )
         values
             <foreach item="i" collection="tickets" separator=",">
-                (#{i.seminarId}, #{i.name}, #{i.price}, current_timestamp, current_timestamp)
+                (#{i.seminarId}, #{i.name}, #{i.price}, #{i.num}, current_timestamp, current_timestamp)
             </foreach>
     </insert>
     
