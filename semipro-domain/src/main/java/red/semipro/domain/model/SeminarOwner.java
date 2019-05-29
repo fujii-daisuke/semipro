@@ -3,10 +3,8 @@ package red.semipro.domain.model;
 import java.io.Serializable;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 public class SeminarOwner implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -16,6 +14,9 @@ public class SeminarOwner implements Serializable {
     private Integer providerOwnerId;
     private String name;
     private String url;
+    
+    public SeminarOwner() {
+    }
     
     public SeminarOwner(Seminar seminar, Member member) {
         this.seminarId = seminar.getId();

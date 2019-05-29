@@ -21,7 +21,7 @@ public class ReserveSeminarController {
         ModelAndView model) {
         
         model.addObject("seminar", seminarService.findOneWithDetails(seminarId));
-        model.setViewName("detailseminar/reserveForm");
+        model.setViewName("reserveseminar/reserveForm");
         return model;
     }
 }

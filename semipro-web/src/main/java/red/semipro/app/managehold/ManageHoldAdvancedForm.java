@@ -21,18 +21,6 @@ public class ManageHoldAdvancedForm implements Serializable {
     @NotNull
     private String contents;
     @NotNull
-    private String entryStartingDate;
-    @NotNull
-    private String entryStartingTime;
-    @NotNull
-    private String entryEndingDate;
-    @NotNull
-    private String entryEndingTime;
-    @NotNull
-    private Integer capacity;
-    @NotNull
-    private Integer minimumNumberHosts;
-    @NotNull
     private Boolean shootingSupported;
     @NotNull
     private Boolean shootingEditSupported;

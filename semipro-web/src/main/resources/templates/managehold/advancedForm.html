@@ -8,7 +8,7 @@
   <title>セミナー開催 詳細情報登録</title>
   <link th:href="@{/css/wysiwyg.min.css}" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
   <!--Main Navigation-->
   <main layout:fragment="content">
     <section class="view">
@@ -29,117 +29,72 @@
                   </li>
                 </ul>
                 <hr>
-                <div class="row mt-3">
-                  <div class="col">
-                    <form th:action="@{/holds/__${seminarId}__/advanced/save}" th:object="${manageHoldAdvancedForm}" enctype="multipart/form-data" method="post">
-                      <div class="md-form">
-                        <div class="file-field">
-                          <a class="btn-floating purple-gradient mt-0 float-left">
-                            <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
-                            <input type="file" id="mainImage" name="mainImage" th:field="*{mainImage}">
-                          </a>
-                          <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text" placeholder="メイン画像">
-                          </div>
-                        </div>
-                        <div class="preview"></div>
+                <form th:action="@{/holds/__${seminarId}__/advanced/save}" th:object="${manageHoldAdvancedForm}" enctype="multipart/form-data" method="post">
+                  <div class="md-form">
+                    <div class="file-field">
+                      <a class="btn-floating purple-gradient mt-0 float-left">
+                        <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                        <input type="file" id="mainImage" name="mainImage" th:field="*{mainImage}">
+                      </a>
+                      <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="メイン画像">
                       </div>
-                      <div class="mt-5">
-                        <div class="md-form">
-                          <textarea id="holdDetailSeminarForm-summary" class="md-textarea form-control" rows="3" th:field="*{summary}"></textarea>
-                          <label for="holdDetailSeminarForm-summary">概要</label>
-                          <div th:if="${#fields.hasErrors('summary')}" th:errors="*{summary}" class="invalid-feedback d-block">error</div>
-                        </div>
-                      </div>
-                      <div class="md-form">
-                        <textarea id="holdDetailSeminarForm-contents" class="md-textarea form-control" rows="3" th:field="*{contents}"></textarea>
-                        <label for="holdDetailSeminarForm-contents">詳細</label>
-                        <div id="editor"></div>
-                        <div th:if="${#fields.hasErrors('contents')}" th:errors="*{contents}" class="invalid-feedback d-block">error</div>
-                      </div>
-                      <div class="row">
-                        <!--Grid column-->
-                        <div class="col-md-4">
-                          <div class="md-form">
-                            <input type="date" id="entryStartingDate" class="form-control" th:field="*{entryStartingDate}">
-                            <label for="entryStartingDate">申し込み開始日</label>
-                            <div th:if="${#fields.hasErrors('entryStartingDate')}" th:errors="*{entryStartingDate}" class="invalid-feedback d-block">error</div>
-                          </div>
-                        </div>
-                        <div class="col-md-2">
-                          <div class="md-form">
-                            <input type="time" id="entryStartingTime" class="form-control" th:field="*{entryStartingTime}">
-                            <label for="entryStartingTime">時間</label>
-                            <div th:if="${#fields.hasErrors('entryStartingTime')}" th:errors="*{entryStartingTime}" class="invalid-feedback d-block">error</div>
-                          </div>
-                        </div>
-                        <div class="col-md-4">
-                          <div class="md-form">
-                            <input type="date" id="entryEndingDate" class="form-control" th:field="*{entryEndingDate}">
-                            <label for="entryEndingDate">終了日</label>
-                            <div th:if="${#fields.hasErrors('entryEndingDate')}" th:errors="*{entryEndingDate}" class="invalid-feedback d-block">error</div>
-                          </div>
-                        </div>
-                        <div class="col-md-2">
-                          <div class="md-form">
-                            <input type="time" id="entryEndingTime" class="form-control" th:field="*{entryEndingTime}">
-                            <label for="endingTime">時間</label>
-                            <div th:if="${#fields.hasErrors('entryEndingTime')}" th:errors="*{entryEndingTime}" class="invalid-feedback d-block">error</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="md-form">
-                        <input type="text" id="" class="form-control" th:field="*{capacity}">
-                        <label for="capacity">定員</label>
-                        <div th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}" class="invalid-feedback d-block">error</div>
-                      </div>
-                      <div class="md-form">
-                        <input type="text" id="" class="form-control" th:field="*{minimumNumberHosts}">
-                        <label for="capacity">最低開催人数</label>
-                        <div th:if="${#fields.hasErrors('minimumNumberHosts')}" th:errors="*{minimumNumberHosts}" class="invalid-feedback d-block">error</div>
-                      </div>
-                      <div class="md-form">
-                        <div class="text-muted">セミナー撮影オプション</div>
-                        <div class="form-check">
-                          <input type="radio" class="form-check-input" id="unUseShootingSupport" name="groupOfShootingSupport" th:field="*{shootingSupported}" value="0">
-                          <label class="form-check-label" for="unUseShootingSupport">不要</label>
-                        </div>
-                        <div class="form-check">
-                          <input type="radio" class="form-check-input" id="useShootingSupport" name="groupOfShootingSupport" th:field="*{shootingSupported}" value="1">
-                          <label class="form-check-label" for="useShootingSupport">必要</label>
-                        </div>
-                        <div th:if="${#fields.hasErrors('shootingSupported')}" th:errors="*{shootingSupported}" class="invalid-feedback d-block">error</div>
-                      </div>
-                      <div class="md-form">
-                        <div class="text-muted">セミナー動画編集オプション</div>
-                        <div class="form-check">
-                          <input type="radio" class="form-check-input" id="unUseShootingEditSupport" name="groupOfShootingEditSupport" th:field="*{shootingEditSupported}" value="0">
-                          <label class="form-check-label" for="unUseShootingEditSupport">不要</label>
-                        </div>
-                        <div class="form-check">
-                          <input type="radio" class="form-check-input" id="useShootingEditSupport" name="groupOfShootingSupport" th:field="*{shootingEditSupported}" value="1">
-                          <label class="form-check-label" for="useShootingEditSupport">必要</label>
-                        </div>
-                        <div th:if="${#fields.hasErrors('shootingEditSupported')}" th:errors="*{shootingEditSupported}" class="invalid-feedback d-block">error</div>
-                      </div>
-                      <div class="md-form">
-                        <div class="text-muted">セミナー動画販売オプション</div>
-                        <div class="form-check">
-                          <input type="radio" class="form-check-input" id="unUseMovieSalesSupport" name="groupOfMovieSalesSupport" th:field="*{movieSalesSupported}" value="0">
-                          <label class="form-check-label" for="unUseMovieSalesSupport">不要</label>
-                        </div>
-                        <div class="form-check">
-                          <input type="radio" class="form-check-input" id="useMovieSalesSupport" name="groupOfMovieSalesSupport" th:field="*{movieSalesSupported}" value="1">
-                          <label class="form-check-label" for="useMovieSalesSupport">必要</label>
-                        </div>
-                        <div th:if="${#fields.hasErrors('movieSalesSupported')}" th:errors="*{movieSalesSupported}" class="invalid-feedback d-block">error</div>
-                      </div>
-                      <div class="text-center">
-                        <button class="btn btn-indigo btn-rounded mt-5" type="submit">登 録</button>
-                      </div>
-                    </form>
+                    </div>
+                    <div class="preview"></div>
                   </div>
-                </div>
+                  <div class="mt-5">
+                    <div class="md-form">
+                      <textarea id="holdDetailSeminarForm-summary" class="md-textarea form-control" rows="3" th:field="*{summary}"></textarea>
+                      <label for="holdDetailSeminarForm-summary">概要</label>
+                      <div th:if="${#fields.hasErrors('summary')}" th:errors="*{summary}" class="invalid-feedback d-block">error</div>
+                    </div>
+                  </div>
+                  <div class="md-form">
+                    <textarea id="holdDetailSeminarForm-contents" class="md-textarea form-control" rows="3" th:field="*{contents}"></textarea>
+                    <label for="holdDetailSeminarForm-contents">詳細</label>
+                    <div id="editor"></div>
+                    <div th:if="${#fields.hasErrors('contents')}" th:errors="*{contents}" class="invalid-feedback d-block">error</div>
+                  </div>
+                  <div class="md-form">
+                    <div class="text-muted">セミナー撮影オプション</div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" id="unUseShootingSupport" name="groupOfShootingSupport" th:field="*{shootingSupported}" value="0">
+                      <label class="form-check-label" for="unUseShootingSupport">不要</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" id="useShootingSupport" name="groupOfShootingSupport" th:field="*{shootingSupported}" value="1">
+                      <label class="form-check-label" for="useShootingSupport">必要</label>
+                    </div>
+                    <div th:if="${#fields.hasErrors('shootingSupported')}" th:errors="*{shootingSupported}" class="invalid-feedback d-block">error</div>
+                  </div>
+                  <div class="md-form">
+                    <div class="text-muted">セミナー動画編集オプション</div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" id="unUseShootingEditSupport" name="groupOfShootingEditSupport" th:field="*{shootingEditSupported}" value="0">
+                      <label class="form-check-label" for="unUseShootingEditSupport">不要</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" id="useShootingEditSupport" name="groupOfShootingSupport" th:field="*{shootingEditSupported}" value="1">
+                      <label class="form-check-label" for="useShootingEditSupport">必要</label>
+                    </div>
+                    <div th:if="${#fields.hasErrors('shootingEditSupported')}" th:errors="*{shootingEditSupported}" class="invalid-feedback d-block">error</div>
+                  </div>
+                  <div class="md-form">
+                    <div class="text-muted">セミナー動画販売オプション</div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" id="unUseMovieSalesSupport" name="groupOfMovieSalesSupport" th:field="*{movieSalesSupported}" value="0">
+                      <label class="form-check-label" for="unUseMovieSalesSupport">不要</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" id="useMovieSalesSupport" name="groupOfMovieSalesSupport" th:field="*{movieSalesSupported}" value="1">
+                      <label class="form-check-label" for="useMovieSalesSupport">必要</label>
+                    </div>
+                    <div th:if="${#fields.hasErrors('movieSalesSupported')}" th:errors="*{movieSalesSupported}" class="invalid-feedback d-block">error</div>
+                  </div>
+                  <div class="text-center">
+                    <button class="btn btn-indigo btn-rounded mt-5" type="submit">登 録</button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>

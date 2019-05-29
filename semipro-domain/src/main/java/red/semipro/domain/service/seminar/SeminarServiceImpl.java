@@ -101,7 +101,7 @@ public class SeminarServiceImpl implements SeminarService {
     }
 
     @Transactional
-    public Seminar saveBasic(Seminar seminar, Member member) {
+    public Seminar save(Seminar seminar, Member member) {
         if (seminar.getId() == null) {
             seminarRepository.insert(seminar);
             List<SeminarOwner> owners = new ArrayList<SeminarOwner>();
