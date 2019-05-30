@@ -101,6 +101,50 @@
 
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>development</id>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/development/resources</directory>
+                    </resource>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <profile>
+            <id>staging</id>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/staging/resources</directory>
+                    </resource>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <profile>
+            <id>production</id>
+            <build>
+                <finalName>ROOT</finalName>
+                <resources>
+                    <resource>
+                        <directory>src/production/resources</directory>
+                    </resource>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+    </profiles>
+    
+    <!-- 
     <build>
         <finalName>semipro</finalName>
         <plugins>
@@ -121,12 +165,11 @@
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
                     <compilerArgs>
-                        <!--<arg>-verbose</arg>-->
                         <arg>-Xlint:all,-options,-path</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
+    -->
 </project>
