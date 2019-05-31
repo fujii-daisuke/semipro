@@ -42,6 +42,10 @@ public class SignupController {
     private String fromEmail;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Value("${custom.application.schema}")
+    private String schema;
+    @Value("${custom.application.domain}")
+    private String domain;
     
     @InitBinder("signupForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -94,6 +98,8 @@ public class SignupController {
     
     private void sendMail(Member member, Locale locale) throws Exception {
         Map<String, Object> variableMap = new HashMap<String, Object>();
+        variableMap.put("schema", schema);
+        variableMap.put("domain", domain);
         variableMap.put("member", member);
         variableMap.put("activationKey", (new Crypto()).encrypto(member.getId().toString()));
         emailService.sendMail(
