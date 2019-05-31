@@ -19,8 +19,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: d.ziifuu@gmail.com
-    password: jikrefrqjqzfsjko
+    username: red.semipro@gmail.com
+    password: qozxlzjnydjasnbr
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
@@ -67,6 +67,10 @@ mybatis:
 # application settings
 custom:
   application:
+    schema:
+      http
+    domain:
+      localhost:8080
   # 秒/分/時/日/月/曜日
     cron:
       eventon: 0 0 3 * * *

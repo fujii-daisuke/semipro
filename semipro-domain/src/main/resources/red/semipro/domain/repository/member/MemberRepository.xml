@@ -67,7 +67,7 @@
         from member
         where
             email = #{email}
-            and register_status = 2
+            and register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR.value}
     </select>
     
     <select id="isExistsUsername" resultType="boolean">
