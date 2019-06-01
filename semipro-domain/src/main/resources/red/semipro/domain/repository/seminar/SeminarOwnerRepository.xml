@@ -30,6 +30,7 @@
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         insert into seminar_owner (
             seminar_id,
+            member_id,
             provider_owner_id,
             name,
             url,
@@ -38,7 +39,7 @@
             )
         values
             <foreach item="i" collection="owners" separator=",">
-                (#{i.seminarId}, #{i.providerOwnerId}, #{i.name}, #{i.url}, current_timestamp, current_timestamp)
+                (#{i.seminarId}, #{i.member.id}, #{i.providerOwnerId}, #{i.name}, #{i.url}, current_timestamp, current_timestamp)
             </foreach>
     </insert>
     
