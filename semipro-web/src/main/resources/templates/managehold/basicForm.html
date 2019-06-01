@@ -6,6 +6,7 @@
       th:lang="${#locale.language}">
 <head>
   <title>セミナー開催 基本情報登録</title>
+  <link th:href="@{/wp-content/themes/mdbootstrap4/css/compiled-4.8.2.min.css}" rel="stylesheet">
 </head>
 <body class="bg-light">
   <!--Main Navigation-->
@@ -38,7 +39,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="md-form">
+                  <div class="my-3">
                     <div class="text-muted">セミナータイプ</div>
                     <div class="form-check">
                       <input type="radio" class="form-check-input" id="offlineSeminar" name="groupOfSeminarType" th:field="*{seminarType}" value="1">
@@ -51,7 +52,7 @@
                     <div th:if="${#fields.hasErrors('seminarType')}" th:errors="*{seminarType}" class="invalid-feedback d-block">error</div>
                   </div>
                   <div class="row mt-5">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                       <div class="md-form">
                         <input type="date" id="startingDate" class="form-control" th:field="*{startingDate}">
                         <label for="startingDate">開催日</label>
@@ -65,7 +66,7 @@
                         <div th:if="${#fields.hasErrors('startingTime')}" th:errors="*{startingTime}" class="invalid-feedback d-block">error</div>
                       </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                       <div class="md-form">
                         <input type="date" id="endingDate" class="form-control" th:field="*{endingDate}">
                         <label for="endingDate">終了日</label>
@@ -81,7 +82,7 @@
                     </div>
                   </div>
                   <div class="my-3">
-                    <div class="text-muted">会場</div>
+                    <div class="text-muted">会場手配</div>
                     <div class="form-check">
                       <input type="radio" class="form-check-input" id="semiproSupport" name="placeSupported" th:field="*{placeSupported}" value="true">
                       <label class="form-check-label" for="semiproSupport">セミプロに任せる</label>
@@ -91,7 +92,8 @@
                       <label class="form-check-label" for="placeByMySelf">自分で手配する</label>
                     </div>
                     <div th:if="${#fields.hasErrors('placeSupported')}" th:errors="*{placeSupported}" class="invalid-feedback d-block">error</div>
-                    <div class="place-input-area d-none">
+                  </div>
+                  <div class="place-input-area d-none">
                       <div class="row">
                         <div class="col-md-2">
                           <select class="mdb-select md-form" th:field="*{prefectureId}">
@@ -121,7 +123,7 @@
                     </div>
                   </div>
                   <div class="text-center">
-                    <button class="btn btn-indigo btn-rounded mt-5" type="submit">登 録</button>
+                    <button class="btn btn-indigo btn-rounded mt-3 mb-5" type="submit">登 録</button>
                   </div>
                 </form>
               </div>

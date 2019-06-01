@@ -14,7 +14,7 @@
       <section class="py-5 my-3">
         <th:block th:each="seminar, parentStat:${rows}">
           <div class="list-group">
-            <a th:href="@{/holds/${seminar.id}/basic/input}" class="list-group-item list-group-item-action flex-column align-items-start">
+            <a th:href="@{/holds/__${seminar.id}__/basic/input}" class="list-group-item list-group-item-action flex-column align-items-start">
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-2 h5" th:text="${seminar.title}">title</h5>
               </div>
