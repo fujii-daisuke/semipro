@@ -105,11 +105,20 @@ public class ManageHoldController {
     
     @GetMapping(value = {"basic/input", "{seminarId}/basic/input"})
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.BEGIN)
-    public ModelAndView inputBasic(@PathVariable(name = "seminarId", required = false) Long seminarId,
+    public ModelAndView inputBasic(@AuthenticationPrincipal AccountUserDetails account,
+            @PathVariable(name = "seminarId", required = false) Long seminarId,
             ManageHoldBasicForm form,
             ModelAndView model) {
-        model.setViewName("managehold/basicForm");
+        if (seminarId != null) {
+            Seminar seminar = seminarService.findOneByOwner(seminarId, account.getMember().getId());
+            if (seminar == null) {
+                model.setViewName("redirect:/");
+                return model;
+            }
+            form.set(seminar);
+        }
         form.setId(seminarId);
+        model.setViewName("managehold/basicForm");
         return model;
     }
     

@@ -119,6 +119,11 @@ public class SeminarServiceImpl implements SeminarService {
     }
 
     @Override
+    public Seminar findOneByOwner(Long id, Long memberId) {
+        return seminarRepository.findOneByOwner(id, memberId);
+    }
+
+    @Override
     public List<Seminar> findAllByOwner(Long memberId) {
         return seminarRepository.findAllByOwner(memberId);
     }
