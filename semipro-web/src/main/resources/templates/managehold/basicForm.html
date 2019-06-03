@@ -19,17 +19,19 @@
               <div class="card-body">
                 <ul class="nav md-pills pills-deep-orange nav-justified">
                   <li class="nav-item">
-                    <a class="nav-link active" href="#!">基本情報</a>
+                    <a class="nav-link active" href="javascript:void(0)">基本情報</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#!">詳細</a>
+                    <a class="nav-link" th:if="${manageHoldBasicForm.id != null}" th:href="@{/holds/__${manageHoldBasicForm.id}__/advanced/input}">詳細</a>
+                    <a class="nav-link" th:if="${manageHoldBasicForm.id == null}" href="javascript:void(0)">詳細</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#!">チケット</a>
+                    <a class="nav-link" th:if="${manageHoldBasicForm.id != null}" th:href="@{/holds/__${manageHoldBasicForm.id}__/ticket/input}">チケット</a>
+                    <a class="nav-link" th:if="${manageHoldBasicForm.id == null}" href="javascript:void(0)">チケット</a>
                   </li>
                 </ul>
                 <hr>
-                <form th:action="@{/holds/basic/save}" th:object="${manageHoldBasicForm}" method="post">
+                <form th:action="@{/holds/__${manageHoldBasicForm.id == null ? '' : manageHoldBasicForm.id}__basic/save}" th:object="${manageHoldBasicForm}" method="post">
                   <div class="row">
                     <div class="col-md-12">
                       <div class="md-form">
@@ -39,19 +41,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="my-3">
-                    <div class="text-muted">セミナータイプ</div>
-                    <div class="form-check">
-                      <input type="radio" class="form-check-input" id="offlineSeminar" name="groupOfSeminarType" th:field="*{seminarType}" value="1">
-                      <label class="form-check-label" for="offlineSeminar">オフラインセミナー</label>
-                    </div>
-                    <div class="form-check">
-                      <input type="radio" class="form-check-input" id="onlineSeminar" name="groupOfSeminarType" th:field="*{seminarType}" value="2">
-                      <label class="form-check-label" for="onlineSeminar">オンラインセミナー</label>
-                    </div>
-                    <div th:if="${#fields.hasErrors('seminarType')}" th:errors="*{seminarType}" class="invalid-feedback d-block">error</div>
-                  </div>
-                  <div class="row mt-5">
+                  <div class="row mt-3">
                     <div class="col-md-3">
                       <div class="md-form">
                         <input type="date" id="startingDate" class="form-control" th:field="*{startingDate}">
@@ -82,6 +72,18 @@
                     </div>
                   </div>
                   <div class="my-3">
+                    <div class="text-muted">セミナータイプ</div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" id="offlineSeminar" name="groupOfSeminarType" th:field="*{seminarType}" value="1">
+                      <label class="form-check-label" for="offlineSeminar">オフラインセミナー</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" id="onlineSeminar" name="groupOfSeminarType" th:field="*{seminarType}" value="2">
+                      <label class="form-check-label" for="onlineSeminar">オンラインセミナー</label>
+                    </div>
+                    <div th:if="${#fields.hasErrors('seminarType')}" th:errors="*{seminarType}" class="invalid-feedback d-block">error</div>
+                  </div>
+                  <div class="place-supported-area my-3" th:classappend="*{(seminarType != null and seminarType == 1)? 'd-block' : 'd-none' }">
                     <div class="text-muted">会場手配</div>
                     <div class="form-check">
                       <input type="radio" class="form-check-input" id="semiproSupport" name="placeSupported" th:field="*{placeSupported}" value="true">
@@ -93,37 +95,39 @@
                     </div>
                     <div th:if="${#fields.hasErrors('placeSupported')}" th:errors="*{placeSupported}" class="invalid-feedback d-block">error</div>
                   </div>
-                  <div class="place-input-area d-none">
-                      <div class="row">
-                        <div class="col-md-2">
-                          <select class="mdb-select md-form" th:field="*{prefectureId}">
-                            <option th:each="pref:${prefectures}" th:value="${pref.id}">[[${pref.name}]]</option>
-                          </select>
-                          <label class="mdb-main-label">都道府県</label>
-                        </div>
-                        <div class="col-md-2">
-                          <select class="mdb-select md-form" th:field="*{cityId}">
-                            <option th:each="city:${cities}" th:value="${city.id}">[[${city.name}]]</option>
-                          </select>
-                          <label class="mdb-main-label">市区町村</label>
-                        </div>
-                        <div class="col-md-8">
-                          <div class="md-form">
-                            <input type="text" id="holdSeminarForm-address" class="form-control" th:field="*{address}">
-                            <label for="holdSeminarForm-address">以降の住所</label>
-                            <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="invalid-feedback d-block">error</div>
-                          </div>
+                  <div class="place-address-area" th:classappend="*{(placeSupported != null and !placeSupported)? 'd-block' : 'd-none' }">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <select class="mdb-select md-form mb-0" th:field="*{prefectureId}">
+                          <option value="">都道府県</option>
+                          <option th:each="pref:${prefectures}" th:value="${pref.id}" th:selected="${pref.id == manageHoldBasicForm.prefectureId}">[[${pref.name}]]</option>
+                        </select>
+                        <label class="mdb-main-label">都道府県</label>
+                        <div th:if="${#fields.hasErrors('prefectureId')}" th:errors="*{prefectureId}" class="invalid-feedback d-block  mt-0">error</div>
+                      </div>
+                      <div class="col-md-2">
+                        <select class="mdb-select md-form  mb-0" th:field="*{cityId}">
+                          <option th:each="city:${cities}" th:value="${city.id}" th:selected="${city.id == manageHoldBasicForm.cityId}">[[${city.name}]]</option>
+                        </select>
+                        <label class="mdb-main-label">市区町村</label>
+                        <div th:if="${#fields.hasErrors('cityId')}" th:errors="*{cityId}" class="invalid-feedback d-block  mt-0">error</div>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="md-form">
+                          <input type="text" id="holdSeminarForm-address" class="form-control" th:field="*{address}">
+                          <label for="holdSeminarForm-address">以降の住所</label>
+                          <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="invalid-feedback d-block">error</div>
                         </div>
                       </div>
-                      <div class="md-form">
-                        <input type="text" id="holdSeminarForm-place" class="form-control" th:field="*{place}">
-                        <label for="holdSeminarForm-place">会場名</label>
-                        <div th:if="${#fields.hasErrors('place')}" th:errors="*{place}" class="invalid-feedback d-block">error</div>
-                      </div>
+                    </div>
+                    <div class="md-form">
+                      <input type="text" id="holdSeminarForm-place" class="form-control" th:field="*{place}">
+                      <label for="holdSeminarForm-place">会場名</label>
+                      <div th:if="${#fields.hasErrors('place')}" th:errors="*{place}" class="invalid-feedback d-block">error</div>
                     </div>
                   </div>
                   <div class="text-center">
-                    <button class="btn btn-indigo btn-rounded mt-3 mb-5" type="submit">登 録</button>
+                    <button class="btn btn-indigo btn-rounded my-3" type="submit">登 録</button>
                   </div>
                 </form>
               </div>
@@ -140,11 +144,19 @@
       // Material Select Initialization
       $('.mdb-select').materialSelect();
       
+      $('[name=seminarType]').on('change',function(){
+        if ($('input[name=seminarType]:checked').val() === '1') {
+          $('.place-supported-area').removeClass('d-none').addClass('d-block');
+        } else {
+          $('.place-supported-area').removeClass('d-block').addClass('d-none');
+        }
+      });
+      
       $('[name=placeSupported]').on('change', function() {
         if ($('input[name=placeSupported]:checked').val() === 'false') {
-          $('.place-input-area').removeClass('d-none').addClass('d-block');
+          $('.place-address-area').removeClass('d-none').addClass('d-block');
         } else {
-          $('.place-input-area').removeClass('d-block').addClass('d-none');
+          $('.place-address-area').removeClass('d-block').addClass('d-none');
         }
       });
       
