@@ -36,6 +36,12 @@
         <result property="updatedAt" column="updated_at" />
         <result property="prefecture.id" column="prefecture_id" />
         <result property="prefecture.name" column="prefecture_name" />
+        <result property="city.id" column="city_id" />
+        <result property="city.name" column="city_name" />
+        <result property="placeSupported" column="place_supported" />
+        <result property="shootingSupported" column="shooting_supported" />
+        <result property="shootingEditSupported" column="shooting_edit_supported" />
+        <result property="movieSalesSupported" column="movie_sales_supported" />
     </resultMap>
 
     <sql id="findPageByCriteriaWherePhrase">
@@ -107,12 +113,15 @@
             seminar.movie_sales_supported,
             seminar.updated_at,
             seminar.prefecture_id,
-            prefecture.name prefecture_name
+            prefecture.name prefecture_name,
+            seminar.city_id,
+            city.name city_name
     </sql>
 
     <sql id="baseFromPhrase">
         from seminar
         left outer join prefecture on seminar.prefecture_id = prefecture.id
+        left outer join city on prefecture.id = city.prefecture_id and seminar.city_id = city.id
     </sql>
     
     <select id="findOneWithDetails" resultMap="seminarResultMap">
@@ -142,6 +151,7 @@
             reference_url,
             cancel_policy,
             prefecture_id,
+            city_id,
             address,
             place,
             lat,
@@ -176,6 +186,7 @@
             #{referenceUrl},
             #{cancelPolicy},
             #{prefecture.id},
+            #{city.id},
             #{address},
             #{place},
             #{lat},
@@ -216,6 +227,7 @@
             reference_url = #{referenceUrl},
             cancel_policy = #{cancelPolicy},
             prefecture_id = #{prefecture.id},
+            city_id = #{city.id}
             address = #{address},
             place = #{place},
             lat = #{lat},
@@ -238,7 +250,15 @@
             id = #{id}
     </update>
     
-    
+    <select id="findOneByOwner" resultMap="seminarResultMap">
+        <include refid="baseSelectPhrase" />
+        <include refid="baseFromPhrase" />
+        inner join seminar_owner on seminar.id = seminar_owner.seminar_id
+        where
+            seminar_owner.member_id = #{memberId}
+            and seminar.id = #{id}
+    </select>
+
     <select id="findAllByOwner" resultMap="seminarResultMap">
         <include refid="baseSelectPhrase" />
         <include refid="baseFromPhrase" />

@@ -28,5 +28,7 @@ public interface SeminarRepository {
     
     int update(Seminar seminar);
     
+    Seminar findOneByOwner(@Param("id")Long id, @Param("memberId")Long memberId);
+    
     List<Seminar> findAllByOwner(Long memberId);
 }

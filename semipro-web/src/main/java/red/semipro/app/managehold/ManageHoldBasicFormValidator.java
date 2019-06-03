@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -18,18 +19,43 @@ public class ManageHoldBasicFormValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+        
+        ManageHoldBasicForm form = (ManageHoldBasicForm)target;
+        
+        if (!form.getPlaceSupported()) {
+            if (form.getPrefectureId() == null) {
+                errors.rejectValue("prefectureId",
+                        "NotNull",
+                        "Incorrect date was entered.");
+            }
+            if (form.getCityId() == null) {
+                errors.rejectValue("cityId",
+                        "NotNull",
+                        "Incorrect date was entered.");
+            }
+            if (StringUtils.isEmpty(form.getAddress())) {
+                errors.rejectValue("address",
+                        "NotNull",
+                        "Incorrect date was entered.");
+            }
+            if (StringUtils.isEmpty(form.getPlace())) {
+                errors.rejectValue("place",
+                        "NotNull",
+                        "Incorrect date was entered.");
+            }
+        }
+        
         if (errors.hasErrors()) {
             return;
         }
         
-        ManageHoldBasicForm form = (ManageHoldBasicForm)target;
         LocalDateTime startingDateTime = null;
         LocalDateTime endingDateTime = null;
         try {
             startingDateTime = LocalDateTime.of(LocalDate.parse(form.getStartingDate()), LocalTime.parse(form.getStartingTime()));
         } catch (Exception e) {
             errors.rejectValue("startingDate",
-                    "IncorrectDate.datetime",
+                    "IncorrectDate",
                     "Incorrect date was entered.");
         }
 
@@ -37,7 +63,7 @@ public class ManageHoldBasicFormValidator implements Validator {
             endingDateTime = LocalDateTime.of(LocalDate.parse(form.getEndingDate()), LocalTime.parse(form.getEndingTime()));
         } catch (Exception e) {
             errors.rejectValue("endingDate",
-                    "IncorrectDate.datetime",
+                    "IncorrectDate",
                     "Incorrect date was entered.");
         }
         
@@ -45,11 +71,10 @@ public class ManageHoldBasicFormValidator implements Validator {
             return;
         }
         
-        if (startingDateTime.isAfter(endingDateTime)) {
+        if (!startingDateTime.isBefore(endingDateTime)) {
             errors.rejectValue("endingDate",
-                    "IncorrectDate.datetime",
+                    "BeforeStartDate",
                     "Incorrect date was entered.");
         }
     }
-
 }
