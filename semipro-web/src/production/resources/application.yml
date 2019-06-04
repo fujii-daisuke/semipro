@@ -11,7 +11,7 @@ spring:
       initialSize: 4
   messages:
     basename: i18n/messages
-    cache-duration: -1
+    cacheDuration: -1
     encoding: UTF-8
   mail:
     host: smtp.gmail.com
@@ -23,6 +23,10 @@ spring:
       mail.smtp.starttls.enable: true
   thymeleaf:
     cache: false
+  servlet:
+    multipart:
+      maxFileSize: 10MB # Max file size.
+      maxRequestSize: 10MB # Max request size.
 #  jpa:
 #    properties:
 #      hibernate:
