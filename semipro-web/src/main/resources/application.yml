@@ -14,7 +14,7 @@ spring:
       initialSize: 4
   messages:
     basename: i18n/messages
-    cache-duration: -1
+    cacheDuration: -1
     encoding: UTF-8
   mail:
     host: smtp.gmail.com
@@ -26,16 +26,12 @@ spring:
       mail.smtp.starttls.enable: true
   thymeleaf:
     cache: false
-#  jpa:
-#    properties:
-#      hibernate:
-#        show_sql: true
-#        format_sql: true
-#        use_sql_comments: true
-#        generate_statistics: true
-#  jackson:
-#    serialization:
-#      write-dates-as-timestamps: false
+  servlet:
+    multipart:
+      enabled: true
+      maxFileSize: 10Mb
+      maxRequestSize: 10Mb
+
 server:
   port: 8080
 #  port: 8085 
@@ -63,7 +59,7 @@ logging:
 mybatis:
 #  mapperLocations: classpath:sqlMapper/*.xml
   type-handlers-package: red.semipro.domain.typehandler
-
+  
 # application settings
 custom:
   application:

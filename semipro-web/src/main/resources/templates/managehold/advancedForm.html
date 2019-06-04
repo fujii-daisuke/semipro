@@ -39,6 +39,7 @@
                       <div class="file-path-wrapper">
                         <input class="file-path validate" type="text" placeholder="メイン画像">
                       </div>
+                      <div th:if="${#fields.hasErrors('mainImage')}" th:errors="*{mainImage}" class="invalid-feedback d-block">error</div>
                     </div>
                     <div class="preview"></div>
                   </div>
@@ -55,7 +56,7 @@
                     <div id="editor"></div>
                     <div th:if="${#fields.hasErrors('contents')}" th:errors="*{contents}" class="invalid-feedback d-block">error</div>
                   </div>
-                  <div class="md-form">
+                  <div class="my-4">
                     <div class="text-muted">セミナー撮影オプション</div>
                     <div class="form-check">
                       <input type="radio" class="form-check-input" id="unUseShootingSupport" name="groupOfShootingSupport" th:field="*{shootingSupported}" value="0">
@@ -67,7 +68,7 @@
                     </div>
                     <div th:if="${#fields.hasErrors('shootingSupported')}" th:errors="*{shootingSupported}" class="invalid-feedback d-block">error</div>
                   </div>
-                  <div class="md-form">
+                  <div class="my-4">
                     <div class="text-muted">セミナー動画編集オプション</div>
                     <div class="form-check">
                       <input type="radio" class="form-check-input" id="unUseShootingEditSupport" name="groupOfShootingEditSupport" th:field="*{shootingEditSupported}" value="0">
@@ -79,7 +80,7 @@
                     </div>
                     <div th:if="${#fields.hasErrors('shootingEditSupported')}" th:errors="*{shootingEditSupported}" class="invalid-feedback d-block">error</div>
                   </div>
-                  <div class="md-form">
+                  <div class="my-4">
                     <div class="text-muted">セミナー動画販売オプション</div>
                     <div class="form-check">
                       <input type="radio" class="form-check-input" id="unUseMovieSalesSupport" name="groupOfMovieSalesSupport" th:field="*{movieSalesSupported}" value="0">
@@ -115,7 +116,7 @@
             reader = new FileReader(),
             $preview = $(".preview");
             t = this;
-
+         
         // 画像ファイル以外の場合は何もしない
         if(file.type.indexOf("image") < 0){
           return false;

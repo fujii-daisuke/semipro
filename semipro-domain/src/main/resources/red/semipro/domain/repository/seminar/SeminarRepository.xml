@@ -48,6 +48,7 @@
         <![CDATA[
         where
             seminar.ending_at >= current_timestamp
+            and opening_status =  ${@red.semipro.domain.enums.OpeningStatus@OPENING.value}
         ]]>
     </sql>
 
@@ -133,6 +134,7 @@
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         insert into seminar (
+            opening_status,
             provider_id,
             provider_seminar_id,
             seminar_type,
@@ -168,6 +170,7 @@
             updated_at
             )
         values (
+            #{openingStatus.value}
             #{providerId.value},
             #{providerSeminarId},
             #{seminarType},
