@@ -30,7 +30,9 @@ public class ManageHoldBasicForm implements Serializable {
     private String endingTime;
     private Boolean placeSupported;
     private Integer prefectureId;
+    private String prefectureName;
     private Integer cityId;
+    private String cityName;
     @Size(max=50)
     private String address;
     @Size(max=20)
@@ -46,7 +48,9 @@ public class ManageHoldBasicForm implements Serializable {
         this.placeSupported = seminar.isPlaceSupported();
         if (!this.placeSupported) {
             this.prefectureId = seminar.getPrefecture().getId();
+            this.prefectureName = seminar.getPrefecture().getName();
             this.cityId = seminar.getCity().getId();
+            this.cityName = seminar.getCity().getName();
             this.address = seminar.getAddress();
             this.place = seminar.getPlace();
         }
