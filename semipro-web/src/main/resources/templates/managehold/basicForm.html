@@ -98,7 +98,7 @@
                   <div class="place-address-area" th:classappend="*{(placeSupported != null and !placeSupported)? 'd-block' : 'd-none' }">
                     <div class="row">
                       <div class="col-md-2">
-                        <select class="mdb-select md-form mb-0" th:field="*{prefectureId}">
+                        <select class="mdb-select prefecture md-form mb-0" th:field="*{prefectureId}">
                           <option value="">都道府県</option>
                           <option th:each="pref:${prefectures}" th:value="${pref.id}" th:selected="${pref.id == manageHoldBasicForm.prefectureId}">[[${pref.name}]]</option>
                         </select>
@@ -106,7 +106,7 @@
                         <div th:if="${#fields.hasErrors('prefectureId')}" th:errors="*{prefectureId}" class="invalid-feedback d-block  mt-0">error</div>
                       </div>
                       <div class="col-md-2">
-                        <select class="mdb-select md-form  mb-0" th:field="*{cityId}">
+                        <select class="mdb-select city md-form  mb-0" th:field="*{cityId}">
                           <option th:each="city:${cities}" th:value="${city.id}" th:selected="${city.id == manageHoldBasicForm.cityId}">[[${city.name}]]</option>
                         </select>
                         <label class="mdb-main-label">市区町村</label>
@@ -139,11 +139,14 @@
   </main>
   <!--Main Navigation-->
   <th:block th:fragment="script">
-  <script type="text/javascript">
+  <script type="text/javascript" th:inline="javascript">
     $(document).ready(function() {
-      // Material Select Initialization
-      $('.mdb-select').materialSelect();
+      $('.prefecture').materialSelect();
+      $('.prefecture .select-dropdown li:contains("[(${manageHoldBasicForm.prefectureName})]")').trigger('click');
       
+      $('.city').materialSelect();
+      $('.city .select-dropdown li:contains("[(${manageHoldBasicForm.cityName})]")').trigger('click');
+
       $('[name=seminarType]').on('change',function(){
         if ($('input[name=seminarType]:checked').val() === '1') {
           $('.place-supported-area').removeClass('d-none').addClass('d-block');

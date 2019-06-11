@@ -16,8 +16,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: d.ziifuu@gmail.com
-    password: jikrefrqjqzfsjko
+    username: red.semipro@gmail.com
+    password: qozxlzjnydjasnbr
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
@@ -25,18 +25,10 @@ spring:
     cache: false
   servlet:
     multipart:
-      maxFileSize: 10MB # Max file size.
-      maxRequestSize: 10MB # Max request size.
-#  jpa:
-#    properties:
-#      hibernate:
-#        show_sql: true
-#        format_sql: true
-#        use_sql_comments: true
-#        generate_statistics: true
-#  jackson:
-#    serialization:
-#      write-dates-as-timestamps: false
+      enabled: true
+      maxFileSize: 10Mb
+      maxRequestSize: 10Mb
+
 server:
   port: 8080
 #  port: 8085 
@@ -65,15 +57,26 @@ mybatis:
 #  mapperLocations: classpath:sqlMapper/*.xml
   type-handlers-package: red.semipro.domain.typehandler
 
+cloud.aws:
+  stack:
+    auto: false
+  credentials:
+    accessKey: AKIA47C5VUL4TKOZN7EX
+    secretKey: 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
+  region:
+    static: ap-northeast-1
+    auto: false
+
 # application settings
 custom:
   application:
     schema:
       https
     domain:
-      localhost:8080
+      semipro.red
   # 秒/分/時/日/月/曜日
     cron:
       eventon: 0 0 3 * * 0
     email:
       fromEmail: d.ziifuu@gmail.com
+  aws.s3.bucket: semipro-dev

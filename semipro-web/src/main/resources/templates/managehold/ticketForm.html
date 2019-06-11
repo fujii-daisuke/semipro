@@ -19,13 +19,13 @@
               <div class="card-body">
                 <ul class="nav md-pills pills-deep-orange nav-justified">
                   <li class="nav-item">
-                    <a class="nav-link" href="#!">基本情報</a>
+                    <a class="nav-link" th:href="@{/holds/__${seminarId}__/basic/input}">基本情報</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#!">詳細</a>
+                    <a class="nav-link" th:href="@{/holds/__${seminarId}__/advanced/input}">詳細</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active" href="#!">チケット</a>
+                    <a class="nav-link active" href="javascript:void(0)">チケット</a>
                   </li>
                 </ul>
                 <hr>

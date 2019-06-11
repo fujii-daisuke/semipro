@@ -46,7 +46,7 @@ public class ManageHoldTicketFormValidator implements Validator {
             return;
         }
         
-        if (entryStartingDateTime.isAfter(entryEndingDateTime)) {
+        if (!entryStartingDateTime.isBefore(entryEndingDateTime)) {
             errors.rejectValue("endingDate",
                     "IncorrectDate.datetime",
                     "Incorrect date was entered.");
