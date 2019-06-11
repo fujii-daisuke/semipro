@@ -230,7 +230,7 @@
             reference_url = #{referenceUrl},
             cancel_policy = #{cancelPolicy},
             prefecture_id = #{prefecture.id},
-            city_id = #{city.id}
+            city_id = #{city.id},
             address = #{address},
             place = #{place},
             lat = #{lat},

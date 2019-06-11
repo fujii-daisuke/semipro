@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import red.semipro.business.aws.S3StorageService;
 import red.semipro.business.util.FileUploader;
 import red.semipro.domain.model.Seminar;
 import red.semipro.domain.model.SeminarTicket;
@@ -23,20 +24,21 @@ public class ManageHoldHelper {
     @Autowired
     private SeminarService seminarService;
     @Autowired
-    private FileUploader fileUploader;
-    @Autowired
     private SeminarTicketService seminarTicketService;
+    @Autowired
+    private S3StorageService s3StorageService;
     
     @Transactional
     public void saveAdvanced(Long seminarId, ManageHoldAdvancedForm form) throws IOException {
         Seminar seminar = seminarService.findOneWithDetails(Long.valueOf(seminarId));
+        seminar.setImagePath(seminar.getId() + "." + FileUploader.getSuffix(form.getMainImage().getOriginalFilename()));
         seminar.setSummary(form.getSummary());
         seminar.setContents(form.getContents());
         seminar.setShootingSupported(form.getShootingEditSupported());
         seminar.setShootingEditSupported(form.getShootingEditSupported());
         seminar.setUpdatedAt(LocalDateTime.now());
         
-        fileUploader.upload(form.getMainImage(), "seminar", seminar.getId().toString());
+        s3StorageService.upload(form.getMainImage(), seminar.getId().toString() + "." + FileUploader.getSuffix(form.getMainImage().getOriginalFilename()));
         seminarService.update(seminar);
     }
     

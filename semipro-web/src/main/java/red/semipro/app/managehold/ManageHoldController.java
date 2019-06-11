@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenCheck;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenType;
 
+import red.semipro.business.aws.S3StorageService;
 import red.semipro.domain.enums.ProviderId;
 import red.semipro.domain.enums.SeminarType;
 import red.semipro.domain.model.Prefecture;
@@ -45,6 +46,8 @@ public class ManageHoldController {
     private PrefectureService prefectureService;
     @Autowired
     private ManageHoldHelper manageHoldHelper;
+    @Autowired
+    private S3StorageService s3StorageService;
     
     @InitBinder("manageHoldBasicForm")
     public void initManageHoldBasicBinder(WebDataBinder webDataBinder) {
@@ -153,9 +156,14 @@ public class ManageHoldController {
     
     @GetMapping(value="{seminarId}/advanced/input")
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.BEGIN)
-    public ModelAndView inputAdvanced(@PathVariable("seminarId") String seminarId,
+    public ModelAndView inputAdvanced(@AuthenticationPrincipal AccountUserDetails account,
+                @PathVariable("seminarId") Long seminarId,
+                ManageHoldAdvancedForm form,
                 ModelAndView model) {
+        
+        form.set(seminarService.findOneByOwner(seminarId, account.getMember().getId()));
         model.addObject("seminarId", seminarId);
+        model.addObject("s3Url", s3StorageService.getUrl());
         model.setViewName("managehold/advancedForm");
         return model;
     }
@@ -201,7 +209,7 @@ public class ManageHoldController {
             return model;
         }
         manageHoldHelper.saveTicket(Long.valueOf(seminarId), form);
-        model.setViewName("redirect:/holds/" + seminarId + "/preview");
+        model.setViewName("redirect:/seminars/" + seminarId + "/reserve");
         return model;
     }
     

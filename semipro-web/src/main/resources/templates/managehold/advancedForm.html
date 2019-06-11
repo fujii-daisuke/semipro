@@ -41,7 +41,9 @@
                       </div>
                       <div th:if="${#fields.hasErrors('mainImage')}" th:errors="*{mainImage}" class="invalid-feedback d-block">error</div>
                     </div>
-                    <div class="preview"></div>
+                    <div class="preview">
+                        <img th:if="*{imagePath != null}" th:src="${s3Url + manageHoldAdvancedForm.imagePath}" width="100%">
+                    </div>
                   </div>
                   <div class="mt-5">
                     <div class="md-form">
