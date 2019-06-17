@@ -42,6 +42,13 @@
         <result property="shootingSupported" column="shooting_supported" />
         <result property="shootingEditSupported" column="shooting_edit_supported" />
         <result property="movieSalesSupported" column="movie_sales_supported" />
+        <collection property="tickets" ofType="red.semipro.domain.model.SeminarTicket">
+            <result column="ticket_id" property="id"/>
+            <result column="id" property="seminarId"/>
+            <result column="ticket_name" property="name"/>
+            <result column="ticket_price" property="price"/>
+            <result column="ticket_num" property="num"/>
+        </collection>
     </resultMap>
 
     <sql id="findPageByCriteriaWherePhrase">
@@ -116,11 +123,16 @@
             seminar.prefecture_id,
             prefecture.name prefecture_name,
             seminar.city_id,
-            city.name city_name
+            city.name city_name,
+            seminar_ticket.id ticket_id,
+            seminar_ticket.name ticket_name,
+            seminar_ticket.price ticket_price,
+            seminar_ticket.num ticket_num
     </sql>
 
     <sql id="baseFromPhrase">
         from seminar
+        left outer join seminar_ticket on seminar.id = seminar_ticket.seminar_id
         left outer join prefecture on seminar.prefecture_id = prefecture.id
         left outer join city on prefecture.id = city.prefecture_id and seminar.city_id = city.id
     </sql>
