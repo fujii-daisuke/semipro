@@ -62,9 +62,9 @@ public class Seminar implements Serializable {
     /** 参考URL */
     private String referenceUrl;
     /** 支払い方法 */
-    private List<SeminarPaymentType> seminarPaymentTypes;
+    private List<SeminarPaymentType> paymentTypes;
     /** チケット情報 */
-    private List<SeminarTicket> seminarTickets;
+    private List<SeminarTicket> tickets;
     private String cancelPolicy;
     /** 都道府県 */
     private Prefecture prefecture;
@@ -83,7 +83,7 @@ public class Seminar implements Serializable {
     /** waiting */
     private Integer waiting;
     /** 主催者情報 */
-    private List<SeminarOwner> seminarOwners;
+    private List<SeminarOwner> owners;
     /** 埋め込みコード */
     private String embedCode;
     /** 最低開催人数定員 */
@@ -165,18 +165,18 @@ public class Seminar implements Serializable {
         this.providerSeminarUrl = event.getEvent_url();
         this.referenceUrl = event.getUrl();
         if (event.getPayment_types() != null && event.getPayment_types().size() > 0) {
-            this.seminarPaymentTypes = new ArrayList<SeminarPaymentType>();
+            this.paymentTypes = new ArrayList<SeminarPaymentType>();
             for (String paymentTypeName: event.getPayment_types()) {
                 PaymentType paymentType = PaymentType.nameOf(paymentTypeName);
                 if (paymentType != null) {
-                    this.seminarPaymentTypes.add(new SeminarPaymentType(paymentType));
+                    this.paymentTypes.add(new SeminarPaymentType(paymentType));
                 }
             }
         }
         if (event.getTickets() != null && event.getTickets().size() > 0) {
-            this.seminarTickets = new ArrayList<SeminarTicket>();
+            this.tickets = new ArrayList<SeminarTicket>();
             for (Ticket ticket: event.getTickets()) {
-                this.seminarTickets.add(new SeminarTicket(ticket.getName(), ticket.getPrice()));
+                this.tickets.add(new SeminarTicket(ticket.getName(), ticket.getPrice()));
             }
         }
         
@@ -191,9 +191,9 @@ public class Seminar implements Serializable {
         this.accepted = event.getAccepted();
         this.waiting = event.getWaiting();
         if (event.getOwners() != null && event.getOwners().size() > 0) {
-            this.seminarOwners = new ArrayList<>();
+            this.owners = new ArrayList<>();
             for (Owner owner: event.getOwners()) {
-                this.seminarOwners.add(new SeminarOwner(owner.getId(), owner.getName(), owner.getUrl()));
+                this.owners.add(new SeminarOwner(owner.getId(), owner.getName(), owner.getUrl()));
             }
         }
         this.embedCode = event.getEmbed_code();

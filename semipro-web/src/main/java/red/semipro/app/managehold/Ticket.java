@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
+import red.semipro.domain.model.SeminarTicket;
 
 @Data
 public class Ticket implements Serializable {
@@ -20,5 +21,11 @@ public class Ticket implements Serializable {
     @NotNull
     private Integer num;
     
-
+    public Ticket() {
+    }
+    public Ticket(SeminarTicket ticket) {
+        this.name = ticket.getName();
+        this.price = ticket.getPrice();
+        this.num = ticket.getNum();
+    }
 }
