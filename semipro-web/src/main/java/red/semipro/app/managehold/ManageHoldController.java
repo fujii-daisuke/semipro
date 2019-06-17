@@ -197,8 +197,12 @@ public class ManageHoldController {
     
     @GetMapping(value="{seminarId}/ticket/input")
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.BEGIN)
-    public ModelAndView inputTicket(@PathVariable("seminarId") String seminarId,
+    public ModelAndView inputTicket(@AuthenticationPrincipal AccountUserDetails account,
+                @PathVariable("seminarId") Long seminarId,
+                ManageHoldTicketForm form,
                 ModelAndView model) {
+        
+        form.set(seminarService.findOneByOwner(seminarId, account.getMember().getId()));
         model.addObject("seminarId", seminarId);
         model.setViewName("managehold/ticketForm");
         return model;

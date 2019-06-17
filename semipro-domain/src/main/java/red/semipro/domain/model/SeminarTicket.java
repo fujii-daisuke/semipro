@@ -23,6 +23,7 @@ public class SeminarTicket implements Serializable {
     }
     
     public SeminarTicket(Long seminarId, String name, Integer price, Integer num) {
+        this.seminarId = seminarId;
         this.name = name;
         this.price = price;
         this.num = num;

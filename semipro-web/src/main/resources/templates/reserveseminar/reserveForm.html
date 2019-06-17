@@ -102,7 +102,7 @@
           <h4 class="h4-responsive text-center font-weight-bold dark-grey-text">チケット販売状況</h4>
           <hr>
           
-          <div class="row mb-3" th:each="ticket, stat: ${seminar.seminarTickets}">
+          <div class="row mb-3" th:each="ticket, stat: ${seminar.tickets}">
             <div class="offset-md-3 col-md-2" th:text="${ticket.name}"></div>
             <div class="col-md-2 text-right">[[${#numbers.formatInteger(ticket.price,1,'DEFAULT')}]] 円</div>
           </div>
@@ -138,7 +138,7 @@
           </div>
           <div class="row mb-3">
             <div class="offset-md-1 col-md-1">主催</div>
-            <div class="col" th:each="owner, stat: ${seminar.seminarOwners}">
+            <div class="col" th:each="owner, stat: ${seminar.owners}">
               <span th:text="${owner.name}"></span><br>
               <a th:href="${owner.url}" target="_blank" th:text="${owner.url}"></a>
             </div>
