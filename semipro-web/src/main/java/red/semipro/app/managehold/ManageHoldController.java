@@ -29,6 +29,7 @@ import red.semipro.domain.enums.ProviderId;
 import red.semipro.domain.enums.SeminarType;
 import red.semipro.domain.model.Prefecture;
 import red.semipro.domain.model.Seminar;
+import red.semipro.domain.service.city.CityService;
 import red.semipro.domain.service.prefecture.PrefectureService;
 import red.semipro.domain.service.seminar.SeminarService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
@@ -44,6 +45,8 @@ public class ManageHoldController {
     private ManageHoldBasicFormValidator manageHoldBasicFormValidator;
     @Autowired
     private PrefectureService prefectureService;
+    @Autowired
+    private CityService cityService;
     @Autowired
     private ManageHoldHelper manageHoldHelper;
     @Autowired
@@ -119,6 +122,9 @@ public class ManageHoldController {
                 return model;
             }
             form.set(seminar);
+            if (!form.getPlaceSupported()) {
+                model.addObject("cities", cityService.findByPrefectureId(form.getPrefectureId()));
+            }
         }
         form.setId(seminarId);
         model.setViewName("managehold/basicForm");
@@ -134,6 +140,9 @@ public class ManageHoldController {
             ModelAndView model) throws Exception {
         
         if (result.hasErrors()) {
+            if (!form.getPlaceSupported()) {
+                model.addObject("cities", cityService.findByPrefectureId(form.getPrefectureId()));
+            }
             model.setViewName("managehold/basicForm");
             return model;
         }
