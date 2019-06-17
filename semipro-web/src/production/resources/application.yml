@@ -78,5 +78,5 @@ custom:
     cron:
       eventon: 0 0 3 * * 0
     email:
-      fromEmail: d.ziifuu@gmail.com
-  aws.s3.bucket: semipro-dev
+      fromEmail: red.semipro@gmail.com
+  aws.s3.bucket: semipro-production
