@@ -24,4 +24,8 @@ public enum ProviderId {
         }
         return null;
     }
+    
+    public boolean isEventon() {
+        return this.value == ProviderId.EVENTON.getValue();
+    }
 }

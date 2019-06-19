@@ -236,4 +236,15 @@ public class Seminar implements Serializable {
         }
         return false;
     }
+    
+    public String getHoldPlace() {
+        if (ProviderId.EVENTON.equals(this.providerId)) {
+            return this.address + " " + this.place;
+        } else {
+            if (this.prefecture != null && this.city != null) {
+                return this.prefecture.getName() + this.city.getName() + this.address + " " + this.place;
+            }
+        }
+        return null;
+    }
 }
