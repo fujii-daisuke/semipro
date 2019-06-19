@@ -105,7 +105,7 @@ public class SeminarServiceImpl implements SeminarService {
         if (seminar.getId() == null) {
             seminarRepository.insert(seminar);
             List<SeminarOwner> owners = new ArrayList<SeminarOwner>();
-            owners.add(new SeminarOwner(seminar, member));
+            owners.add(new SeminarOwner(seminar, member.getId()));
             seminarOwnerRepository.insert(owners);
         } else {
             seminarRepository.update(seminar);
@@ -126,5 +126,13 @@ public class SeminarServiceImpl implements SeminarService {
     @Override
     public List<Seminar> findAllByOwner(Long memberId) {
         return seminarRepository.findAllByOwner(memberId);
+    }
+
+    @Override
+    public void publish(Long id, Member member) {
+        Seminar seminar = findOneByOwner(id, member.getId());
+        if (seminar.isOwnership(member.getId())) {
+            seminarRepository.publish(id);
+        }
     }
 }

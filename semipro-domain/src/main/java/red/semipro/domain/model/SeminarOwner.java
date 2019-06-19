@@ -10,7 +10,7 @@ public class SeminarOwner implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long id;
     private Long seminarId;
-    private Member member;
+    private Long memberId;
     private Integer providerOwnerId;
     private String name;
     private String url;
@@ -18,9 +18,9 @@ public class SeminarOwner implements Serializable {
     public SeminarOwner() {
     }
     
-    public SeminarOwner(Seminar seminar, Member member) {
+    public SeminarOwner(Seminar seminar, Long memberId) {
         this.seminarId = seminar.getId();
-        this.member = member;
+        this.memberId = memberId;
     }
     
     public SeminarOwner(Integer providerOwnerId, String name, String url) {
