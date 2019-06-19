@@ -22,4 +22,8 @@ public enum OpeningStatus {
         }
         return null;
     }
+    
+    public boolean isOpening() {
+        return this.value == OpeningStatus.OPENING.getValue();
+    }
 }

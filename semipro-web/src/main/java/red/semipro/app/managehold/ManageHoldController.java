@@ -226,12 +226,13 @@ public class ManageHoldController {
         return model;
     }
     
-    @GetMapping(value="{seminarId}/preview")
-    public ModelAndView preview(@PathVariable("seminarId") String seminarId,
+    @GetMapping(value="{seminarId}/publish")
+    public ModelAndView publish(@AuthenticationPrincipal AccountUserDetails account,
+            @PathVariable("seminarId") Long seminarId,
                 ModelAndView model) {
         
-        model.addObject("seminar", seminarService.findOneWithDetails(Long.valueOf(seminarId)));
-        model.setViewName("managehold/preview");
+        seminarService.publish(seminarId, account.getMember());
+        model.setViewName("redirect:/seminars/" + seminarId + "/reserve");
         return model;
     }
 }

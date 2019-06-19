@@ -227,4 +227,13 @@ public class Seminar implements Serializable {
             return "空席あり";
         }
     }
+    
+    public boolean isOwnership(Long memberId) {
+        for (SeminarOwner owner: this.owners) {
+            if (owner.getMemberId().equals(memberId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

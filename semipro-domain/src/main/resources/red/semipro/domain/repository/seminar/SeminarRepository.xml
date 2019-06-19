@@ -7,7 +7,8 @@
     namespace="red.semipro.domain.repository.seminar.SeminarRepository">
 
     <resultMap id="seminarResultMap" type="red.semipro.domain.model.Seminar">
-        <result property="id" column="id" />
+        <id property="id" column="id" />
+        <result property="openingStatus" column="opening_status" />
         <result property="providerId" column="provider_id" />
         <result property="providerSeminarId" column="provider_seminar_id" />
         <result property="seminarType" column="seminar_type" />
@@ -43,11 +44,19 @@
         <result property="shootingEditSupported" column="shooting_edit_supported" />
         <result property="movieSalesSupported" column="movie_sales_supported" />
         <collection property="tickets" ofType="red.semipro.domain.model.SeminarTicket">
-            <result column="ticket_id" property="id"/>
+            <id column="ticket_id" property="id"/>
             <result column="id" property="seminarId"/>
             <result column="ticket_name" property="name"/>
             <result column="ticket_price" property="price"/>
             <result column="ticket_num" property="num"/>
+        </collection>
+        <collection property="owners" ofType="red.semipro.domain.model.SeminarOwner">
+            <id property="id" column="id" />
+            <result property="seminarId" column="seminar_id" />
+            <result property="memberId" column="member_id" />
+            <result property="providerOwnerId" column="provider_owner_id" />
+            <result property="name" column="name" />
+            <result property="url" column="url" />
         </collection>
     </resultMap>
 
@@ -87,9 +96,36 @@
             and seminar.provider_seminar_id = #{providerSeminarId}
     </select>
 
+    <select id="findOneByOwner" resultMap="seminarResultMap">
+        <include refid="baseSelectPhrase" />
+        ,
+        seminar_owner.id,
+        seminar_owner.seminar_id,
+        seminar_owner.member_id,
+        seminar_owner.provider_owner_id,
+        seminar_owner.name,
+        seminar_owner.url
+        <include refid="baseFromPhrase" />
+        inner join seminar_owner on seminar.id = seminar_owner.seminar_id
+        where
+            seminar_owner.member_id = #{memberId}
+            and seminar.id = #{id}
+    </select>
+
+    <select id="findAllByOwner" resultMap="seminarResultMap">
+        <include refid="baseSelectPhrase" />
+        <include refid="baseFromPhrase" />
+        inner join seminar_owner on seminar.id = seminar_owner.seminar_id
+        where
+            seminar_owner.member_id = #{memberId}
+        order by
+            seminar.created_at desc
+    </select>
+
     <sql id="baseSelectPhrase">
         select
             seminar.id,
+            seminar.opening_status,
             seminar.provider_id,
             seminar.provider_seminar_id,
             seminar.seminar_type,
@@ -265,23 +301,11 @@
             id = #{id}
     </update>
     
-    <select id="findOneByOwner" resultMap="seminarResultMap">
-        <include refid="baseSelectPhrase" />
-        <include refid="baseFromPhrase" />
-        inner join seminar_owner on seminar.id = seminar_owner.seminar_id
+    <update id="publish">
+        update seminar set
+            opening_status = ${@red.semipro.domain.enums.OpeningStatus@OPENING.value}
         where
-            seminar_owner.member_id = #{memberId}
-            and seminar.id = #{id}
-    </select>
-
-    <select id="findAllByOwner" resultMap="seminarResultMap">
-        <include refid="baseSelectPhrase" />
-        <include refid="baseFromPhrase" />
-        inner join seminar_owner on seminar.id = seminar_owner.seminar_id
-        where
-            seminar_owner.member_id = #{memberId}
-        order by
-            seminar.created_at desc
-    </select>
+            id = #{id}
+    </update>
     
 </mapper>

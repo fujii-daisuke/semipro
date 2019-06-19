@@ -24,4 +24,6 @@ public interface SeminarService {
     public Seminar findOneByOwner(Long id, Long memberId);
     
     public List<Seminar> findAllByOwner(Long memberId);
+    
+    public void publish(Long id, Member member);
 }

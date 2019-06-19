@@ -9,6 +9,7 @@
     <resultMap id="seminarOwnerResultMap" type="red.semipro.domain.model.SeminarOwner">
         <result property="id" column="id" />
         <result property="seminarId" column="seminar_id" />
+        <result property="memberId" column="member_id" />
         <result property="providerOwnerId" column="provider_owner_id" />
         <result property="name" column="name" />
         <result property="url" column="url" />
@@ -18,6 +19,7 @@
         select
             id,
             seminar_id,
+            member_id,
             provider_owner_id,
             name,
             url
@@ -39,7 +41,7 @@
             )
         values
             <foreach item="i" collection="owners" separator=",">
-                (#{i.seminarId}, #{i.member.id}, #{i.providerOwnerId}, #{i.name}, #{i.url}, current_timestamp, current_timestamp)
+                (#{i.seminarId}, #{i.memberId}, #{i.providerOwnerId}, #{i.name}, #{i.url}, current_timestamp, current_timestamp)
             </foreach>
     </insert>
     
