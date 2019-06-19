@@ -137,14 +137,14 @@
           </div>
           <div class="row mb-3">
             <div class="offset-md-1 col-md-1">開催地</div>
-            <div class="col">[[${output.seminar.address}]] [[${output.seminar.place}]]</div>
+            <div class="col">[[${output.seminar.getHoldPlace()}]]</div>
           </div>
           <div class="row mb-3">
             <div class="offset-md-1 col-md-1">
               <div id="map"></div>
             </div>
           </div>
-          <div class="row mb-3">
+          <div class="row mb-3" th:if="${output.seminar.providerId.isEventon()}">
             <div class="offset-md-1 col-md-1">主催</div>
             <div class="col" th:each="owner, stat: ${output.seminar.owners}">
               <span th:text="${owner.name}"></span><br>
