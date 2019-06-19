@@ -31,4 +31,6 @@ public interface SeminarRepository {
     Seminar findOneByOwner(@Param("id")Long id, @Param("memberId")Long memberId);
     
     List<Seminar> findAllByOwner(Long memberId);
+    
+    int publish(Long id);
 }
