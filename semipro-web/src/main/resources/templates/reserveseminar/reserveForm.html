@@ -155,7 +155,7 @@
       </section>
       <!--/.Author box-->
       
-      <section class="my-5">
+      <section class="my-5" th:if="${output.seminar.providerId.isEventon()}">
         <div class="row">
           <div class="offset-md-3 col-md-5">
               <a th:href="${'https://eventon.jp/' + output.seminar.providerSeminarId}" target="_blank"><button type="button" class="btn btn-dark-green btn-lg btn-block">申し込みはこちら</button></a>
