@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="semipro-web" />
+        <module name="semipro-common" />
+        <module name="semipro-domain" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="semipro" target="1.8" />
+      <module name="semipro-common" target="1.8" />
+      <module name="semipro-domain" target="1.8" />
+      <module name="semipro-web" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="semipro-common" options="-parameters" />
+      <module name="semipro-domain" options="-parameters" />
+      <module name="semipro-web" options="-parameters" />
+    </option>
+  </component>
+</project>
