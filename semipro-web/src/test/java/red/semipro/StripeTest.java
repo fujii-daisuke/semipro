@@ -3,6 +3,10 @@ package red.semipro;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.stripe.net.RequestOptions;
+import com.stripe.param.AccountCreateParams;
+import com.stripe.param.AccountUpdateParams;
+import com.stripe.param.ChargeCreateParams;
 import org.junit.Test;
 
 import com.stripe.Stripe;
@@ -15,6 +19,130 @@ import com.stripe.model.Transfer;
 public class StripeTest {
 
     /**
+     * アカウントの作成
+     * @throws StripeException
+     */
+    @Test
+    public void create() throws StripeException {
+        RequestOptions requestOptions = new RequestOptions.RequestOptionsBuilder()
+                .setApiKey("sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn")
+                .build();
+
+        AccountCreateParams accountCreateParams = new AccountCreateParams.Builder()
+                                                        .setCountry("JP")
+                                                        .setType(AccountCreateParams.Type.CUSTOM)
+                                                        .setEmail("sukiyaki366@gmail.com")
+                                                        .build();
+
+        Account account = Account.create(accountCreateParams, requestOptions);
+        System.out.println(account);
+    }
+
+    /**
+     * 利用規約への同意
+     * @throws StripeException
+     */
+    @Test
+    public void tosAcceptance() throws StripeException {
+        Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
+
+        Account account = Account.retrieve("acct_1FGp0xKZb7ogTiAO");
+
+        AccountUpdateParams.TosAcceptance tosAcceptance = new AccountUpdateParams.TosAcceptance.Builder()
+                .setDate((long) System.currentTimeMillis() / 1000L)
+                .setIp("127.0.0.0")
+                .build();
+
+        AccountUpdateParams accountUpdateParams = new AccountUpdateParams.Builder()
+                .setTosAcceptance(tosAcceptance)
+                .build();
+
+        account.update(accountUpdateParams);
+        System.out.println(account);
+    }
+
+    /**
+     * アカウント情報の取得
+     * @throws StripeException
+     */
+    @Test
+    public void retrieve() throws StripeException {
+        RequestOptions requestOptions = new RequestOptions.RequestOptionsBuilder()
+                .setApiKey("sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn")
+                .setStripeAccount("acct_1FGp0xKZb7ogTiAO")
+                .build();
+
+        Account account = Account.retrieve(requestOptions);
+        System.out.println(account);
+    }
+
+    @Test
+    public void accountUpdate() throws  StripeException {
+        RequestOptions requestOptions = new RequestOptions.RequestOptionsBuilder()
+                .setApiKey("sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn")
+                .setStripeAccount("acct_1FGp0xKZb7ogTiAO")
+                .build();
+
+        Account account = Account.retrieve(requestOptions);
+
+        AccountUpdateParams.Individual.AddressKana addressKana = new AccountUpdateParams.Individual.AddressKana.Builder()
+                .setCity("サイタマシ")
+                .setLine1("２１３２−７")
+                .setPostalCode("3360911")
+                .setState("サイタマケン")
+                .setTown("ミドリク　ミムロ")
+                .build();
+
+        AccountUpdateParams.Individual.AddressKanji addressKanji = new AccountUpdateParams.Individual.AddressKanji.Builder()
+                .setCity("さいたま市")
+                .setLine1("２１３２−７")
+                .setPostalCode("3360911")
+                .setState("埼玉県")
+                .setTown("緑区　三室")
+                .build();
+
+        AccountUpdateParams.Individual individual = new AccountUpdateParams.Individual.Builder()
+                .setAddressKana(addressKana)
+                .setAddressKanji(addressKanji)
+                .setPhone("+819011112222")
+                .build();
+
+        AccountUpdateParams accountUpdateParams = new AccountUpdateParams.Builder()
+                .setBusinessType("individual")
+                .setIndividual(individual)
+                .build();
+
+        account.update(accountUpdateParams, requestOptions);
+        System.out.println(account);
+    }
+
+    /**
+     * プラットフォームからコネクトアカウントにチャージ
+     * @throws StripeException
+     */
+    @Test
+    public void charge() throws StripeException {
+        RequestOptions requestOptions = new RequestOptions.RequestOptionsBuilder()
+                .setApiKey("sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn")
+                .build();
+
+        Account account = Account.retrieve(requestOptions);
+        ChargeCreateParams.TransferData transferData = new ChargeCreateParams.TransferData.Builder().setDestination("acct_1FGp0xKZb7ogTiAO").build();
+
+        ChargeCreateParams chargeCreateParams = new ChargeCreateParams.Builder()
+                .setAmount(1000l)
+                .setCurrency("JPY")
+                .setSource("tok_visa")
+                .setTransferData(transferData)
+                .setApplicationFee(200l)
+                .build();
+
+        Charge charge = Charge.create(chargeCreateParams, requestOptions);
+        System.out.println(charge);
+    }
+
+
+    /**
      * カスタムアカウント作成
      * @throws StripeException
      */
@@ -25,7 +153,7 @@ public class StripeTest {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("country", "JP");
         params.put("type", "custom");
-        
+        params.put("email", "sukiyaki366@gmail.com");
         Account acct = Account.create(params);
         System.out.println(acct);
     }
