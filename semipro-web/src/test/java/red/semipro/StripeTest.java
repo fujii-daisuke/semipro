@@ -19,8 +19,7 @@ import com.stripe.model.Transfer;
 public class StripeTest {
 
     /**
-     * アカウントの作成
-     * @throws StripeException
+     * コネクトアカウントの作成
      */
     @Test
     public void create() throws StripeException {
@@ -40,13 +39,12 @@ public class StripeTest {
 
     /**
      * 利用規約への同意
-     * @throws StripeException
      */
     @Test
     public void tosAcceptance() throws StripeException {
         Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
 
-        Account account = Account.retrieve("acct_1FGp0xKZb7ogTiAO");
+        Account account = Account.retrieve("acct_1FghDYCY7ikIEVsM");
 
         AccountUpdateParams.TosAcceptance tosAcceptance = new AccountUpdateParams.TosAcceptance.Builder()
                 .setDate((long) System.currentTimeMillis() / 1000L)
@@ -63,13 +61,12 @@ public class StripeTest {
 
     /**
      * アカウント情報の取得
-     * @throws StripeException
      */
     @Test
     public void retrieve() throws StripeException {
         RequestOptions requestOptions = new RequestOptions.RequestOptionsBuilder()
                 .setApiKey("sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn")
-                .setStripeAccount("acct_1FGp0xKZb7ogTiAO")
+                .setStripeAccount("acct_1FghDYCY7ikIEVsM")
                 .build();
 
         Account account = Account.retrieve(requestOptions);
@@ -80,12 +77,18 @@ public class StripeTest {
     public void accountUpdate() throws  StripeException {
         RequestOptions requestOptions = new RequestOptions.RequestOptionsBuilder()
                 .setApiKey("sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn")
-                .setStripeAccount("acct_1FGp0xKZb7ogTiAO")
+                .setStripeAccount("acct_1FghDYCY7ikIEVsM")
                 .build();
 
         Account account = Account.retrieve(requestOptions);
 
-        AccountUpdateParams.Individual.AddressKana addressKana = new AccountUpdateParams.Individual.AddressKana.Builder()
+        // 利用規約同意
+        AccountUpdateParams.TosAcceptance tosAcceptance = AccountUpdateParams.TosAcceptance.builder()
+                .setDate((long) System.currentTimeMillis() / 1000L)
+                .setIp("127.0.0.0")
+                .build();
+
+        AccountUpdateParams.Individual.AddressKana addressKana = AccountUpdateParams.Individual.AddressKana.builder()
                 .setCity("サイタマシ")
                 .setLine1("２１３２−７")
                 .setPostalCode("3360911")
@@ -93,7 +96,7 @@ public class StripeTest {
                 .setTown("ミドリク　ミムロ")
                 .build();
 
-        AccountUpdateParams.Individual.AddressKanji addressKanji = new AccountUpdateParams.Individual.AddressKanji.Builder()
+        AccountUpdateParams.Individual.AddressKanji addressKanji = AccountUpdateParams.Individual.AddressKanji.builder()
                 .setCity("さいたま市")
                 .setLine1("２１３２−７")
                 .setPostalCode("3360911")
@@ -101,13 +104,29 @@ public class StripeTest {
                 .setTown("緑区　三室")
                 .build();
 
-        AccountUpdateParams.Individual individual = new AccountUpdateParams.Individual.Builder()
+        AccountUpdateParams.Individual.Dob dob =
+                AccountUpdateParams.Individual.Dob.builder()
+                        .setYear(1980L)
+                        .setMonth(9L)
+                        .setDay(29L)
+                        .build();
+
+        AccountUpdateParams.Individual individual = AccountUpdateParams.Individual.builder()
+                .setFirstName("大介")
+                .setLastName("藤井")
+                .setFirstNameKanji("大介")
+                .setLastNameKanji("藤井")
+                .setFirstNameKana("だいすけ")
+                .setLastNameKana("ふじい")
+                .setGender("male")
+                .setDob(dob)
                 .setAddressKana(addressKana)
                 .setAddressKanji(addressKanji)
                 .setPhone("+819011112222")
                 .build();
 
         AccountUpdateParams accountUpdateParams = new AccountUpdateParams.Builder()
+                .setTosAcceptance(tosAcceptance)
                 .setBusinessType("individual")
                 .setIndividual(individual)
                 .build();
@@ -118,7 +137,6 @@ public class StripeTest {
 
     /**
      * プラットフォームからコネクトアカウントにチャージ
-     * @throws StripeException
      */
     @Test
     public void charge() throws StripeException {
@@ -144,7 +162,6 @@ public class StripeTest {
 
     /**
      * カスタムアカウント作成
-     * @throws StripeException
      */
     @Test
     public void createCustomAccountTest() throws StripeException {
@@ -160,7 +177,6 @@ public class StripeTest {
     
     /**
      * カスタムアカウント更新
-     * @throws StripeException
      */
     @Test
     public void updateCustomAccountTest() throws StripeException {
@@ -221,7 +237,6 @@ public class StripeTest {
     
     /**
      * 利用規約への同意
-     * @throws StripeException
      */
     @Test
     public void agreementAcceptanceTest() throws StripeException {
@@ -242,7 +257,6 @@ public class StripeTest {
     
     /**
      * アカウントへ支払い
-     * @throws StripeException
      */
     @Test
     public void destinationChargeTest() throws StripeException {
@@ -265,7 +279,6 @@ public class StripeTest {
     
     /**
      * 返金
-     * @throws StripeException
      */
     @Test
     public void refundTest() throws StripeException {
@@ -282,7 +295,6 @@ public class StripeTest {
 
     /**
      * 子アカウントからプラットフォームへ送金を戻す
-     * @throws StripeException
      */
     @Test
     public void reverseTransferTest() throws StripeException {
