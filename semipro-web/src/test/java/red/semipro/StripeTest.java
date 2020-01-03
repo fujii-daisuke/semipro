@@ -3,23 +3,54 @@ package red.semipro;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.amazonaws.services.ec2.model.transform.AccountAttributeValueStaxUnmarshaller;
+import com.stripe.model.*;
 import com.stripe.net.RequestOptions;
-import com.stripe.param.AccountCreateParams;
-import com.stripe.param.AccountUpdateParams;
-import com.stripe.param.ChargeCreateParams;
+import com.stripe.param.*;
 import org.junit.Test;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.Account;
-import com.stripe.model.Charge;
-import com.stripe.model.Refund;
-import com.stripe.model.Transfer;
 
 public class StripeTest {
 
     /**
-     * コネクトアカウントの作成
+     * 顧客の作成
+     * @throws StripeException
+     */
+    @Test
+    public void createCustomer() throws StripeException {
+        Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
+
+        Map<String, Object> params = new HashMap<>();
+        params.put(
+                "description",
+                "Customer for d.ziifuu@gmail.com"
+        );
+
+        Customer customer = Customer.create(params);
+        System.out.println(customer);
+    }
+
+    /**
+     * 顧客のカード情報登録
+     * sourceにはStrip.jsで作成したカード情報のトークンを設定
+     * @throws StripeException
+     */
+    @Test
+    public void createCustomerCard() throws StripeException {
+        Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
+
+        Customer customer = Customer.retrieve("cus_GSWxccCcQQKyp5");
+        CustomerUpdateParams params = CustomerUpdateParams.builder()
+                .setSource("tok_1FviVSEQOFvWv0QlStjagAPx")
+                .build();
+        customer.update(params);
+        System.out.println(customer);
+    }
+
+    /**
+     * 子アカウントの作成
      */
     @Test
     public void create() throws StripeException {
@@ -27,68 +58,13 @@ public class StripeTest {
                 .setApiKey("sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn")
                 .build();
 
-        AccountCreateParams accountCreateParams = new AccountCreateParams.Builder()
-                                                        .setCountry("JP")
-                                                        .setType(AccountCreateParams.Type.CUSTOM)
-                                                        .setEmail("sukiyaki366@gmail.com")
-                                                        .build();
-
-        Account account = Account.create(accountCreateParams, requestOptions);
-        System.out.println(account);
-    }
-
-    /**
-     * 利用規約への同意
-     */
-    @Test
-    public void tosAcceptance() throws StripeException {
-        Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
-
-        Account account = Account.retrieve("acct_1FghDYCY7ikIEVsM");
-
-        AccountUpdateParams.TosAcceptance tosAcceptance = new AccountUpdateParams.TosAcceptance.Builder()
-                .setDate((long) System.currentTimeMillis() / 1000L)
-                .setIp("127.0.0.0")
-                .build();
-
-        AccountUpdateParams accountUpdateParams = new AccountUpdateParams.Builder()
-                .setTosAcceptance(tosAcceptance)
-                .build();
-
-        account.update(accountUpdateParams);
-        System.out.println(account);
-    }
-
-    /**
-     * アカウント情報の取得
-     */
-    @Test
-    public void retrieve() throws StripeException {
-        RequestOptions requestOptions = new RequestOptions.RequestOptionsBuilder()
-                .setApiKey("sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn")
-                .setStripeAccount("acct_1FghDYCY7ikIEVsM")
-                .build();
-
-        Account account = Account.retrieve(requestOptions);
-        System.out.println(account);
-    }
-
-    @Test
-    public void accountUpdate() throws  StripeException {
-        RequestOptions requestOptions = new RequestOptions.RequestOptionsBuilder()
-                .setApiKey("sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn")
-                .setStripeAccount("acct_1FghDYCY7ikIEVsM")
-                .build();
-
-        Account account = Account.retrieve(requestOptions);
-
         // 利用規約同意
-        AccountUpdateParams.TosAcceptance tosAcceptance = AccountUpdateParams.TosAcceptance.builder()
+        AccountCreateParams.TosAcceptance tosAcceptance = AccountCreateParams.TosAcceptance.builder()
                 .setDate((long) System.currentTimeMillis() / 1000L)
                 .setIp("127.0.0.0")
                 .build();
 
-        AccountUpdateParams.Individual.AddressKana addressKana = AccountUpdateParams.Individual.AddressKana.builder()
+        AccountCreateParams.Individual.AddressKana addressKana = AccountCreateParams.Individual.AddressKana.builder()
                 .setCity("サイタマシ")
                 .setLine1("２１３２−７")
                 .setPostalCode("3360911")
@@ -96,7 +72,7 @@ public class StripeTest {
                 .setTown("ミドリク　ミムロ")
                 .build();
 
-        AccountUpdateParams.Individual.AddressKanji addressKanji = AccountUpdateParams.Individual.AddressKanji.builder()
+        AccountCreateParams.Individual.AddressKanji addressKanji = AccountCreateParams.Individual.AddressKanji.builder()
                 .setCity("さいたま市")
                 .setLine1("２１３２−７")
                 .setPostalCode("3360911")
@@ -104,14 +80,14 @@ public class StripeTest {
                 .setTown("緑区　三室")
                 .build();
 
-        AccountUpdateParams.Individual.Dob dob =
-                AccountUpdateParams.Individual.Dob.builder()
+        AccountCreateParams.Individual.Dob dob =
+                AccountCreateParams.Individual.Dob.builder()
                         .setYear(1980L)
                         .setMonth(9L)
                         .setDay(29L)
                         .build();
 
-        AccountUpdateParams.Individual individual = AccountUpdateParams.Individual.builder()
+        AccountCreateParams.Individual individual = AccountCreateParams.Individual.builder()
                 .setFirstName("大介")
                 .setLastName("藤井")
                 .setFirstNameKanji("大介")
@@ -125,183 +101,141 @@ public class StripeTest {
                 .setPhone("+819011112222")
                 .build();
 
-        AccountUpdateParams accountUpdateParams = new AccountUpdateParams.Builder()
-                .setTosAcceptance(tosAcceptance)
-                .setBusinessType("individual")
-                .setIndividual(individual)
-                .build();
 
-        account.update(accountUpdateParams, requestOptions);
+        AccountCreateParams accountCreateParams = new AccountCreateParams.Builder()
+                                                        .setCountry("JP")
+                                                        .setType(AccountCreateParams.Type.CUSTOM)
+                                                        .setEmail("sukiyaki366@gmail.com")
+                                                        .setBusinessType("individual")
+                                                        .setIndividual(individual)
+                                                        .setTosAcceptance(tosAcceptance)
+                                                        .build();
+
+        Account account = Account.create(accountCreateParams, requestOptions);
         System.out.println(account);
     }
 
     /**
-     * プラットフォームからコネクトアカウントにチャージ
+     * 子アカウント情報
      */
     @Test
-    public void charge() throws StripeException {
-        RequestOptions requestOptions = new RequestOptions.RequestOptionsBuilder()
-                .setApiKey("sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn")
+    public void retrieveTest() throws StripeException {
+        Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
+
+        Account account = Account.retrieve("acct_1FklGoCINNLsYkH7");
+        System.out.println(account);
+    }
+
+    @Test
+    public void createTokenTest() throws StripeException {
+        Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
+
+        Map<String, Object> bankAccount = new HashMap<>();
+        bankAccount.put("country", "JP");
+        bankAccount.put("currency", "jpy");
+        bankAccount.put("account_holder_name", "フジイ　ダイスケ");
+        bankAccount.put("account_holder_type", "individual");
+        bankAccount.put("routing_number", "0017258");
+        bankAccount.put("account_number", "3921677");
+        Map<String, Object> params = new HashMap<>();
+        params.put("bank_account", bankAccount);
+
+        Token token = Token.create(params);
+        System.out.println(token);
+    }
+
+    /**
+     * 子アカウントの本人確認書類の提出
+     * @see <a href="https://qiita.com/y_toku/items/7bfa42793801dfc5415d#custom-%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">アカウントを作成する</a>
+     */
+    @Test
+    public void identityVerificationTest() throws StripeException {
+        //TODO pending
+        Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
+        RequestOptions requestOptions = RequestOptions.builder()
+                .setStripeAccount("acct_1FklGoCINNLsYkH7")
                 .build();
 
-        Account account = Account.retrieve(requestOptions);
-        ChargeCreateParams.TransferData transferData = new ChargeCreateParams.TransferData.Builder().setDestination("acct_1FGp0xKZb7ogTiAO").build();
+        Map<String, Object> fileUploadParams = new HashMap<String, Object>();
+        fileUploadParams.put("purpose", "identity_document");
+        fileUploadParams.put("file", new java.io.File("/Users/fujiidaisuke/Pictures/sample/dog.jpg"));
+
+        File.create(fileUploadParams, requestOptions);
+    }
+
+    /**
+     * 子アカウントの銀行口座情報の登録
+     * @see <a href="https://stripe.com/docs/stripe-js/v2#collecting-bank-account-details">Collecting bank account details</a>
+     */
+    @Test
+    public void createBank() throws StripeException {
+        Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
+
+        Account account = Account.retrieve("acct_1FklGoCINNLsYkH7");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("external_account", "btok_1FvvSlEQOFvWv0QlpmLlehHF");
+
+        account.getExternalAccounts().create(params);
+        System.out.println(account);
+    }
+
+    /**
+     * Separate Charges and Transfers
+     * プラットフォームにチャージ
+     * @see <a href="https://qiita.com/y_toku/items/7bfa42793801dfc5415d#custom-%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">Separate Charges and Transfers: 支払いと送金を分ける</a>
+     * @see <a href="https://stripe.com/docs/connect/testing#account-numbers">Testing Stripe Connect</a>
+     */
+    @Test
+    public void chargeTest() throws StripeException {
+        Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
 
         ChargeCreateParams chargeCreateParams = new ChargeCreateParams.Builder()
-                .setAmount(1000l)
+                .setAmount(10000l)
                 .setCurrency("JPY")
-                .setSource("tok_visa")
-                .setTransferData(transferData)
-                .setApplicationFee(200l)
+                .setSource("card_1FviVSEQOFvWv0Qlzi8ZjaXV")
+                .setTransferGroup("12345")
+                .setCustomer("cus_GSWxccCcQQKyp5")
                 .build();
 
-        Charge charge = Charge.create(chargeCreateParams, requestOptions);
+        Charge charge = Charge.create(chargeCreateParams);
         System.out.println(charge);
     }
 
-
     /**
-     * カスタムアカウント作成
+     * Separate Charges and Transfers
+     * 子アカウントへ送金
      */
     @Test
-    public void createCustomAccountTest() throws StripeException {
+    public void transferTest() throws StripeException {
         Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
-        
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("country", "JP");
-        params.put("type", "custom");
-        params.put("email", "sukiyaki366@gmail.com");
-        Account acct = Account.create(params);
-        System.out.println(acct);
-    }
-    
-    /**
-     * カスタムアカウント更新
-     */
-    @Test
-    public void updateCustomAccountTest() throws StripeException {
-        Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
+        TransferCreateParams params = TransferCreateParams.builder()
+                .setAmount(7000l)
+                .setCurrency("jpy")
+                .setDestination("acct_1FklGoCINNLsYkH7")
+                .setTransferGroup("12345")
+                .build();
 
-        Account acct = Account.retrieve("acct_1Et9QdLauNMFrXUW");
-        
-        Map<String, Object> individual = new HashMap<String, Object>();
-        
-        individual.put("last_name", "藤井");
-        individual.put("first_name", "大介");
-        individual.put("last_name_kanji", "藤井");
-        individual.put("first_name_kanji", "大介");
-        individual.put("last_name_kana", "ふじい");
-        individual.put("first_name_kana", "だいすけ");
-        individual.put("gender", "male");
-        individual.put("phone", "+819058046429");
-        individual.put("email", "d.ziifuu@gmail.com");
-        
-        Map<String, Object> addressKanji = new HashMap<String, Object>();
-        addressKanji.put("postal_code", "3360911");
-        addressKanji.put("state", "埼玉県");
-        addressKanji.put("city", "さいたま市");
-        addressKanji.put("town", "緑区三室");
-        addressKanji.put("line1", "２１３２−７");
-        individual.put("address_kanji", addressKanji);
-        
-        Map<String, Object> addressKana = new HashMap<String, Object>();
-        addressKana.put("postal_code", "3360911");
-        addressKana.put("state", "さいたまけん");
-        addressKana.put("city", "さいたまし");
-        addressKana.put("town", "みどりくみむろ");
-        addressKana.put("line1", "２１３２ー７");
-        individual.put("address_kana", addressKana);
-        
-        Map<String, Object> dob = new HashMap<String, Object>();
-        dob.put("day", "29");
-        dob.put("month", "09");
-        dob.put("year", "1980");
-        individual.put("dob", dob);
-        
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("business_type", "individual");
-        params.put("individual", individual);
-        
-        Map<String, Object> externalAccount = new HashMap<String, Object>();
-        externalAccount.put("object", "bank_account");
-        externalAccount.put("country", "jp");
-        externalAccount.put("currency", "jpy");
-        externalAccount.put("account_number", "00012345");
-        externalAccount.put("routing_number", "1100000");
-        externalAccount.put("account_holder_name", "トクテスト(カ");
-        params.put("external_account", externalAccount);
-        
-        acct = acct.update(params);
-        System.out.println(acct);
-     }
-    
-    /**
-     * 利用規約への同意
-     */
-    @Test
-    public void agreementAcceptanceTest() throws StripeException {
-        Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
-
-        Account acct = Account.retrieve("acct_1Et9QdLauNMFrXUW");
-
-        Map<String, Object> tosAcceptanceParams = new HashMap<String, Object>();
-        tosAcceptanceParams.put("date", (long) System.currentTimeMillis() / 1000L);
-        tosAcceptanceParams.put("ip", "127.0.0.0"); // Assumes you're not using a proxy
-
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("tos_acceptance", tosAcceptanceParams);
-
-        acct = acct.update(params);
-        System.out.println(acct);
-    }
-    
-    /**
-     * アカウントへ支払い
-     */
-    @Test
-    public void destinationChargeTest() throws StripeException {
-        // Set your secret key: remember to change this to your live secret key in production
-        // See your keys here: https://dashboard.stripe.com/account/apikeys
-        Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
-        
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("amount", 1000);
-        params.put("currency", "jpy");
-        params.put("source", "tok_visa");
-        
-        Map<String, Object> transferDataParams = new HashMap<String, Object>();
-        transferDataParams.put("destination", "acct_1Et9QdLauNMFrXUW");
-        
-        params.put("transfer_data", transferDataParams);
-        Charge charge = Charge.create(params);
-        System.out.println(charge);
+        Transfer transfer = Transfer.create(params);
+        System.out.println(transfer);
    }
     
     /**
-     * 返金
+     * プラットフォームから顧客へ返金
      */
     @Test
     public void refundTest() throws StripeException {
+        // TODO　プラットフォームへの入金が未完の為、テスト未確認
         Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
 
-        Map<String, Object> refundParams = new HashMap<String, Object>();
-        refundParams.put("charge", "ch_1EtNuTEQOFvWv0QliMTaDHFh");
-        refundParams.put("reverse_transfer", true);
-        
-        Refund refund = Refund.create(refundParams);
-        
+        RefundCreateParams params = RefundCreateParams.builder()
+                .setCharge("ch_1Fvb9iEQOFvWv0QlL61b72dI")
+                .build();
+        Refund refund = Refund.create(params);
         System.out.println(refund);
    }
 
-    /**
-     * 子アカウントからプラットフォームへ送金を戻す
-     */
-    @Test
-    public void reverseTransferTest() throws StripeException {
-        Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
-
-        Transfer transfer = Transfer.retrieve("tr_1EtNfxEQOFvWv0Qll5LrH3yn");
-        
-        System.out.println(transfer);
+   public void payoutTest() {
+        //TODO
    }
 }
