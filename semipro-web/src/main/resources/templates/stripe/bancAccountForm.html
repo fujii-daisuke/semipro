@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      lang="ja">
+<head>
+    <title>Stripe BankAccount Create Token Test Form</title>
+</head>
+
+<body>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('pk_test_kfHrwK9IL4ArC9ZsATw8ymhQ00w6t7mFJl');
+    stripe.createToken('bank_account', {
+        country: 'JP',
+        currency: 'jpy',
+        routing_number: '0017258',
+        account_number: '0001234',
+        account_holder_name: 'フジイ　ダイスケ',
+        account_holder_type: 'individual'
+    }).then(function (result) {
+        if (result.error) {
+            console.log(result.error);
+        } else {
+            console.log(result.token);
+        }
+    });
+</script>
+</body>
+</html>
