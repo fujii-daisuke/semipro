@@ -1,0 +1,19 @@
+version: '3'
+services:
+  db:
+    image: mysql
+    restart: always
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: 1qaz3edc
+      MYSQL_USER: semipro
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: semipro
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/tmp/mysql:/var/lib/mysql
+      - ./docker/mysql/initdb.d:/docker-entrypoint-initdb.d
+volumes:
+  data:
+    driver: local
