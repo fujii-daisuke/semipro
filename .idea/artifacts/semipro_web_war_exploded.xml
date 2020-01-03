@@ -43,6 +43,7 @@
           <element id="archive" name="semipro-common-0.0.1-SNAPSHOT.jar">
             <element id="module-output" name="semipro-common" />
           </element>
+          <element id="library" level="project" name="Maven: javax.xml.bind:jaxb-api:2.3.1" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-mail:2.0.6.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-context-support:5.0.10.RELEASE" />
           <element id="library" level="project" name="Maven: com.sun.mail:javax.mail:1.6.2" />
@@ -106,7 +107,7 @@
           <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ec2:1.11.415" />
           <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudformation:1.11.415" />
           <element id="library" level="project" name="Maven: org.springframework:spring-context:5.0.10.RELEASE" />
-          <element id="library" level="project" name="Maven: com.stripe:stripe-java:10.4.0" />
+          <element id="library" level="project" name="Maven: com.stripe:stripe-java:16.4.0" />
           <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.5" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter:2.0.6.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.0.6.RELEASE" />

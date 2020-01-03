@@ -16,7 +16,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
         <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
         <thymeleaf-layout-dialect.version>2.3.0</thymeleaf-layout-dialect.version>
     </properties>
@@ -113,7 +112,7 @@
         <dependency>
           <groupId>com.stripe</groupId>
           <artifactId>stripe-java</artifactId>
-          <version>10.4.0</version>
+          <version>16.4.0</version>
         </dependency>
     </dependencies>
 
