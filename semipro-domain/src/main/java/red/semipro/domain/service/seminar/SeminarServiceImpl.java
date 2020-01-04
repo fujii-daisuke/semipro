@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import red.semipro.domain.model.Member;
+import red.semipro.domain.model.Account;
 import red.semipro.domain.model.Seminar;
 import red.semipro.domain.model.SeminarOwner;
 import red.semipro.domain.model.SeminarSearchCriteria;
@@ -101,11 +101,11 @@ public class SeminarServiceImpl implements SeminarService {
     }
 
     @Transactional
-    public Seminar save(Seminar seminar, Member member) {
+    public Seminar save(Seminar seminar, Account account) {
         if (seminar.getId() == null) {
             seminarRepository.insert(seminar);
             List<SeminarOwner> owners = new ArrayList<SeminarOwner>();
-            owners.add(new SeminarOwner(seminar, member.getId()));
+            owners.add(new SeminarOwner(seminar, account.getId()));
             seminarOwnerRepository.insert(owners);
         } else {
             seminarRepository.update(seminar);
@@ -119,19 +119,19 @@ public class SeminarServiceImpl implements SeminarService {
     }
 
     @Override
-    public Seminar findOneByOwner(Long id, Long memberId) {
-        return seminarRepository.findOneByOwner(id, memberId);
+    public Seminar findOneByOwner(Long id, Long accountId) {
+        return seminarRepository.findOneByOwner(id, accountId);
     }
 
     @Override
-    public List<Seminar> findAllByOwner(Long memberId) {
-        return seminarRepository.findAllByOwner(memberId);
+    public List<Seminar> findAllByOwner(Long accountId) {
+        return seminarRepository.findAllByOwner(accountId);
     }
 
     @Override
-    public void publish(Long id, Member member) {
-        Seminar seminar = findOneByOwner(id, member.getId());
-        if (seminar.isOwnership(member.getId())) {
+    public void publish(Long id, Account account) {
+        Seminar seminar = findOneByOwner(id, account.getId());
+        if (seminar.isOwnership(account.getId())) {
             seminarRepository.publish(id);
         }
     }

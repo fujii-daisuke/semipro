@@ -1783,12 +1783,12 @@ VALUES
 UNLOCK TABLES;
 
 
-# テーブルのダンプ member
+# テーブルのダンプ account
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `member`;
+DROP TABLE IF EXISTS `account`;
 
-CREATE TABLE `member` (
+CREATE TABLE `account` (
   `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(12) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -1799,15 +1799,15 @@ CREATE TABLE `member` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-LOCK TABLES `member` WRITE;
-/*!40000 ALTER TABLE `member` DISABLE KEYS */;
+LOCK TABLES `account` WRITE;
+/*!40000 ALTER TABLE `account` DISABLE KEYS */;
 
-INSERT INTO `member` (`id`, `username`, `email`, `password`, `register_status`, `created_at`, `updated_at`)
+INSERT INTO `account` (`id`, `username`, `email`, `password`, `register_status`, `created_at`, `updated_at`)
 VALUES
 	(14,'d-fujii','fujii.daisuke@goingflow.com','$2a$10$qAv.bJYX.PTYXQSHsz1uJOp07FvNEmcJAxcrneoJyvlquq.RehRMq',1,'2019-04-24 16:43:46','2019-04-24 16:50:00'),
 	(18,'d-ziifuu','d.ziifuu@gmail.com','$2a$10$jKoP7p.69uH6MEe0w4P5q.3OvgKo3pVJm7wVM06DTjUV4MO6k4S/G',1,'2019-05-31 19:33:51','2019-05-31 19:35:44');
 
-/*!40000 ALTER TABLE `member` ENABLE KEYS */;
+/*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -2272,7 +2272,7 @@ DROP TABLE IF EXISTS `seminar_owner`;
 CREATE TABLE `seminar_owner` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `seminar_id` bigint(20) NOT NULL,
-  `member_id` bigint(11) DEFAULT NULL,
+  `account_id` bigint(11) DEFAULT NULL,
   `provider_owner_id` int(11) DEFAULT NULL,
   `name` text,
   `url` text,
@@ -2284,7 +2284,7 @@ CREATE TABLE `seminar_owner` (
 LOCK TABLES `seminar_owner` WRITE;
 /*!40000 ALTER TABLE `seminar_owner` DISABLE KEYS */;
 
-INSERT INTO `seminar_owner` (`id`, `seminar_id`, `member_id`, `provider_owner_id`, `name`, `url`, `created_at`, `updated_at`)
+INSERT INTO `seminar_owner` (`id`, `seminar_id`, `account_id`, `provider_owner_id`, `name`, `url`, `created_at`, `updated_at`)
 VALUES
 	(1196,387,NULL,31851,'亀田智仁','https://eventon.jp/user/31851','2019-04-01 13:23:58','2019-04-01 13:23:58'),
 	(1197,388,NULL,16034,'日本占導師協会','https://eventon.jp/user/16034','2019-04-01 13:23:58','2019-04-01 13:23:58'),

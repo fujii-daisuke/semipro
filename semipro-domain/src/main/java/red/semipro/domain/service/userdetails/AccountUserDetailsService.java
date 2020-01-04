@@ -7,25 +7,25 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import red.semipro.domain.model.Member;
-import red.semipro.domain.service.member.MemberService;
+import red.semipro.domain.model.Account;
+import red.semipro.domain.service.account.AccountService;
 
 @Service
 public class AccountUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private MemberService memberService;
+    private AccountService accountService;
     
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         if (StringUtils.isEmpty(email)) {
             throw new UsernameNotFoundException("email is null or empry.");
           }
-          Member member = memberService.findByEmail(email);
-          if (member == null) {
+          Account account = accountService.findByEmail(email);
+          if (account == null) {
             throw new UsernameNotFoundException("email not found.");
           }
-          return new AccountUserDetails(member, null);
+          return new AccountUserDetails(account, null);
     }
 
 }

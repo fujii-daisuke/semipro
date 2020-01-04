@@ -4,9 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper
-    namespace="red.semipro.domain.repository.member.MemberRepository">
+    namespace="red.semipro.domain.repository.account.AccountRepository">
 
-    <resultMap id="member" type="red.semipro.domain.model.Member">
+    <resultMap id="account" type="red.semipro.domain.model.Account">
         <result property="id" column="id" />
         <result property="email" column="email" />
         <result property="password" column="password" />
@@ -14,38 +14,38 @@
         <result property="registerStatus" column="register_status" />
     </resultMap>
 
-    <select id="findOne" resultMap="member">
+    <select id="findOne" resultMap="account">
         select
             id,
             email,
             password,
             username,
             register_status
-        from member
+        from account
         where
             id = #{id}
     </select>
     
-    <select id="findByUsername" resultMap="member">
+    <select id="findByUsername" resultMap="account">
         select
             id,
             email,
             password,
             username,
             register_status
-        from member
+        from account
         where
             username = #{username}
     </select>
 
-    <select id="findByEmail" resultMap="member">
+    <select id="findByEmail" resultMap="account">
         select
             id,
             email,
             password,
             username,
             register_status
-        from member
+        from account
         where
             email = #{email}
             and register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR.value}
@@ -54,7 +54,7 @@
     <select id="isExists" resultType="boolean">
         select
             count(*) > 0
-        from member
+        from account
         where
             id != #{id}
             and (email = #{email} or username = #{username})
@@ -64,7 +64,7 @@
     <select id="isExistsEmail" resultType="boolean">
         select
             count(*) > 0
-        from member
+        from account
         where
             email = #{email}
             and register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR.value}
@@ -73,14 +73,14 @@
     <select id="isExistsUsername" resultType="boolean">
         select
             count(*) > 0
-        from member
+        from account
         where
             username = #{username}
             and register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR.value}
     </select>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        insert into member (
+        insert into account (
             email,
             password,
             username,
@@ -95,7 +95,7 @@
     </insert>
     
     <insert id="activation">
-        update member set
+        update account set
             register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR.value},
             updated_at = current_timestamp
         where
