@@ -228,9 +228,9 @@ public class Seminar implements Serializable {
         }
     }
     
-    public boolean isOwnership(Long memberId) {
+    public boolean isOwnership(Long accountId) {
         for (SeminarOwner owner: this.owners) {
-            if (owner.getMemberId().equals(memberId)) {
+            if (owner.getAccountId().equals(accountId)) {
                 return true;
             }
         }

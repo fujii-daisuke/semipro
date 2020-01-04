@@ -1,4 +1,4 @@
-[# th:text="${member.username}" /]様
+[# th:text="${account.username}" /]様
 
 セミプロ会員登録が完了致しました。
 

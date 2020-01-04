@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import red.semipro.business.aws.S3StorageService;
 import red.semipro.domain.enums.ProviderId;
-import red.semipro.domain.model.Member;
+import red.semipro.domain.model.Account;
 import red.semipro.domain.model.Seminar;
 import red.semipro.domain.service.seminar.SeminarServiceImpl;
 
@@ -17,11 +17,11 @@ public class ReserveSeminarHelper {
     @Autowired
     private S3StorageService s3StorageService;
 
-    public SeminarDetailOutput findSeminarDetail(Long seminarId, Member member) {
+    public SeminarDetailOutput findSeminarDetail(Long seminarId, Account account) {
         Seminar seminar = seminarService.findOneWithDetails(seminarId);
         
         SeminarDetailOutput output = new SeminarDetailOutput();
-        output.setMember(member);
+        output.setAccount(account);
         output.setSeminar(seminar);
         if (ProviderId.SEMIPRO.equals(seminar.getProviderId())) {
             output.setMainImagePath(s3StorageService.getUrl() + seminar.getImagePath());

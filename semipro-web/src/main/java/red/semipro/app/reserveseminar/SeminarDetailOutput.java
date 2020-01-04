@@ -1,7 +1,7 @@
 package red.semipro.app.reserveseminar;
 
 import lombok.Data;
-import red.semipro.domain.model.Member;
+import red.semipro.domain.model.Account;
 import red.semipro.domain.model.Seminar;
 
 @Data
@@ -11,12 +11,12 @@ public class SeminarDetailOutput {
     
     private String mainImagePath;
     
-    private Member member;
+    private Account account;
     
     public boolean isOwnership() {
-        if (member == null) {
+        if (account == null) {
             return false;
         }
-        return seminar.isOwnership(member.getId());
+        return seminar.isOwnership(account.getId());
     }
 }

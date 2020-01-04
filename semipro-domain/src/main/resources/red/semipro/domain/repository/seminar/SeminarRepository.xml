@@ -53,7 +53,7 @@
         <collection property="owners" ofType="red.semipro.domain.model.SeminarOwner">
             <id property="id" column="id" />
             <result property="seminarId" column="seminar_id" />
-            <result property="memberId" column="member_id" />
+            <result property="accountId" column="account_id" />
             <result property="providerOwnerId" column="provider_owner_id" />
             <result property="name" column="name" />
             <result property="url" column="url" />
@@ -101,14 +101,14 @@
         ,
         seminar_owner.id,
         seminar_owner.seminar_id,
-        seminar_owner.member_id,
+        seminar_owner.account_id,
         seminar_owner.provider_owner_id,
         seminar_owner.name,
         seminar_owner.url
         <include refid="baseFromPhrase" />
         inner join seminar_owner on seminar.id = seminar_owner.seminar_id
         where
-            seminar_owner.member_id = #{memberId}
+            seminar_owner.account_id = #{accountId}
             and seminar.id = #{id}
     </select>
 
@@ -117,7 +117,7 @@
         <include refid="baseFromPhrase" />
         inner join seminar_owner on seminar.id = seminar_owner.seminar_id
         where
-            seminar_owner.member_id = #{memberId}
+            seminar_owner.account_id = #{accountId}
         order by
             seminar.created_at desc
     </select>

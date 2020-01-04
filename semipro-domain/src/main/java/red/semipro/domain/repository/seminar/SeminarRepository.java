@@ -28,9 +28,9 @@ public interface SeminarRepository {
     
     int update(Seminar seminar);
     
-    Seminar findOneByOwner(@Param("id")Long id, @Param("memberId")Long memberId);
+    Seminar findOneByOwner(@Param("id")Long id, @Param("accountId")Long accountId);
     
-    List<Seminar> findAllByOwner(Long memberId);
+    List<Seminar> findAllByOwner(Long accountId);
     
     int publish(Long id);
 }

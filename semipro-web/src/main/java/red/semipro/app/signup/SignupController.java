@@ -24,8 +24,8 @@ import org.terasoluna.gfw.web.token.transaction.TransactionTokenType;
 import red.semipro.business.email.EmailDocument;
 import red.semipro.business.email.EmailService;
 import red.semipro.common.Crypto;
-import red.semipro.domain.model.Member;
-import red.semipro.domain.service.member.MemberService;
+import red.semipro.domain.model.Account;
+import red.semipro.domain.service.account.AccountService;
 
 @Controller
 @RequestMapping(value = "signup")
@@ -33,7 +33,7 @@ import red.semipro.domain.service.member.MemberService;
 public class SignupController {
     
     @Autowired
-    private MemberService memberService;
+    private AccountService accountService;
     @Autowired
     private EmailService emailService;
     @Autowired
@@ -83,8 +83,8 @@ public class SignupController {
             return model;
         }
         
-        Member member = memberService.register(new Member(signupForm.getEmail(),signupForm.getUsername(), passwordEncoder.encode(signupForm.getPassword())));
-        sendMail(member, locale);
+        Account account = accountService.register(new Account(signupForm.getEmail(),signupForm.getUsername(), passwordEncoder.encode(signupForm.getPassword())));
+        sendMail(account, locale);
         
         model.setViewName("redirect:/signup/completed");
         return model;
@@ -96,16 +96,16 @@ public class SignupController {
         return model;
     }
     
-    private void sendMail(Member member, Locale locale) throws Exception {
+    private void sendMail(Account account, Locale locale) throws Exception {
         Map<String, Object> variableMap = new HashMap<String, Object>();
         variableMap.put("schema", schema);
         variableMap.put("domain", domain);
-        variableMap.put("member", member);
-        variableMap.put("activationKey", (new Crypto()).encrypto(member.getId().toString()));
+        variableMap.put("account", account);
+        variableMap.put("activationKey", (new Crypto()).encrypto(account.getId().toString()));
         emailService.sendMail(
                 EmailDocument.SIGNUPED,
                 variableMap, 
-                member.getEmail(), 
+                account.getEmail(),
                 fromEmail, 
                 locale);
     }

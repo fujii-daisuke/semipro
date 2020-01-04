@@ -6,7 +6,7 @@ import lombok.Data;
 import red.semipro.domain.enums.RegisterStatus;
 
 @Data
-public class Member implements Serializable {
+public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private Long id;
@@ -15,10 +15,10 @@ public class Member implements Serializable {
     private String username;
     private RegisterStatus registerStatus;
     
-    public Member() {
+    public Account() {
     }
     
-    public Member(String email, String username, String password) {
+    public Account(String email, String username, String password) {
         this.email = email;
         this.username = username;
         this.password = password;

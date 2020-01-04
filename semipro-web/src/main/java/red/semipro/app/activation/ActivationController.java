@@ -16,15 +16,15 @@ import red.semipro.business.email.EmailDocument;
 import red.semipro.business.email.EmailService;
 import red.semipro.common.Crypto;
 import red.semipro.domain.enums.RegisterStatus;
-import red.semipro.domain.model.Member;
-import red.semipro.domain.service.member.MemberService;
+import red.semipro.domain.model.Account;
+import red.semipro.domain.service.account.AccountService;
 
 @RequestMapping(value = "activation")
 @Controller
 public class ActivationController {
 
     @Autowired
-    private MemberService memberService;
+    private AccountService accountService;
     @Autowired
     private EmailService emailService;
     @Value("${custom.application.email.fromEmail}")
@@ -35,17 +35,17 @@ public class ActivationController {
             ModelAndView model, Locale locale) throws Exception {
         
         Crypto crypto = new Crypto();
-        String memberId = crypto.decrypto(activationKey);
-        Member member = memberService.findOne(Long.valueOf(memberId));
-        if (member == null 
-                || RegisterStatus.REGULAR.equals(member.getRegisterStatus())
-                || memberService.isExists(member)) {
+        String accountId = crypto.decrypto(activationKey);
+        Account account = accountService.findOne(Long.valueOf(accountId));
+        if (account == null
+                || RegisterStatus.REGULAR.equals(account.getRegisterStatus())
+                || accountService.isExists(account)) {
             
             model.setViewName("redirect:/activation/failure");
             return model;
         }
-        memberService.activation(member);
-        sendMail(member, locale);
+        accountService.activation(account);
+        sendMail(account, locale);
         model.setViewName("redirect:/activation/completed");
         return model;
     }
@@ -62,13 +62,13 @@ public class ActivationController {
         return model;
     }
 
-    private void sendMail(Member member, Locale locale) throws Exception {
+    private void sendMail(Account account, Locale locale) throws Exception {
         Map<String, Object> variableMap = new HashMap<String, Object>();
-        variableMap.put("member", member);
+        variableMap.put("account", account);
         emailService.sendMail(
                 EmailDocument.ACTIVATED,
                 variableMap, 
-                member.getEmail(), 
+                account.getEmail(),
                 fromEmail, 
                 locale);
     }

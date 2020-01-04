@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import red.semipro.domain.model.Member;
+import red.semipro.domain.model.Account;
 import red.semipro.domain.model.Seminar;
 import red.semipro.domain.model.SeminarSearchCriteria;
 
@@ -17,13 +17,13 @@ public interface SeminarService {
     
     public void registerByProvider(Seminar seminar);
     
-    public Seminar save(Seminar seminar, Member member);
+    public Seminar save(Seminar seminar, Account account);
     
     public void update(Seminar seminar);
     
-    public Seminar findOneByOwner(Long id, Long memberId);
+    public Seminar findOneByOwner(Long id, Long accountId);
     
-    public List<Seminar> findAllByOwner(Long memberId);
+    public List<Seminar> findAllByOwner(Long accountId);
     
-    public void publish(Long id, Member member);
+    public void publish(Long id, Account account);
 }

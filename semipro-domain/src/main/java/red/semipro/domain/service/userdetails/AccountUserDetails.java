@@ -6,7 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import red.semipro.domain.enums.RegisterStatus;
-import red.semipro.domain.model.Member;
+import red.semipro.domain.model.Account;
 
 public class AccountUserDetails implements UserDetails {
 
@@ -15,16 +15,16 @@ public class AccountUserDetails implements UserDetails {
      */
     private static final long serialVersionUID = 1L;
     
-    private final Member member;
+    private final Account account;
     private final Collection<? extends GrantedAuthority> authorities;
     
-    public AccountUserDetails(Member member, Collection<? extends GrantedAuthority> authorities) {
-        this.member = member;
+    public AccountUserDetails(Account account, Collection<? extends GrantedAuthority> authorities) {
+        this.account = account;
         this.authorities = authorities;
     }
     
-    public Member getMember() {
-        return member;
+    public Account getAccount() {
+        return account;
     }
     
     @Override
@@ -34,12 +34,12 @@ public class AccountUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return member.getPassword();
+        return account.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return member.getUsername();
+        return account.getUsername();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class AccountUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return member != null && RegisterStatus.REGULAR.equals(member.getRegisterStatus());
+        return account != null && RegisterStatus.REGULAR.equals(account.getRegisterStatus());
     }
 
 }

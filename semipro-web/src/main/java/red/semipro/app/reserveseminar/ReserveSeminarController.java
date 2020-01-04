@@ -18,11 +18,11 @@ public class ReserveSeminarController {
     private ReserveSeminarHelper helper;
 
     @GetMapping(value = "{seminarId}/reserve")
-    public ModelAndView detail(@AuthenticationPrincipal AccountUserDetails account,
+    public ModelAndView detail(@AuthenticationPrincipal AccountUserDetails accountUserDetails,
             @PathVariable("seminarId") Long seminarId,
         ModelAndView model) {
         
-        model.addObject("output", helper.findSeminarDetail(seminarId, account == null ? null:account.getMember()));
+        model.addObject("output", helper.findSeminarDetail(seminarId, accountUserDetails == null ? null:accountUserDetails.getAccount()));
         model.setViewName("reserveseminar/reserveForm");
         return model;
     }
