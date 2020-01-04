@@ -101,9 +101,9 @@ public class ManageHoldController {
     }
     
     @RequestMapping(value = "me", method = RequestMethod.GET)
-    public ModelAndView list(@AuthenticationPrincipal AccountUserDetails account,
+    public ModelAndView list(@AuthenticationPrincipal AccountUserDetails accountUserDetails,
             ModelAndView model) {
-        List<Seminar> rows = seminarService.findAllByOwner(account.getMember().getId());
+        List<Seminar> rows = seminarService.findAllByOwner(accountUserDetails.getAccount().getId());
         model.addObject("rows", rows);
         model.setViewName("managehold/list");
         return model;
@@ -111,12 +111,12 @@ public class ManageHoldController {
     
     @GetMapping(value = {"basic/input", "{seminarId}/basic/input"})
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.BEGIN)
-    public ModelAndView inputBasic(@AuthenticationPrincipal AccountUserDetails account,
+    public ModelAndView inputBasic(@AuthenticationPrincipal AccountUserDetails accountUserDetails,
             @PathVariable(name = "seminarId", required = false) Long seminarId,
             ManageHoldBasicForm form,
             ModelAndView model) {
         if (seminarId != null) {
-            Seminar seminar = seminarService.findOneByOwner(seminarId, account.getMember().getId());
+            Seminar seminar = seminarService.findOneByOwner(seminarId, accountUserDetails.getAccount().getId());
             if (seminar == null) {
                 model.setViewName("redirect:/");
                 return model;
@@ -133,7 +133,7 @@ public class ManageHoldController {
     
     @PostMapping(value = {"basic/save", "{seminarId}/basic/save"})
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.IN)
-    public ModelAndView saveBasic(@AuthenticationPrincipal AccountUserDetails account,
+    public ModelAndView saveBasic(@AuthenticationPrincipal AccountUserDetails accountUserDetails,
             @PathVariable(name = "seminarId", required = false) Long seminarId,
             @Validated ManageHoldBasicForm form, 
             BindingResult result,
@@ -157,7 +157,7 @@ public class ManageHoldController {
                                     form.getCityId(),
                                     form.getAddress(),
                                     form.getPlace());
-        seminar = seminarService.save(seminar, account.getMember());
+        seminar = seminarService.save(seminar, accountUserDetails.getAccount());
         
         model.setViewName("redirect:/holds/" + seminar.getId() + "/advanced/input");
         return model;
@@ -165,12 +165,12 @@ public class ManageHoldController {
     
     @GetMapping(value="{seminarId}/advanced/input")
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.BEGIN)
-    public ModelAndView inputAdvanced(@AuthenticationPrincipal AccountUserDetails account,
+    public ModelAndView inputAdvanced(@AuthenticationPrincipal AccountUserDetails accountUserDetails,
                 @PathVariable("seminarId") Long seminarId,
                 ManageHoldAdvancedForm form,
                 ModelAndView model) {
         
-        form.set(seminarService.findOneByOwner(seminarId, account.getMember().getId()));
+        form.set(seminarService.findOneByOwner(seminarId, accountUserDetails.getAccount().getId()));
         model.addObject("seminarId", seminarId);
         model.addObject("s3Url", s3StorageService.getUrl());
         model.setViewName("managehold/advancedForm");
@@ -197,12 +197,12 @@ public class ManageHoldController {
     
     @GetMapping(value="{seminarId}/ticket/input")
     @TransactionTokenCheck(value = "create", type = TransactionTokenType.BEGIN)
-    public ModelAndView inputTicket(@AuthenticationPrincipal AccountUserDetails account,
+    public ModelAndView inputTicket(@AuthenticationPrincipal AccountUserDetails accountUserDetails,
                 @PathVariable("seminarId") Long seminarId,
                 ManageHoldTicketForm form,
                 ModelAndView model) {
         
-        form.set(seminarService.findOneByOwner(seminarId, account.getMember().getId()));
+        form.set(seminarService.findOneByOwner(seminarId, accountUserDetails.getAccount().getId()));
         model.addObject("seminarId", seminarId);
         model.setViewName("managehold/ticketForm");
         return model;
@@ -227,11 +227,11 @@ public class ManageHoldController {
     }
     
     @GetMapping(value="{seminarId}/publish")
-    public ModelAndView publish(@AuthenticationPrincipal AccountUserDetails account,
+    public ModelAndView publish(@AuthenticationPrincipal AccountUserDetails accountUserDetails,
             @PathVariable("seminarId") Long seminarId,
                 ModelAndView model) {
         
-        seminarService.publish(seminarId, account.getMember());
+        seminarService.publish(seminarId, accountUserDetails.getAccount());
         model.setViewName("redirect:/seminars/" + seminarId + "/reserve");
         return model;
     }

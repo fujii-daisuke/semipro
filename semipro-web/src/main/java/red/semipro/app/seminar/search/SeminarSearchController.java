@@ -1,4 +1,4 @@
-package red.semipro.app.searchseminar;
+package red.semipro.app.seminar.search;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
 import red.semipro.common.PageWrapper;
 import red.semipro.domain.model.Seminar;
 import red.semipro.domain.model.SeminarSearchCriteria;
@@ -21,7 +20,7 @@ import red.semipro.domain.service.seminar.SeminarServiceImpl;
 
 @RequestMapping(value = "/")
 @Controller
-public class SearchSeminarController {
+public class SeminarSearchController {
 
     @Autowired
     private SeminarServiceImpl seminarService;
@@ -29,9 +28,9 @@ public class SearchSeminarController {
     private ModelMapper modelMapper;
     
     @GetMapping
-    public ModelAndView search(SearchSeminarForm form,
-            BindingResult result,
-            @PageableDefault(size = 20)
+    public ModelAndView search(SeminarSearchForm form,
+                               BindingResult result,
+                               @PageableDefault(size = 20)
             @SortDefaults(
                     {
                         @SortDefault(
@@ -39,14 +38,14 @@ public class SearchSeminarController {
                                      direction = Direction.ASC
                                     )
                     }) Pageable pageable,
-            ModelAndView model) {
+                               ModelAndView model) {
         
         SeminarSearchCriteria criteria= modelMapper.map(form, SeminarSearchCriteria.class);
         Page<Seminar> seminarPage = seminarService.searchSeminar(criteria, pageable);
         PageWrapper<Seminar> page = new PageWrapper<Seminar>(seminarPage, "/");
                 
         model.addObject("page", page);
-        model.setViewName("searchseminar/searchSeminar");
+        model.setViewName("seminar/search/seminarSearch");
         return model;
     }
 

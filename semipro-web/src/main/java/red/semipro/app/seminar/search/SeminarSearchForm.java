@@ -1,8 +1,8 @@
-package red.semipro.app.searchseminar;
+package red.semipro.app.seminar.search;
 
 import java.io.Serializable;
 
-public class SearchSeminarForm implements Serializable {
+public class SeminarSearchForm implements Serializable {
 
     /**
      * 

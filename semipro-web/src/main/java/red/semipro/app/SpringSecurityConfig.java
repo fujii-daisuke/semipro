@@ -13,13 +13,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import red.semipro.domain.service.userdetails.AccountUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Autowired
-    private UserDetailsService userDetailsService;
+    private AccountUserDetailsService userDetailsService;
     
     private static final String[] authenticateActionArray = 
         {

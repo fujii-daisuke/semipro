@@ -5,13 +5,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import red.semipro.domain.service.member.MemberService;
+import red.semipro.domain.service.account.AccountService;
 
 @Component
 public class SignupFormValidator implements Validator {
 
     @Autowired
-    MemberService memberService;
+    AccountService accountService;
     
     @Override
     public boolean supports(Class<?> clazz) {
@@ -25,11 +25,11 @@ public class SignupFormValidator implements Validator {
         }
         SignupForm form = (SignupForm)target;
         
-        if (memberService.isExistsEmail(form.getEmail())) {
+        if (accountService.isExistsEmail(form.getEmail())) {
             errors.rejectValue("email", "AalreadyExists.email");
         }
         
-        if (memberService.isExistsUsername(form.getUsername())) {
+        if (accountService.isExistsUsername(form.getUsername())) {
             errors.rejectValue("userame", "AalreadyExists.username");
         }
     }
