@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="red.semipro.domain.repository.seminar.SeminarSupportRepository">
+
+    <resultMap id="seminarSupportResultMap" type="red.semipro.domain.model.seminar.SeminarSupport">
+        <result property="seminarId" column="seminar_id"/>
+        <result property="shootingSupport" column="shooting_support"/>
+        <result property="shootingEditSupport" column="shooting_edit_support"/>
+        <result property="movieSalesSupport" column="movie_sales_support"/>
+    </resultMap>
+
+    <select id="findOne" resultMap="seminarSupportResultMap">
+        SELECT
+            seminar_id
+            , shooting_support
+            , shooting_edit_support
+            , movie_sales_support
+        FROM
+            seminar_support
+        WHERE
+            seminar_id = #{seminarId}
+    </select>
+
+    <insert id="initialize">
+        INSERT INTO seminar_support (
+            seminar_id
+        ) VALUES (
+            #{seminarId}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE seminar_support SET
+            shooting_support = #{shootingSupport}
+            , shooting_edit_support = #{shootingEditSupport}
+            , movie_sales_support = #{movieSalesSupport}
+            , updated_at = CURRENT_TIMESTAMP
+        WHERE
+            seminar_id = #{seminarId}
+    </update>
+
+</mapper>

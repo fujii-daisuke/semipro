@@ -6,89 +6,53 @@
       th:lang="${#locale.language}">
 <head>
     <title>ログイン</title>
-    <meta name="keywords" content="content1" />
-    <meta name="description" content="content1" />
+    <meta name="description" content="ログイン画面です。" />
 </head>
-
-<body class="grey lighten-3">
-
-  <main class="mt-5 pt-4" layout:fragment="content">
-    <div class="container h-100 d-flex justify-content-center align-items-center">
-      <!-- Material form login -->
-      <div class="card mb-5">
-      
-        <h5 class="card-header info-color white-text text-center py-4">
-          <strong>ログイン</strong>
-        </h5>
-      
-        <!--Card content-->
-        <div class="card-body px-lg-5 pt-0">
-      
-          <!-- Form -->
-          <form class="text-center" style="color: #757575;" th:action="@{/authenticate}" th:object="${loginForm}" method="post">
-
-            <p th:if="${param.error}" class="red-text mt-3" th:text="#{login.failed}"></p>
-
-            <!-- Email -->
-            <div class="md-form">
-              <input type="email" id="materialLoginFormEmail" class="form-control is-invalid" th:field="*{email}">
-              <label for="materialLoginFormEmail">E-mail</label>
-              <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback text-left">error</span>
-            </div>
-      
-            <!-- Password -->
-            <div class="md-form">
-              <input type="password" id="materialLoginFormPassword" class="form-control is-invalid" th:field="*{password}">
-              <label for="materialLoginFormPassword">Password</label>
-              <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback text-left">error</span>
-            </div>
-            
-            <!-- 
-            <div class="d-flex justify-content-around">
-              <div>
-                <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="materialLoginFormRemember">
-                  <label class="form-check-label" for="materialLoginFormRemember">Remember me</label>
+<body>
+    <main layout:fragment="content">
+        <div class="uk-container uk-margin">
+            <div class="uk-flex uk-flex-center">
+                <div class="uk-card uk-card-default">
+                    <div class="uk-card-header">
+                        <div class="uk-grid-small uk-flex-middle" uk-grid>
+                            <div class="uk-width-expand">
+                              <h3 class="uk-card-title uk-margin-remove-bottom">ログイン</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-card-body">
+                        <form class="uk-form-stacked" th:action="@{/authenticate}" th:object="${loginForm}" method="post">
+                            <p th:if="${param.error}" class="uk-text-small uk-text-danger" th:text="#{login.failed}"></p>
+                            <div class="uk-margin">
+                                <label for="email">メールアドレス</label>
+                                <div class="uk-form-controls">
+                                    <input type="email"
+                                           id="email"
+                                           class="uk-input uk-form-small uk-form-width-large"
+                                           th:classappend="${#fields.hasErrors('email') ? 'uk-form-danger':''}"
+                                           th:field="*{email}">
+                                </div>
+                            </div>
+                            <div class="uk-margin">
+                                <label for="password">パスワード</label>
+                                <div class="uk-form-controls">
+                                    <input type="password"
+                                           id="password"
+                                           class="uk-input uk-form-small uk-form-width-large"
+                                           th:classappend="${#fields.hasErrors('password') ? 'uk-form-danger':''}"
+                                           th:field="*{password}">
+                                </div>
+                            </div>
+                            <p class="uk-text-center uk-margin">
+                                <button type="submit" class="uk-button uk-button-primary">ログイン</button>
+                            </p>
+                            <p>会員登録は<a th:href=@{/signup}>こちら</a></p>
+                          </form>
+                    </div>
                 </div>
-              </div>
-              <div>
-                <a href="">Forgot password?</a>
-              </div>
             </div>
-            -->
-            
-            <!-- Sign in button -->
-            <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">ログイン</button>
-      
-            <!-- Register -->
-            <p>会員登録は
-              <a th:href=@{/signup}>こちら</a>
-            </p>
-      
-            <!-- Social login
-            <p>or sign in with:</p>
-            <a type="button" class="btn-floating btn-fb btn-sm">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a type="button" class="btn-floating btn-tw btn-sm">
-              <i class="fab fa-twitter"></i>
-            </a>
-            <a type="button" class="btn-floating btn-li btn-sm">
-              <i class="fab fa-linkedin-in"></i>
-            </a>
-            <a type="button" class="btn-floating btn-git btn-sm">
-              <i class="fab fa-github"></i>
-            </a>
-            -->
-          </form>
-          <!-- Form -->
-      
         </div>
-      
-      </div>
-      <!-- Material form login -->
-    </div>
-  </main>
-  <th:block th:fragment="script"></th:block>
+    </main>
+    <th:block th:fragment="script"></th:block>
 </body>
 </html>

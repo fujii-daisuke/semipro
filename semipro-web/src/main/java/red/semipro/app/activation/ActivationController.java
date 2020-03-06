@@ -1,75 +1,70 @@
 package red.semipro.app.activation;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import red.semipro.business.email.EmailDocument;
-import red.semipro.business.email.EmailService;
-import red.semipro.common.Crypto;
-import red.semipro.domain.enums.RegisterStatus;
-import red.semipro.domain.model.Account;
-import red.semipro.domain.service.account.AccountService;
-
-@RequestMapping(value = "activation")
+/**
+ * アクティベーション - controller
+ */
 @Controller
+@RequestMapping(value = "activation")
+@RequiredArgsConstructor
+@Slf4j
 public class ActivationController {
 
-    @Autowired
-    private AccountService accountService;
-    @Autowired
-    private EmailService emailService;
-    @Value("${custom.application.email.fromEmail}")
-    private String fromEmail;
-    
-    @GetMapping(value="{activationKey}/register")
-    public ModelAndView register(@PathVariable("activationKey") String activationKey,
-            ModelAndView model, Locale locale) throws Exception {
-        
-        Crypto crypto = new Crypto();
-        String accountId = crypto.decrypto(activationKey);
-        Account account = accountService.findOne(Long.valueOf(accountId));
-        if (account == null
-                || RegisterStatus.REGULAR.equals(account.getRegisterStatus())
-                || accountService.isExists(account)) {
-            
+    private final ActivationHelper activationHelper;
+
+    /**
+     * アクティベーションのリクエストを受け付けます
+     *
+     * @param activationKey アクティベーションキー
+     * @param model         ModelAndView
+     * @param locale        Locale
+     * @return ModelAndView
+     * @throws Exception アクティベーションキーの復号化失敗時に発生します
+     */
+    @GetMapping(value = "{activationKey}/register")
+    public ModelAndView activation(@PathVariable("activationKey") String activationKey,
+        ModelAndView model, Locale locale) throws Exception {
+
+        try {
+            activationHelper.activate(activationKey, locale);
+        } catch (IllegalStateException e) {
+            log.warn(e.getMessage());
             model.setViewName("redirect:/activation/failure");
             return model;
         }
-        accountService.activation(account);
-        sendMail(account, locale);
         model.setViewName("redirect:/activation/completed");
         return model;
     }
-    
+
+    /**
+     * アクティベーション失敗画面を表示します
+     *
+     * @param model ModelAndView
+     * @return ModelAndView
+     */
     @GetMapping(value = "failure")
     public ModelAndView failure(ModelAndView model) {
         model.setViewName("activation/failure");
         return model;
     }
-    
+
+    /**
+     * アクティベーション成功画面を表示します
+     *
+     * @param model ModelAndView
+     * @return ModelAndView
+     */
     @GetMapping(value = "completed")
     public ModelAndView completed(ModelAndView model) {
         model.setViewName("activation/completed");
         return model;
-    }
-
-    private void sendMail(Account account, Locale locale) throws Exception {
-        Map<String, Object> variableMap = new HashMap<String, Object>();
-        variableMap.put("account", account);
-        emailService.sendMail(
-                EmailDocument.ACTIVATED,
-                variableMap, 
-                account.getEmail(),
-                fromEmail, 
-                locale);
     }
 }

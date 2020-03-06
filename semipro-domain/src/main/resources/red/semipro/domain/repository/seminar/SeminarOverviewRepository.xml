@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="red.semipro.domain.repository.seminar.SeminarOverviewRepository">
+
+    <resultMap id="resultMap" type="red.semipro.domain.model.seminar.SeminarOverview">
+        <result property="seminarId" column="seminar_id"/>
+        <result property="title" column="title"/>
+        <result property="summary" column="summary"/>
+        <result property="lecturerProfile" column="lecturer_profile"/>
+        <result property="mainImageExtension" column="main_image_extension"/>
+    </resultMap>
+
+    <sql id="baseSelectPhrase">
+        SELECT
+            seminar_id
+            , title
+            , summary
+            , lecturer_profile
+            , main_image_extension
+    </sql>
+
+    <select id="findOne" resultMap="resultMap">
+        <include refid="baseSelectPhrase"/>
+        FROM
+        seminar_overview
+        WHERE
+        seminar_id = #{seminarId}
+    </select>
+
+    <insert id="initialize">
+        INSERT INTO seminar_overview (
+            seminar_id
+        ) VALUES (
+            #{seminarId}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE seminar_overview SET
+            title = #{title}
+            , summary = #{summary}
+            , lecturer_profile = #{lecturerProfile}
+            , updated_at = CURRENT_TIMESTAMP
+        WHERE
+            seminar_id = #{seminarId}
+    </update>
+
+    <update id="updateMainImageExtension">
+        UPDATE seminar_overview SET
+            main_image_extension = #{mainImageExtension}
+            , updated_at = CURRENT_TIMESTAMP
+        WHERE
+            seminar_id = #{seminarId}
+    </update>
+
+</mapper>

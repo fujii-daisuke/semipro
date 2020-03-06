@@ -10,23 +10,19 @@ import red.semipro.domain.model.Account;
 
 public class AccountUserDetails implements UserDetails {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-    
+    private static final long serialVersionUID = -2310000986072616321L;
     private final Account account;
     private final Collection<? extends GrantedAuthority> authorities;
-    
+
     public AccountUserDetails(Account account, Collection<? extends GrantedAuthority> authorities) {
         this.account = account;
         this.authorities = authorities;
     }
-    
+
     public Account getAccount() {
         return account;
     }
-    
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
@@ -61,5 +57,4 @@ public class AccountUserDetails implements UserDetails {
     public boolean isEnabled() {
         return account != null && RegisterStatus.REGULAR.equals(account.getRegisterStatus());
     }
-
 }

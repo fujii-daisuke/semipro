@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+  <title>作成済みセミナー一覧</title>
+</head>
+<body>
+    <main class="uk-margin" layout:fragment="content">
+        <div class="uk-container">
+            <div class="uk-flex uk-flex-center">
+                <div class="uk-card uk-card-default uk-width-xxlarge">
+                    <div class="uk-card-header">
+                        <div class="uk-grid-small uk-flex-middle" uk-grid>
+                            <div class="uk-width-expand">
+                                <h3 class="uk-card-title uk-margin-remove-bottom">作成済みセミナー</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-card-body">
+                        <ul class="uk-list uk-list-large uk-list-divider">
+                        <th:block th:each="summary, parentStat:${page.content}">
+                          <li>
+                              <div>
+                                  <span th:text="#{openingStatus.__${summary.seminar.openingStatus.value}__}">編集中</span>
+                              </div>
+                              <a class="uk-text-large"
+                                 th:href="@{/seminars/create/__${summary.seminar.id}__/goal}"
+                                 th:text="${summary.overview.title != null ? summary.overview.title : '未タイトル'}">>title</a></li>
+                        </th:block>
+                        </ul>
+                    </div>
+                    <div class="uk-card-footer">
+                        <p class="uk-text-center uk-margin">
+                            <a th:href="@{/seminars/create}" class="uk-button uk-button-primary">セミナーを開催する</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <th:block th:fragment="script">
+    </th:block>
+</body>
+</html>

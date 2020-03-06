@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="red.semipro.domain.repository.seminar.SeminarDetailRepository">
+
+    <select id="findOneWithDetails" resultMap="seminarDetailResultMap">
+        SELECT
+            seminar.id seminar_id
+            , seminar.opening_status
+            , seminar.seminar_type
+            , seminar.minimum_number
+            , seminar.capacity
+            , seminar.entry_starting_at
+            , seminar.entry_ending_at
+            , seminar.success_condition
+            , seminar.seminar_starting_at
+            , seminar.seminar_ending_at
+            , account.id account_id
+            , account.email
+            , account.username
+            , seminar_overview.title
+            , seminar_overview.summary
+            , seminar_overview.lecturer_profile
+            , seminar_overview.main_image_extension
+            , seminar_contents.contents
+            , seminar_ticket.id ticket_id
+            , seminar_ticket.seminar_id ticket_seminar_id
+            , seminar_ticket.name ticket_name
+            , seminar_ticket.price ticket_price
+            , seminar_ticket.capacity ticket_capacity
+            , seminar_place.place_arrangement
+            , prefecture.id prefecture_id
+            , prefecture.name prefecture_name
+            , city.id city_id
+            , city.name city_name
+            , seminar_place.address
+            , seminar_place.place
+            , seminar_place.lat
+            , seminar_place.lng
+            , seminar_entry_summary.entry_count
+        FROM seminar
+        INNER JOIN account ON seminar.account_id = account.id
+        LEFT OUTER JOIN seminar_overview ON seminar.id = seminar_overview.seminar_id
+        LEFT OUTER JOIN seminar_contents ON seminar.id = seminar_contents.seminar_id
+        LEFT OUTER JOIN seminar_ticket ON seminar.id = seminar_ticket.seminar_id
+        LEFT OUTER JOIN seminar_place ON seminar.id = seminar_place.seminar_id
+        LEFT OUTER JOIN prefecture ON seminar_place.prefecture_id = prefecture.id
+        LEFT OUTER JOIN city ON prefecture.id = city.prefecture_id AND seminar_place.city_id = city.id
+        LEFT OUTER JOIN seminar_entry_summary ON seminar.id = seminar_entry_summary.seminar_id
+        WHERE
+            seminar.id = #{seminarId}
+    </select>
+
+    <resultMap id="seminarDetailResultMap" type="red.semipro.domain.model.seminar.SeminarDetail">
+        <id column="seminar_id"/>
+        <association property="seminar" javaType="red.semipro.domain.model.Seminar">
+            <id property="id" column="seminar_id"/>
+            <result property="openingStatus" column="opening_status"/>
+            <result property="seminarType" column="seminar_type"/>
+            <result property="minimumNumber" column="minimum_number"/>
+            <result property="capacity" column="capacity"/>
+            <result property="entryStartingAt" column="entry_starting_at"/>
+            <result property="entryEndingAt" column="entry_ending_at"/>
+            <result property="successCondition" column="success_condition"/>
+            <result property="seminarStartingAt" column="seminar_starting_at"/>
+            <result property="seminarEndingAt" column="seminar_ending_at"/>
+        </association>
+        <association property="account" javaType="red.semipro.domain.model.Account">
+            <id property="id" column="account_id"/>
+            <result property="email" column="email"/>
+            <result property="username" column="username"/>
+        </association>
+        <association property="seminarOverview" javaType="red.semipro.domain.model.seminar.SeminarOverview">
+            <id property="seminarId" column="seminar_id"/>
+            <result property="title" column="title"/>
+            <result property="summary" column="summary"/>
+            <result property="lecturerProfile" column="lecturer_profile"/>
+            <result property="mainImageExtension" column="main_image_extension"/>
+        </association>
+        <association property="seminarContents" javaType="red.semipro.domain.model.seminar.SeminarContents">
+            <id property="seminarId" column="seminar_id"/>
+            <result property="contents" column="contents"/>
+        </association>
+        <association property="seminarPlace" javaType="red.semipro.domain.model.seminar.SeminarPlace">
+            <id property="seminarId" column="seminar_id"/>
+            <result property="placeArrangement" column="place_arrangement"/>
+            <result property="prefecture.id" column="prefecture_id"/>
+            <result property="prefecture.name" column="prefecture_name"/>
+            <result property="city.id" column="city_id"/>
+            <result property="city.name" column="city_name"/>
+            <result property="address" column="address"/>
+            <result property="place" column="place"/>
+            <result property="lat" column="lat"/>
+            <result property="lng" column="lng"/>
+        </association>
+        <association property="seminarEntrySummary" javaType="red.semipro.domain.model.seminar.SeminarEntrySummary">
+            <id property="seminarId" column="seminar_id"/>
+            <result property="entryCount" column="entry_count"/>
+        </association>
+        <collection property="seminarTicketList" ofType="red.semipro.domain.model.seminar.SeminarTicket">
+            <id property="id" column="ticket_id"/>
+            <result property="seminarId" column="ticket_seminar_id"/>
+            <result property="name" column="ticket_name"/>
+            <result property="price" column="ticket_price"/>
+            <result property="capacity" column="ticket_capacity"/>
+        </collection>
+    </resultMap>
+
+</mapper>

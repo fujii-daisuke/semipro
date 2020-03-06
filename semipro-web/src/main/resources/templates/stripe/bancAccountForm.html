@@ -3,10 +3,15 @@
       lang="ja">
 <head>
     <title>Stripe BankAccount Create Token Test Form</title>
+    <meta charset="utf-8">
 </head>
 
 <body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://js.stripe.com/v3/"></script>
+<form method="post">
+    <input type="hidden" id="account_holder_name" name="account_holder_name" value="フジイ　ダイスケ">
+</form>
 <script>
     var stripe = Stripe('pk_test_kfHrwK9IL4ArC9ZsATw8ymhQ00w6t7mFJl');
     stripe.createToken('bank_account', {
@@ -14,7 +19,7 @@
         currency: 'jpy',
         routing_number: '0017258',
         account_number: '0001234',
-        account_holder_name: 'フジイ　ダイスケ',
+        account_holder_name: $("#account_holder_name").val(),
         account_holder_type: 'individual'
     }).then(function (result) {
         if (result.error) {

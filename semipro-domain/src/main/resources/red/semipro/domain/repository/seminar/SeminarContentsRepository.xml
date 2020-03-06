@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="red.semipro.domain.repository.seminar.SeminarContentsRepository">
+
+    <resultMap id="resultMap" type="red.semipro.domain.model.seminar.SeminarContents">
+        <result property="seminarId" column="seminar_id"/>
+        <result property="contents" column="contents"/>
+    </resultMap>
+
+    <select id="findOne" resultMap="resultMap">
+        SELECT
+            seminar_id
+            , contents
+        FROM
+        seminar_contents
+        WHERE
+        seminar_id = #{seminarId}
+    </select>
+
+    <insert id="initialize">
+        INSERT INTO seminar_contents (
+            seminar_id
+        ) VALUES (
+            #{seminarId}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE seminar_contents SET
+            contents = #{contents}
+            , updated_at = CURRENT_TIMESTAMP
+        WHERE
+            seminar_id = #{seminarId}
+    </update>
+
+</mapper>

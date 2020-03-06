@@ -1,29 +1,30 @@
 package red.semipro.domain.enums;
 
+import java.util.Arrays;
+
+/**
+ * 公開ステータス - enum
+ */
 public enum OpeningStatus {
-    DRAFT(0), OPENING(1);
+    DRAFT("draft"),
+    APPLYING("applying"),
+    OPENING("opening"),
+    CLOSED("closed");
 
-    private int value;
+    private String value;
 
-    OpeningStatus(int value) {
+    OpeningStatus(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return this.value;
     }
 
-    public static OpeningStatus valueOf(final int value) {
-        OpeningStatus[] statuses = OpeningStatus.values();
-        for (OpeningStatus status : statuses) {
-            if (status.getValue() == value) {
-                return status;
-            }
-        }
-        return null;
-    }
-    
-    public boolean isOpening() {
-        return this.value == OpeningStatus.OPENING.getValue();
+    public static OpeningStatus getOpeningStatus(String value) {
+        return Arrays.stream(values())
+            .filter(v -> v.getValue().equals(value))
+            .findFirst()
+            .orElseThrow();
     }
 }

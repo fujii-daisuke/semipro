@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="red.semipro.domain.repository.identification.IdentificationAddressRepository">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO identification_address (
+            identification_id
+            , postal_code
+            , state
+            , city
+            , town
+            , line1
+            , line2
+            , state_kana
+            , city_kana
+            , town_kana
+            , line1_kana
+            , line2_kana
+        ) VALUES (
+            #{identificationId}
+            , #{postalCode}
+            , #{state}
+            , #{city}
+            , #{town}
+            , #{line1}
+            , #{line2}
+            , #{stateKana}
+            , #{cityKana}
+            , #{townKana}
+            , #{line1Kana}
+            , #{line2Kana}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE identification_address SET
+            postal_code = #{postalCode}
+            , state = #{state}
+            , city = #{city}
+            , town = #{town}
+            , line1 = #{line1}
+            , line2 = #{line2}
+            , state_kana = #{stateKana}
+            , city_kana = #{cityKana}
+            , town_kana = #{townKana}
+            , line1_kana = #{line1Kana}
+            , line2_kana = #{line2Kana}
+        WHERE
+            identification_id = #{identificationId}
+    </update>
+
+    <delete id="delete">
+        DELETE
+        FROM identification_address
+        WHERE
+            identification_id = #{identificationId}
+    </delete>
+
+</mapper>
