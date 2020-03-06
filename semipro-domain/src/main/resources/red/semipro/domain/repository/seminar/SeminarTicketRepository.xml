@@ -1,50 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper
     namespace="red.semipro.domain.repository.seminar.SeminarTicketRepository">
-    
-    <resultMap id="seminarTicketResultMap" type="red.semipro.domain.model.SeminarTicket">
-        <result property="id" column="id" />
-        <result property="seminarId" column="seminar_id" />
-        <result property="name" column="name" />
-        <result property="price" column="price" />
+
+    <resultMap id="seminarTicketResultMap" type="red.semipro.domain.model.seminar.SeminarTicket">
+        <result property="id" column="id"/>
+        <result property="seminarId" column="seminar_id"/>
+        <result property="name" column="name"/>
+        <result property="price" column="price"/>
+        <result property="capacity" column="capacity"/>
     </resultMap>
 
     <select id="findAll" resultMap="seminarTicketResultMap">
-        select
-            id,
-            seminar_id,
-            name,
-            price,
-            num
-        from seminar_ticket
-        where
+        SELECT
+            id
+            , seminar_id
+            , name
+            , price
+            , capacity
+        FROM seminar_ticket
+        WHERE
             seminar_id = #{seminarId}
-        order by price
+        ORDER BY price
     </select>
-    
+
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        insert into seminar_ticket (
-            seminar_id,
-            name,
-            price,
-            num,
-            created_at,
-            updated_at
-            )
-        values
-            <foreach item="i" collection="tickets" separator=",">
-                (#{i.seminarId}, #{i.name}, #{i.price}, #{i.num}, current_timestamp, current_timestamp)
-            </foreach>
+        INSERT INTO seminar_ticket (
+        seminar_id
+        , name
+        , price
+        , capacity
+        , created_at
+        , updated_at
+        ) VALUES
+        <foreach item="i" collection="tickets" separator=",">
+            (#{i.seminarId}
+            , #{i.name}
+            , #{i.price}
+            , #{i.capacity}
+            , CURRENT_TIMESTAMP
+            , CURRENT_TIMESTAMP )
+        </foreach>
     </insert>
-    
+
     <delete id="delete">
-        delete from seminar_ticket
-            where
-                seminar_id = #{seminarId}
+        DELETE
+        FROM
+            seminar_ticket
+        WHERE
+            seminar_id = #{seminarId}
     </delete>
-    
+
 </mapper>

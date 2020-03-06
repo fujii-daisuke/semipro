@@ -7,13 +7,11 @@
     <groupId>red.semipro</groupId>
     <artifactId>semipro</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <!-- point.1 -->
     <packaging>pom</packaging>
 
     <name>semipro</name>
     <description>Multi Modules Spring Boot Sample application</description>
 
-    <!-- point.2 -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -21,7 +19,6 @@
         <relativePath/>
     </parent>
 
-    <!-- point.3 -->
     <modules>
         <module>semipro-web</module>
         <module>semipro-domain</module>
@@ -34,7 +31,6 @@
         <java.version>12</java.version>
     </properties>
 
-    <!-- point.4 -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -69,6 +65,12 @@
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>0.7.5</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305 -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
         </dependency>
     </dependencies>
 

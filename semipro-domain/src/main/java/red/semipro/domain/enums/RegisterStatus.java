@@ -1,26 +1,29 @@
 package red.semipro.domain.enums;
 
+import java.util.Arrays;
+
+/**
+ * 登録ステータス - enum
+ */
 public enum RegisterStatus {
 
-    PRE(0), REGULAR(1);
+    PROVISIONAL("provisional"),
+    REGULAR("regular");
 
-    private int value;
+    private String value;
 
-    RegisterStatus(int value) {
+    RegisterStatus(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return this.value;
     }
 
-    public static RegisterStatus valueOf(final int value) {
-        RegisterStatus[] statuses = RegisterStatus.values();
-        for (RegisterStatus status : statuses) {
-            if (status.getValue() == value) {
-                return status;
-            }
-        }
-        return null;
+    public static RegisterStatus getRegisterStatus(String value) {
+        return Arrays.stream(values())
+            .filter(v -> v.getValue().equals(value))
+            .findFirst()
+            .orElseThrow();
     }
 }

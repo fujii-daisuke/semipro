@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="red.semipro.domain.repository.seminar.SeminarPlaceRepository">
+
+    <resultMap id="resultMap" type="red.semipro.domain.model.seminar.SeminarPlace">
+        <result property="seminarId" column="seminar_id"/>
+        <result property="placeArrangement" column="place_arrangement"/>
+        <result property="prefecture.id" column="prefecture_id"/>
+        <result property="city.id" column="city_id"/>
+        <result property="address" column="address"/>
+        <result property="place" column="place"/>
+    </resultMap>
+
+    <sql id="baseSelectPhrase">
+        SELECT
+            seminar_id
+            , place_arrangement
+            , prefecture_id
+            , city_id
+            , address
+            , place
+    </sql>
+
+    <select id="findOne" resultMap="resultMap">
+        <include refid="baseSelectPhrase"/>
+        FROM seminar_place
+        WHERE
+        seminar_id = #{seminarId}
+    </select>
+
+
+    <insert id="insert">
+        INSERT INTO seminar_place (
+        seminar_id
+        , place_arrangement
+        <if test="prefecture != null">
+            , prefecture_id
+        </if>
+        <if test="city != null">
+            , city_id
+        </if>
+        , address
+        , place
+        ) VALUES (
+        #{seminarId}
+        , #{placeArrangement.value}
+        <if test="prefecture != null">
+            , #{prefecture.id}
+        </if>
+        <if test="city != null">
+            , #{city.id}
+        </if>
+        , #{address}
+        , #{place}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE seminar_place SET
+        place_arrangement = #{placeArrangement.value}
+        <choose>
+            <when test="prefecture != null">
+                , prefecture_id = #{prefecture.id}
+            </when>
+            <otherwise>
+                , prefecture_id = null
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="city != null">
+                , city_id = #{city.id}
+            </when>
+            <otherwise>
+                , city_id = null
+            </otherwise>
+        </choose>
+        , address = #{address}
+        , place = #{place}
+        , updated_at = CURRENT_TIMESTAMP
+        WHERE
+        seminar_id = #{seminarId}
+    </update>
+
+</mapper>

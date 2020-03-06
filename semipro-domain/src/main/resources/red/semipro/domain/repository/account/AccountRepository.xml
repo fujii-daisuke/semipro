@@ -1,105 +1,89 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper
     namespace="red.semipro.domain.repository.account.AccountRepository">
 
     <resultMap id="account" type="red.semipro.domain.model.Account">
-        <result property="id" column="id" />
-        <result property="email" column="email" />
-        <result property="password" column="password" />
-        <result property="username" column="username" />
-        <result property="registerStatus" column="register_status" />
+        <result property="id" column="id"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="username" column="username"/>
+        <result property="registerStatus" column="register_status"/>
+        <result property="stripeAccountId" column="stripe_account_id"/>
     </resultMap>
 
+    <sql id="baseSelectPhrase">
+        SELECT
+            id
+            , email
+            , password
+            , username
+            , register_status
+            , stripe_account_id
+    </sql>
+
+    <sql id="baseFromPhrase">
+        FROM account
+    </sql>
+
     <select id="findOne" resultMap="account">
-        select
-            id,
-            email,
-            password,
-            username,
-            register_status
-        from account
-        where
-            id = #{id}
+        <include refid="baseSelectPhrase"/>
+        <include refid="baseFromPhrase"/>
+        WHERE
+        id = #{accountId}
     </select>
-    
+
     <select id="findByUsername" resultMap="account">
-        select
-            id,
-            email,
-            password,
-            username,
-            register_status
-        from account
-        where
-            username = #{username}
+        <include refid="baseSelectPhrase"/>
+        <include refid="baseFromPhrase"/>
+        WHERE
+        username = #{username}
+        <if test="registerStatus != null">
+            AND register_status = #{registerStatus.value}
+        </if>
     </select>
 
     <select id="findByEmail" resultMap="account">
-        select
-            id,
-            email,
-            password,
-            username,
-            register_status
-        from account
-        where
-            email = #{email}
-            and register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR.value}
+        <include refid="baseSelectPhrase"/>
+        <include refid="baseFromPhrase"/>
+        WHERE
+        email = #{email}
+        <if test="registerStatus != null">
+            AND register_status = #{registerStatus.value}
+        </if>
     </select>
 
-    <select id="isExists" resultType="boolean">
-        select
-            count(*) > 0
-        from account
-        where
-            id != #{id}
-            and (email = #{email} or username = #{username})
-            and register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR.value}
-    </select>
-    
-    <select id="isExistsEmail" resultType="boolean">
-        select
-            count(*) > 0
-        from account
-        where
-            email = #{email}
-            and register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR.value}
-    </select>
-    
-    <select id="isExistsUsername" resultType="boolean">
-        select
-            count(*) > 0
-        from account
-        where
-            username = #{username}
-            and register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR.value}
-    </select>
-    
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        insert into account (
-            email,
-            password,
-            username,
-            register_status
-            )
-        values (
+        INSERT INTO account (
+            email
+            , password
+            , username
+            , register_status
+        ) VALUES (
             #{email},
-            #{password},
-            #{username},
-            #{registerStatus.value}
+            , #{password}
+            , #{username}
+            , #{registerStatus.value}
         )
     </insert>
-    
-    <insert id="activation">
-        update account set
-            register_status = ${@red.semipro.domain.enums.RegisterStatus@REGULAR.value},
-            updated_at = current_timestamp
-        where
-            id = #{id}
-    </insert>
+
+    <update id="updateRegisterStatus">
+        UPDATE account SET
+            register_status = #{registerStatus.value}
+            , updated_at = current_timestamp
+        WHERE
+            id = #{accountId}
+    </update>
+
+    <update id="updateStripeAccountId">
+        UPDATE account SET
+            stripe_account_id = #{stripeAccountId}
+            , updated_at = current_timestamp
+        WHERE
+            id = #{accountId}
+    </update>
 
 </mapper>

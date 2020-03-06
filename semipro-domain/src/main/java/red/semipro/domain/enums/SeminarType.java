@@ -2,21 +2,30 @@ package red.semipro.domain.enums;
 
 import java.util.Arrays;
 
+/**
+ * セミナータイプ - enum
+ */
 public enum SeminarType {
 
-    OFFLINE(1), ONLINE(2), BOTH(3);
+    OFFLINE("offline"),
+    ONLINE("online"),
+    BOTH("both");
 
-    private int value;
+    private String value;
 
-    SeminarType(int value) {
+    SeminarType(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return this.value;
     }
 
-    public static SeminarType valueOf(int value) {
-        return Arrays.stream(values()).filter(v -> v.getValue() == value).findFirst().get();
+    public static SeminarType getSeminarType(String value) {
+        return Arrays.stream(values())
+            .filter(v -> v.getValue().equals(value))
+            .findFirst()
+            .orElse(null);
     }
+
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="red.semipro.domain.repository.identification.IdentificationCompanyRepository">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO identification_company (
+            identification_id
+            , company_name
+            , company_name_kana
+            , tax
+            , phone
+        ) VALUES (
+            #{identificationId}
+            , #{companyName}
+            , #{companyNameKana}
+            , #{tax}
+            , #{phone}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE identification_company SET
+            company_name = #{companyName}
+            , company_name_kana = #{companyNameKana}
+            , tax = #{tax}
+            , phone = #{phone}
+        WHERE
+            identification_id = #{identificationId}
+    </update>
+
+    <delete id="delete">
+        DELETE
+        FROM identification_company
+        WHERE
+            identification_id = #{identificationId}
+    </delete>
+
+</mapper>

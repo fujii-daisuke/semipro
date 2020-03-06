@@ -1,81 +1,61 @@
 package red.semipro.app;
 
-import java.util.List;
-
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenInterceptor;
+import red.semipro.share.converter.StringToBusinessTypeConverter;
+import red.semipro.share.converter.StringToGenderConverter;
+import red.semipro.share.converter.StringToLocalDateTimeConverter;
+import red.semipro.share.converter.StringToPlaceArrangementConverter;
+import red.semipro.share.converter.StringToSeminarImageTypeConverter;
+import red.semipro.share.converter.StringToSeminarTypeConverter;
+import red.semipro.share.converter.StringToSuccessConditionConverter;
 
+/**
+ * DIコンテナへ登録するBean
+ */
 @Configuration
 public class SpringMvcConfig implements WebMvcConfigurer {
 
-//    @Autowired
-//    private MessageSource messageSource;
-//
-//    @Bean
-//    public LocalValidatorFactoryBean validator() {
-//        LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
-//        localValidatorFactoryBean.setValidationMessageSource(messageSource);
-//        return localValidatorFactoryBean;
-//    }
-//
-//    @Override
-//    public Validator getValidator() {
-//        return validator();
-//    }
-    
+    /**
+     * コンバーターを登録します
+     *
+     * @param registry FormatterRegistry
+     */
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new StringToSeminarTypeConverter());
+        registry.addConverter(new StringToPlaceArrangementConverter());
+        registry.addConverter(new StringToSuccessConditionConverter());
+        registry.addConverter(new StringToSeminarImageTypeConverter());
+        registry.addConverter(new StringToBusinessTypeConverter());
+        registry.addConverter(new StringToGenderConverter());
+        registry.addConverter(new StringToLocalDateTimeConverter());
+    }
+
+    /**
+     * 二重送信防止時のトランザクショントークンインターセプターを登録します
+     *
+     * @return TransactionTokenInterceptor
+     */
     @Bean
     public TransactionTokenInterceptor transactionTokenInterceptor() {
         return new TransactionTokenInterceptor(1);
     }
-    
+
+    /**
+     * インターセプター除外設定を登録します
+     *
+     * @param registry InterceptorRegistry
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(transactionTokenInterceptor())
             .addPathPatterns("/**")
             .excludePathPatterns("/resources/**")
             .excludePathPatterns("/**/*.html");
-    }
-    
-//    @Bean
-//    public TemplateEngine textTemplateEngine() {
-//        final SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-//        templateEngine.addTemplateResolver(textTemplateResolver());
-//        templateEngine.setTemplateEngineMessageSource(textMessageSource());
-//        return templateEngine;
-//    }
-//
-//    private ITemplateResolver textTemplateResolver() {
-//        final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-//        templateResolver.setOrder(Integer.valueOf(1));
-//        templateResolver.setPrefix("/mail/");
-//        templateResolver.setSuffix(".txt");
-//        templateResolver.setTemplateMode(TemplateMode.TEXT);
-//        templateResolver.setCharacterEncoding("utf-8");
-//        templateResolver.setCacheable(false);
-//        return templateResolver;
-//    }
-//
-//    @Bean
-//    public ResourceBundleMessageSource textMessageSource() {
-//        final ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-//        messageSource.setBasename("mail/Messages");
-//        return messageSource;
-//    }
-    @Bean
-    public TaskScheduler taskScheduler() {
-        return new ConcurrentTaskScheduler(); //single threaded by default
-    }
-    @Bean
-    public ModelMapper modelMapper() {
-      return new ModelMapper();
     }
 }

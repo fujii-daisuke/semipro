@@ -1,33 +1,35 @@
 package red.semipro.app.reserveseminar;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import red.semipro.business.aws.S3StorageService;
-import red.semipro.domain.enums.ProviderId;
-import red.semipro.domain.model.Account;
+import red.semipro.domain.enums.OpeningStatus;
 import red.semipro.domain.model.Seminar;
-import red.semipro.domain.service.seminar.SeminarServiceImpl;
+import red.semipro.domain.model.seminar.SeminarDetail;
+import red.semipro.domain.service.seminar.SeminarDetailService;
+import red.semipro.domain.service.seminar.SeminarService;
 
+/**
+ * セミナー予約 - helper
+ */
 @Component
+@RequiredArgsConstructor
 public class ReserveSeminarHelper {
 
-    @Autowired
-    SeminarServiceImpl seminarService;
-    @Autowired
-    private S3StorageService s3StorageService;
+    private final SeminarService seminarService;
+    private final SeminarDetailService seminarDetailService;
 
-    public SeminarDetailOutput findSeminarDetail(Long seminarId, Account account) {
-        Seminar seminar = seminarService.findOneWithDetails(seminarId);
-        
-        SeminarDetailOutput output = new SeminarDetailOutput();
-        output.setAccount(account);
-        output.setSeminar(seminar);
-        if (ProviderId.SEMIPRO.equals(seminar.getProviderId())) {
-            output.setMainImagePath(s3StorageService.getUrl() + seminar.getImagePath());
-        } else {
-            output.setMainImagePath(seminar.getImagePath());
+    /**
+     * セミナー詳細を取得します
+     *
+     * @param seminarId セミナーID
+     * @return セミナー詳細
+     */
+    public SeminarDetail findSeminarDetail(Long seminarId) throws IllegalAccessException {
+        Seminar seminar = seminarService.findOneBy(seminarId, null, OpeningStatus.OPENING);
+        if (Objects.isNull(seminar)) {
+            throw new IllegalAccessException("seminar illegal access.");
         }
-        return output;
+        return seminarDetailService.findOneWithDetails(seminarId);
     }
 }
