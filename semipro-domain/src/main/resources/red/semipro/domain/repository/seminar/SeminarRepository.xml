@@ -1,311 +1,89 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper
-    namespace="red.semipro.domain.repository.seminar.SeminarRepository">
-
-    <resultMap id="seminarResultMap" type="red.semipro.domain.model.Seminar">
-        <id property="id" column="id" />
-        <result property="openingStatus" column="opening_status" />
-        <result property="providerId" column="provider_id" />
-        <result property="providerSeminarId" column="provider_seminar_id" />
-        <result property="seminarType" column="seminar_type" />
-        <result property="title" column="title" />
-        <result property="summary" column="summary" />
-        <result property="contents" column="contents" />
-        <result property="imagePath" column="image_path" />
-        <result property="startingAt" column="starting_at" />
-        <result property="endingAt" column="ending_at" />
-        <result property="openingAt" column="opening_at" />
-        <result property="entryStartingAt" column="entry_starting_at" />
-        <result property="entryEndingAt" column="entry_ending_at" />
-        <result property="cancelAt" column="cancel_at" />
-        <result property="capacity" column="capacity" />
-        <result property="providerSeminarUrl" column="provider_seminar_url" />
-        <result property="referenceUrl" column="reference_url" />
-        <result property="cancelPolicy" column="cancel_policy" />
-        <result property="address" column="address" />
-        <result property="place" column="place" />
-        <result property="lat" column="lat" />
-        <result property="lng" column="lng" />
-        <result property="accepted" column="accepted" />
-        <result property="waiting" column="waiting" />
-        <result property="embedCode" column="embed_code" />
-        <result property="minimumNumberHosts" column="minimum_number_hosts" />
-        <result property="updatedAt" column="updated_at" />
-        <result property="prefecture.id" column="prefecture_id" />
-        <result property="prefecture.name" column="prefecture_name" />
-        <result property="city.id" column="city_id" />
-        <result property="city.name" column="city_name" />
-        <result property="placeSupported" column="place_supported" />
-        <result property="shootingSupported" column="shooting_supported" />
-        <result property="shootingEditSupported" column="shooting_edit_supported" />
-        <result property="movieSalesSupported" column="movie_sales_supported" />
-        <collection property="tickets" ofType="red.semipro.domain.model.SeminarTicket">
-            <id column="ticket_id" property="id"/>
-            <result column="id" property="seminarId"/>
-            <result column="ticket_name" property="name"/>
-            <result column="ticket_price" property="price"/>
-            <result column="ticket_num" property="num"/>
-        </collection>
-        <collection property="owners" ofType="red.semipro.domain.model.SeminarOwner">
-            <id property="id" column="id" />
-            <result property="seminarId" column="seminar_id" />
-            <result property="accountId" column="account_id" />
-            <result property="providerOwnerId" column="provider_owner_id" />
-            <result property="name" column="name" />
-            <result property="url" column="url" />
-        </collection>
-    </resultMap>
-
-    <sql id="findPageByCriteriaWherePhrase">
-        <![CDATA[
-        where
-            seminar.ending_at >= current_timestamp
-            and opening_status =  ${@red.semipro.domain.enums.OpeningStatus@OPENING.value}
-        ]]>
-    </sql>
-
-    <select id="countByCriteria" resultType="_long">
-        SELECT
-            COUNT(*)
-        FROM
-            seminar
-        <include refid="findPageByCriteriaWherePhrase" />
-    </select>
-
-    <select id="findPageByCriteria" resultMap="seminarResultMap">
-        <include refid="baseSelectPhrase" />
-        <include refid="baseFromPhrase" />
-        <include refid="findPageByCriteriaWherePhrase" />
-        ORDER BY
-            #{pageable.sort}
-        LIMIT
-            #{pageable.pageSize}
-        OFFSET
-            #{pageable.offset}
-    </select>
-
-    <select id="findOneByProviderIdAndProviderSeminarId" resultMap="seminarResultMap">
-        <include refid="baseSelectPhrase" />
-        <include refid="baseFromPhrase" />
-        where
-            seminar.provider_id = #{providerId}
-            and seminar.provider_seminar_id = #{providerSeminarId}
-    </select>
-
-    <select id="findOneByOwner" resultMap="seminarResultMap">
-        <include refid="baseSelectPhrase" />
-        ,
-        seminar_owner.id,
-        seminar_owner.seminar_id,
-        seminar_owner.account_id,
-        seminar_owner.provider_owner_id,
-        seminar_owner.name,
-        seminar_owner.url
-        <include refid="baseFromPhrase" />
-        inner join seminar_owner on seminar.id = seminar_owner.seminar_id
-        where
-            seminar_owner.account_id = #{accountId}
-            and seminar.id = #{id}
-    </select>
-
-    <select id="findAllByOwner" resultMap="seminarResultMap">
-        <include refid="baseSelectPhrase" />
-        <include refid="baseFromPhrase" />
-        inner join seminar_owner on seminar.id = seminar_owner.seminar_id
-        where
-            seminar_owner.account_id = #{accountId}
-        order by
-            seminar.created_at desc
-    </select>
+<mapper namespace="red.semipro.domain.repository.seminar.SeminarRepository">
 
     <sql id="baseSelectPhrase">
-        select
-            seminar.id,
-            seminar.opening_status,
-            seminar.provider_id,
-            seminar.provider_seminar_id,
-            seminar.seminar_type,
-            seminar.title,
-            seminar.summary,
-            seminar.contents,
-            seminar.image_path,
-            seminar.starting_at,
-            seminar.ending_at,
-            seminar.opening_at,
-            seminar.entry_starting_at,
-            seminar.entry_ending_at,
-            seminar.cancel_at,
-            seminar.capacity,
-            seminar.provider_seminar_url,
-            seminar.reference_url,
-            seminar.cancel_policy,
-            seminar.address,
-            seminar.place,
-            seminar.lat,
-            seminar.lng,
-            seminar.accepted,
-            seminar.waiting,
-            seminar.embed_code,
-            seminar.minimum_number_hosts,
-            seminar.place_supported,
-            seminar.shooting_supported,
-            seminar.shooting_edit_supported,
-            seminar.movie_sales_supported,
-            seminar.updated_at,
-            seminar.prefecture_id,
-            prefecture.name prefecture_name,
-            seminar.city_id,
-            city.name city_name,
-            seminar_ticket.id ticket_id,
-            seminar_ticket.name ticket_name,
-            seminar_ticket.price ticket_price,
-            seminar_ticket.num ticket_num
+        SELECT
+            id
+            , opening_status
+            , seminar_type
+            , minimum_number
+            , capacity
+            , entry_ending_at
+            , success_condition
+            , seminar_starting_at
+            , seminar_ending_at
+            , account_id
     </sql>
-
-    <sql id="baseFromPhrase">
-        from seminar
-        left outer join seminar_ticket on seminar.id = seminar_ticket.seminar_id
-        left outer join prefecture on seminar.prefecture_id = prefecture.id
-        left outer join city on prefecture.id = city.prefecture_id and seminar.city_id = city.id
-    </sql>
-    
-    <select id="findOneWithDetails" resultMap="seminarResultMap">
-        <include refid="baseSelectPhrase" />
-        <include refid="baseFromPhrase" />
-        where
-            seminar.id = #{id}
+    <select id="findOne" resultMap="resultMap">
+        <include refid="baseSelectPhrase"/>
+        FROM
+        seminar
+        WHERE
+        id = #{id}
     </select>
-    
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        insert into seminar (
-            opening_status,
-            provider_id,
-            provider_seminar_id,
-            seminar_type,
-            title,
-            summary,
-            contents,
-            image_path,
-            starting_at,
-            ending_at,
-            opening_at,
-            entry_starting_at,
-            entry_ending_at,
-            cancel_at,
-            capacity,
-            provider_seminar_url,
-            reference_url,
-            cancel_policy,
-            prefecture_id,
-            city_id,
-            address,
-            place,
-            lat,
-            lng,
-            accepted,
-            waiting,
-            embed_code,
-            minimum_number_hosts,
-            place_supported,
-            shooting_supported,
-            shooting_edit_supported,
-            movie_sales_supported,
-            created_at,
-            updated_at
-            )
-        values (
-            #{openingStatus.value},
-            #{providerId.value},
-            #{providerSeminarId},
-            #{seminarType},
-            #{title},
-            #{summary},
-            #{contents},
-            #{imagePath},
-            #{startingAt},
-            #{endingAt},
-            #{openingAt},
-            #{entryStartingAt},
-            #{entryEndingAt},
-            #{cancelAt},
-            #{capacity},
-            #{providerSeminarUrl},
-            #{referenceUrl},
-            #{cancelPolicy},
-            #{prefecture.id},
-            #{city.id},
-            #{address},
-            #{place},
-            #{lat},
-            #{lng},
-            #{accepted},
-            #{waiting},
-            #{embedCode},
-            #{minimumNumberHosts},
-            #{placeSupported},
-            #{shootingSupported},
-            #{shootingEditSupported},
-            #{movieSalesSupported},
-            current_timestamp,
-            <if test="updatedAt != null">
-                #{updatedAt}
-            </if>
-            <if test="updatedAt == null">
-                current_timestamp
-            </if>
-            )
+
+    <select id="findOneBy" resultMap="resultMap">
+        <include refid="baseSelectPhrase"/>
+        FROM
+        seminar
+        WHERE
+        id = #{id}
+        <if test="accountId != null">
+            AND account_id = #{accountId}
+        </if>
+        <if test="openingStatus != null">
+            AND opening_status = #{openingStatus.value}
+        </if>
+    </select>
+
+    <resultMap id="resultMap" type="red.semipro.domain.model.Seminar">
+        <id property="id" column="id"/>
+        <result property="openingStatus" column="opening_status"/>
+        <result property="seminarType" column="seminar_type"/>
+        <result property="minimumNumber" column="minimum_number"/>
+        <result property="capacity" column="capacity"/>
+        <result property="entryStartingAt" column="entry_starting_at"/>
+        <result property="entryEndingAt" column="entry_ending_at"/>
+        <result property="successCondition" column="success_condition"/>
+        <result property="seminarStartingAt" column="seminar_starting_at"/>
+        <result property="seminarEndingAt" column="seminar_ending_at"/>
+        <result property="account.id" column="account_id"/>
+    </resultMap>
+
+    <insert id="initialize" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO seminar (
+            opening_status
+            , account_id
+        ) VALUES (
+            #{openingStatus.value}
+            , #{account.id}
+        )
     </insert>
-    
+
     <update id="update">
-        update seminar set
-            seminar_type = #{seminarType},
-            title = #{title},
-            summary = #{summary},
-            contents = #{contents},
-            image_path = #{imagePath},
-            starting_at = #{startingAt},
-            ending_at = #{endingAt},
-            opening_at = #{openingAt},
-            entry_starting_at = #{entryStartingAt},
-            entry_ending_at = #{entryEndingAt},
-            cancel_at = #{cancelAt},
-            capacity = #{capacity},
-            provider_seminar_url = #{providerSeminarUrl},
-            reference_url = #{referenceUrl},
-            cancel_policy = #{cancelPolicy},
-            prefecture_id = #{prefecture.id},
-            city_id = #{city.id},
-            address = #{address},
-            place = #{place},
-            lat = #{lat},
-            lng = #{lng},
-            accepted = #{accepted},
-            waiting = #{waiting},
-            embed_code = #{embedCode},
-            minimum_number_hosts = #{minimumNumberHosts},
-            place_supported = #{placeSupported},
-            shooting_supported = #{shootingSupported},
-            shooting_edit_supported = #{shootingEditSupported},
-            movie_sales_supported = #{movieSalesSupported},
-            <if test="updatedAt != null">
-                updated_at = #{updatedAt}
-            </if>
-            <if test="updatedAt == null">
-                updated_at = current_timestamp
-            </if>
-        where
+        UPDATE seminar SET
+            seminar_type = #{seminarType.value}
+            , minimum_number = #{minimumNumber}
+            , capacity = #{capacity}
+            , entry_ending_at = #{entryEndingAt}
+            , success_condition = #{successCondition.value}
+            , seminar_starting_at = #{seminarStartingAt}
+            , seminar_ending_at = #{seminarEndingAt}
+            , updated_at = CURRENT_TIMESTAMP
+        WHERE
             id = #{id}
     </update>
-    
-    <update id="publish">
-        update seminar set
-            opening_status = ${@red.semipro.domain.enums.OpeningStatus@OPENING.value}
-        where
-            id = #{id}
+
+    <update id="updateOpeningStatus">
+        UPDATE seminar SET
+            opening_status = #{openingStatus.value}
+            , updated_at = CURRENT_TIMESTAMP
+        WHERE
+            id = #{seminarId}
     </update>
-    
+
 </mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="red.semipro.domain.repository.identification.IdentificationIndividualRepository">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO identification_individual (
+            identification_id
+            , last_name
+            , first_name
+            , last_name_kana
+            , first_name_kana
+            , dob_year
+            , dob_month
+            , dob_day
+            , gender
+            , phone
+        ) VALUES (
+            #{identificationId}
+            , #{lastName}
+            , #{firstName}
+            , #{lastNameKana}
+            , #{firstNameKana}
+            , #{dobYear}
+            , #{dobMonth}
+            , #{dobDay}
+            , #{gender.value}
+            , #{phone}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE identification_individual SET
+            last_name = #{lastName}
+            , first_name = #{firstName}
+            , last_name_kana = #{lastNameKana}
+            , first_name_kana = #{firstNameKana}
+            , dob_year = #{dobYear}
+            , dob_month = #{dobMonth}
+            , dob_day = #{dobDay}
+            , gender = #{gender.value}
+            , phone = #{phone}
+        WHERE
+            identification_id = #{identificationId}
+    </update>
+
+    <delete id="delete">
+        DELETE
+        FROM identification_individual
+        WHERE
+            identification_id = #{identificationId}
+    </delete>
+
+</mapper>

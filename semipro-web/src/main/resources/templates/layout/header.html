@@ -4,49 +4,39 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
-  <!--Main Navigation-->
-  <header layout:fragment="header">
-    <!--Navbar -->
-    <nav class="mb-1 navbar navbar-expand-lg navbar-light white">
-      <a class="navbar-brand" th:href="@{/}">セミプロ</a>
-      <span class="navbar-text mr-auto">
-        誰でもノーリスクでセミナーが開催できるサイト
-      </span>
-      <!-- 
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
-        aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-       -->
-      <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
-        <a sec:authorize="isAuthenticated()" th:href="@{/holds}" class="btn btn-deep-orange btn-sm ml-auto">セミナーを開催する</a>
-        <ul class="navbar-nav ml-auto" sec:authorize="!isAuthenticated()">
-          <li class="nav-item">
-            <a th:href="@{/signup}" class="btn btn-deep-orange btn-rounded btn-sm">会員登録</a>
-          </li>
-          <li class="nav-item">
-            <a th:href="@{/login}" class="btn btn-deep-orange btn-rounded btn-sm">ログイン</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav nav-flex-icons" sec:authorize="isAuthenticated()">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-user"></i>
-              <span sec:authentication="name">user name</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-default"
-              aria-labelledby="navbarDropdownMenuLink-333">
-              <a class="dropdown-item" href="#">設定</a>
-              <a class="dropdown-item" th:href="@{/logout}">ログアウト</a>
+    <header layout:fragment="header">
+        <div uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; bottom: #transparent-sticky-navbar">
+            <nav class="uk-navbar-container uk-margin" uk-navbar>
+                <div class="uk-navbar-left">
+                    <a class="uk-navbar-item uk-logo" href="/">セミプロ</a>
+                    <div class="uk-navbar-item">
+                        <div>誰でもノーリスクでセミナーを開催できるサイト</div>
+                    </div>
+                </div>
+            <div class="uk-navbar-right">
+                <ul class="uk-navbar-nav">
+                    <li>
+                        <a th:href="@{/seminars/create}" class="btn btn-deep-orange btn-sm ml-auto">セミナーを開催する</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/signup}" class="btn btn-deep-orange btn-rounded btn-sm">会員登録</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}" class="btn btn-deep-orange btn-rounded btn-sm">ログイン</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a href="#" sec:authentication="name" uk-icon="triangle-down">>user name</a>
+                        <div class="uk-navbar-dropdown">
+                            <ul class="uk-nav uk-navbar-dropdown-nav">
+                                <li><a th:href="@{/seminars/created}">セミナー管理</a></li>
+                                <li><a th:href="@{/logout}">ログアウト</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
             </div>
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <!--/.Navbar -->
-  </header>
-  <!--Main Navigation-->
-  
+            </nav>
+        </div>
+    </header>
 </body>
 </html>

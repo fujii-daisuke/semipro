@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+    <title>TOP</title>
+    <meta name="keywords" content="セミナー" />
+    <meta name="description" content="セミプロは誰でもノーリスクでセミナーを開催できるサイトです。" />
+</head>
+<body>
+<main class="uk-margin" layout:fragment="content">
+    <div class="uk-container">
+        <div th:if="${page != null and !#lists.isEmpty(page.content)}" th:remove="tag">
+            <ul class="uk-list uk-list-large uk-list-divider">
+                <th:block th:each="seminar, parentStat:${page.content}">
+                    <li>
+                        <div class="uk-child-width-expand@s" uk-grid>
+                            <div class="uk-grid-item-match">
+                                <div class="uk-card uk-card-default uk-card-body">
+                                    <a th:href="@{/seminars/{seminarId}/reserve(seminarId=${seminar.id})}">
+                                        <img th:src="${seminar.imagePath}" th:alt="${seminar.title}" class="img-fluid">
+                                    </a>
+                                </div>
+                            </div>
+                            <div>
+                                <a th:href="@{/seminars/{seminarId}/reserve(seminarId=${seminar.id})}">
+                                    <h3 th:text="${seminar.title}">title</h3>
+                                </a>
+                                <p>
+                                    <div th:text="${seminar.summary}">summary</div>
+                                    <div class="uk-margin">[[${#temporals.format(seminar.startingAt, 'yyyy年MM月dd日')}]] 開催</div>
+                                    <div class="uk-margin" th:text="${seminar.remainingStatus()}">remaining status</div>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </th:block>
+            </ul>
+            <ul class="uk-pagination uk-flex-center uk-margin">
+                <li th:classappend="${page.firstPage}?'uk-disabled':''">
+                    <a th:href="@{${page.url}(page=0,size=${page.size})}"><span uk-pagination-previous></span></a>
+                </li>
+                <li class= "page-item" th:classappend="${item.current}? 'uk-active' : ''" th:each="item : ${page.items}">
+                    <a th:href='@{${page.url}(page=${item.number-1},size=${page.size})}' th:text="${item.number}">1</a>
+                </li>
+                <li th:classappend="${page.lastPage}? 'uk-disabled' : ''">
+                    <a th:href="@{${page.url}(page=${page.totalPages - 1},size=${page.size})}"><span uk-pagination-next></span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+<th:block th:fragment="script"></th:block>
+</body>
+</html>

@@ -5,121 +5,80 @@
       layout:decorate="~{layout/layout}"
       th:lang="${#locale.language}">
 <head>
-  <title>会員登録</title>
+    <title>会員仮登録</title>
+    <meta name="description" content="会員仮登録画面です。" />
 </head>
-
-<body class="bg-light">
-
-  <!--Main Navigation-->
-  <main layout:fragment="content">
-    <section class="view">
-      <div class="container h-100 d-flex justify-content-center align-items-center">
-      
-      
-        <!--Grid row-->
-        <div class="row  py-5 my-3">
-
-          <!--Grid column-->
-          <div class="col-md-12">
-
-            <div class="card">
-              <div class="card-body">
-
-                <h2 class="font-weight-bold my-4 text-center mb-5 mt-4 font-weight-bold">
-                  <strong>会員登録</strong>
-                </h2>
-                <hr>
-
-                <!--Grid row-->
-                <div class="row mt-5">
-
-                  <!--Grid column-->
-                  <div class="col-md-6 ml-lg-5 ml-md-3">
-
-                    <!--Grid row-->
-                    <div class="row pb-4">
-                      <div class="col-2 col-lg-1">
-                        <i class="fas fa-university indigo-text fa-lg"></i>
-                      </div>
-                      <div class="col-10">
-                        <h4 class="font-weight-bold mb-4">
-                          <strong>セミナー開催希望の方</strong>
-                        </h4>
-                        <p class="">
-                            セミプロは誰でもノーリスクでセミナーが開催できるサービスです。<br />
-                            セミナー開催経験がない方もセミナー開催をサポートします。
-                        </p>
-                      </div>
+<body>
+    <main layout:fragment="content">
+        <div class="uk-container uk-margin">
+            <div class="uk-card uk-card-default">
+                <div class="uk-card-header">
+                    <div class="uk-grid-small uk-flex-middle" uk-grid>
+                        <div class="uk-width-expand">
+                            <h3 class="uk-card-title uk-margin-remove-bottom">会員仮登録</h3>
+                        </div>
                     </div>
-                    <!--Grid row-->
-
-                    <!--Grid row-->
-                    <div class="row pb-4">
-                      <div class="col-2 col-lg-1">
-                        <i class="fas fa-desktop deep-purple-text fa-lg"></i>
-                      </div>
-                      <div class="col-10">
-                        <h4 class="font-weight-bold mb-4">
-                          <strong>セミナー参加希望の方</strong>
-                        </h4>
-                        <p class="">会員登録を行うことでセミナー参加予約を行うことが出来ます。</p>
-                      </div>
-                    </div>
-                    <!--Grid row-->
-
-                  </div>
-                  <!--Grid column-->
-
-                  <!--Grid column-->
-                  <div class="col-md-5">
-                  
-                    <!--Body-->
-                    <form th:action="@{/signup/register}" th:object="${signupForm}" method="post">
-                      <div class="md-form">
-                        <i class="fas fa-user prefix"></i>
-                        <input type="text" id="orangeForm-name" class="form-control is-invalid" th:field="*{username}">
-                        <label for="orangeForm-name">Your user name</label>
-                        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="invalid-feedback ml-5">error</div>
-                      </div>
-                      <div class="md-form">
-                        <i class="fas fa-envelope prefix"></i>
-                        <input type="text" id="orangeForm-email" class="form-control is-invalid" th:field="*{email}">
-                        <label for="orangeForm-email">Your email</label>
-                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback ml-5">error</span>
-                      </div>
-  
-                      <div class="md-form">
-                        <i class="fas fa-lock prefix"></i>
-                        <input type="password" id="orangeForm-pass" class="form-control is-invalid" th:field="*{password}">
-                        <label for="orangeForm-pass">Your password</label>
-                        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback ml-5">error</span>
-                      </div>
-  
-                      <div class="text-center">
-                        <button class="btn btn-indigo btn-rounded mt-5" type="submit">登 録</button>
-                      </div>
-                    </form>
-                  </div>
-                  <!--Grid column-->
-
                 </div>
-                <!--Grid row-->
-
-              </div>
+                <div class="uk-card-body">
+                    <div class="uk-grid-divider uk-child-width-expand@s" uk-grid>
+                        <div>
+                            <p class="uk-text-small">セミプロは誰でもノーリスクでセミナーが開催できるサービスです。<br />
+                                セミナー開催経験がない方もセミナー開催をサポートします。<br />
+                                <br />
+                                セミナー参加希望の方<br />
+                                会員登録を行うことでセミナー参加予約を行うことが出来ます。
+                            </p>
+                        </div>
+                        <div>
+                            <form class="uk-form-stacked" th:action="@{/signup/register}" th:object="${signUpForm}" method="post">
+                                <div class="uk-margin">
+                                    <label class="uk-form-label" for="username">ユーザー名</label>
+                                    <div class="uk-form-controls">
+                                        <input type="text"
+                                               id="username"
+                                               class="uk-input uk-form-small uk-form-width-large"
+                                               th:classappend="${#fields.hasErrors('username') ? 'uk-form-danger':''}"
+                                               th:field="*{username}"
+                                               placeholder="ユーザー名を入力して下さい。">
+                                        <div th:if="${#fields.hasErrors('username')}"
+                                             th:errors="*{username}"
+                                             class="uk-text-small uk-text-danger">error</div>
+                                    </div>
+                                </div>
+                            <div class="uk-margin">
+                                <label class="uk-form-label" for="email">メールアドレス</label>
+                                <div class="uk-form-controls">
+                                    <input type="text"
+                                           id="email"
+                                           class="uk-input uk-form-small uk-form-width-medium uk-form-width-large"
+                                           th:classappend="${#fields.hasErrors('email') ? 'uk-form-danger':''}"
+                                           th:field="*{email}"
+                                           placeholder="メールアドレスを入力して下さい。">
+                                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="uk-text-small uk-text-danger">error</div>
+                                </div>
+                            </div>
+                            <div class="uk-margin">
+                                <label class="uk-form-label" for="password">パスワード</label>
+                                <div class="uk-form-controls">
+                                    <input type="password"
+                                           id="password"
+                                           class="uk-input uk-form-small uk-form-width-large"
+                                           th:classappend="${#fields.hasErrors('password') ? 'uk-form-danger':''}"
+                                           th:field="*{password}"
+                                           placeholder="パスワードを入力して下さい。">
+                                    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="uk-text-small uk-text-danger">error</div>
+                                </div>
+                            </div>
+                            <p class="uk-text-center uk-margin">
+                              <button class="uk-button uk-button-primary">登録</button>
+                            </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-          </div>
-          <!--Grid column-->
-
         </div>
-        <!--Grid row-->
-      
-      
-      
-      </div>
-    </section>
-  </main>
-  <!--Main Navigation-->
+    </main>
   <th:block th:fragment="script"></th:block>
 </body>
 </html>

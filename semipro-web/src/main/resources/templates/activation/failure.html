@@ -5,31 +5,30 @@
       layout:decorate="~{layout/layout}"
       th:lang="${#locale.language}">
 <head>
-    <title>会員録完了</title>
-    <meta name="keywords" content="content1" />
-    <meta name="description" content="content1" />
+    <title>会員登録失敗</title>
 </head>
-
-<body class="grey lighten-3">
-
-    <!--Main layout-->
-    <main class="mt-5 pt-4" layout:fragment="content">
-        <div class="container">
-            <div class="row justify-content-md-center">
-                <div class="col-md-8 mb-4">
-                  <div class="card">
-                    <div class="card-body">
-                      <h4 class="card-title"><a>会員登録について</a></h4>
-                      会員登録を完了できませんでした。<br />
-                      再度、お手続きをお願いします。<br />
+<body>
+<main layout:fragment="content">
+    <div class="uk-container uk-margin">
+        <div class="uk-flex uk-flex-center">
+            <div class="uk-card uk-card-large uk-card-default">
+                <div class="uk-card-header">
+                    <div class="uk-grid-small uk-flex-middle" uk-grid>
+                        <div class="uk-width-expand">
+                            <h3 class="uk-card-title uk-margin-remove-bottom">会員登録失敗</h3>
+                        </div>
                     </div>
-                  </div>
+                </div>
+                <div class="uk-card-body">
+                    <p>
+                        会員登録に失敗しました。<br />
+                        お手数ですが、会員登録手順を最初からやり直して下さい。
+                    </p>
                 </div>
             </div>
         </div>
-    </main>
-    <!--Main layout-->
-    <th:block th:fragment="script"></th:block>
+    </div>
+</main>
+<th:block th:fragment="script"></th:block>
 </body>
-
 </html>

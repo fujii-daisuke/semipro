@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+    <title>チケット</title>
+</head>
+<body>
+<main class="uk-margin" layout:fragment="content">
+    <div class="uk-flex uk-flex-center">
+        <div class="uk-card uk-card-default uk-width-xxlarge">
+            <div class="uk-card-header">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-expand">
+                        <h3 class="uk-card-title uk-margin-remove-bottom">セミナー編集</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-card-body">
+                <ul class="uk-child-width-expand" uk-tab>
+                    <li><a th:onclick="|location.href='@{/seminars/create/__${ticketForm.seminarId}__/goal}'|">目標設定</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/create/__${ticketForm.seminarId}__/overview}'|">概要</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/create/__${ticketForm.seminarId}__/contents}'|">本文</a></li>
+                    <li class="uk-active"><a href="#">チケット</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/create/__${ticketForm.seminarId}__/support}'|">オプション</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/create/__${ticketForm.seminarId}__/identification}'|">本人確認</a></li>
+                </ul>
+                <div class="uk-text-lead uk-text-bolder uk-text-center uk-margin-medium">セミナーのチケットを設定しましょう</div>
+                <form th:action="@{/seminars/create/__${ticketForm.seminarId}__/ticket/save}"
+                      th:object="${ticketForm}"
+                      method="post">
+                    <div class="uk-grid-small uk-margin" uk-grid>
+                        <div class="uk-width-2-5@s">
+                            <label class="uk-form-label uk-text-bold">チケット種別</label>
+                        </div>
+                        <div class="uk-width-1-5@s">
+                            <label class="uk-form-label uk-text-bold">価格</label>
+                        </div>
+                        <div class="uk-width-1-5@s">
+                            <label class="uk-form-label uk-text-bold">定員</label>
+                        </div>
+                        <div class="uk-width-1-5@s">
+                        </div>
+                    </div>
+                    <div id="ticket-input-area">
+                        <div class="unit uk-grid-small" uk-grid th:each="tikect, stat: *{ticketList}">
+                            <div class="uk-width-2-5@s">
+                                <div class="uk-form-controls">
+                                    <input type="text"
+                                           class="ticket-name uk-input uk-form-small uk-form-width-large"
+                                           th:errorclass="uk-form-danger"
+                                           th:field="*{ticketList[__${stat.index}__].name}"
+                                           maxlength="40"
+                                           placeholder="（例）入場券、VIP席">
+                                    <div th:if="${#fields.hasErrors('*{ticketList[__${stat.index}__].name}')}"
+                                         th:errors="*{ticketList[__${stat.index}__].name}"
+                                         class="uk-text-small uk-text-danger">error
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-width-1-5@s">
+                                <div class="uk-form-controls">
+                                    <input type="text"
+                                           class="ticket-price uk-input uk-form-small uk-form-width-large"
+                                           th:errorclass="uk-form-danger"
+                                           th:field="*{ticketList[__${stat.index}__].price}"
+                                           maxlength="10">
+                                    <div th:if="${#fields.hasErrors('*{ticketList[__${stat.index}__].price}')}"
+                                         th:errors="*{ticketList[__${stat.index}__].price}"
+                                         class="uk-text-small uk-text-danger">error
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-width-1-5@s">
+                                <div class="uk-form-controls">
+                                    <input type="text"
+                                           class="ticket-capacity uk-input uk-form-small uk-form-width-large"
+                                           th:errorclass="uk-form-danger"
+                                           th:field="*{ticketList[__${stat.index}__].capacity}"
+                                           maxlength="10">
+                                    <div th:if="${#fields.hasErrors('*{ticketList[__${stat.index}__].capacity}')}"
+                                         th:errors="*{ticketList[__${stat.index}__].capacity}"
+                                         class="uk-text-small uk-text-danger">error
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="del-ticket uk-width-1-5@s">
+                                <span class="uk-button uk-button-small uk-button-danger">削除</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="add-ticket" class="uk-margin-medium-top">
+                        <span class="uk-button uk-button-small uk-button-secondary">追加</span>
+                    </div>
+                    <hr>
+                    <p class="uk-text-center uk-margin uk-margin-medium-top">
+                        <button type="button" class="submit-button uk-button uk-button-primary uk-margin-right" name="action" th:value="save">　保　存　</button>
+                        <button type="button" class="submit-button uk-button uk-button-secondary uk-margin-left" name="action" th:value="preview">プレビュー</button>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block th:fragment="script">
+    <script type="text/javascript" th:inline="javascript">
+
+      $('.submit-button').on('click', function () {
+        var form = $(this).parents('form');
+        $('<input>').attr({
+          'type': 'hidden',
+          'name': 'action',
+          'value': $(this).val()
+        }).appendTo(form);
+        form.submit();
+      });
+
+      const minCount = 1;
+      const maxCount = 10;
+      $(document).ready(function () {
+        // 追加
+        $('#add-ticket').on('click', function () {
+          const inputCount = $('#ticket-input-area .unit').length;
+          if (inputCount < maxCount) {
+            const element = $('#ticket-input-area .unit:last-child').clone(true);// 末尾をイベントごと複製
+            // 複製したinputのクリア
+            const ticketNameField = element[0].querySelector('.ticket-name');
+            ticketNameField.value = "";
+            ticketNameField.name = "ticketList[" + inputCount + "].name";
+            ticketNameField.id = "ticketList" + inputCount + ".name";
+            const ticketPriceField = element[0].querySelector('.ticket-price');
+            ticketPriceField.value = "";
+            ticketPriceField.name = "ticketList[" + inputCount + "].price";
+            ticketPriceField.id = "ticketList" + inputCount + ".price";
+            const ticketCapacityField = element[0].querySelector('.ticket-capacity');
+            ticketCapacityField.value = "";
+            ticketCapacityField.name = "ticketList[" + inputCount + "].capacity";
+            ticketCapacityField.id = "ticketList" + inputCount + ".capacity";
+            $('#ticket-input-area .unit').parent().append(element);// 末尾追加
+          }
+        });
+
+        // 削除
+        $('.del-ticket').on('click', function () {// イベントごと複製しているのでonのselectorは未設定
+          const inputCount = $('#ticket-input-area .unit').length;
+          if (inputCount > minCount) {
+            $(this).closest('.unit').remove();
+          }
+        });
+      });
+    </script>
+</th:block>
+</body>
+</html>
