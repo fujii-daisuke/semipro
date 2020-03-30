@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="semipro-admin:war">
+    <output-path>$PROJECT_DIR$/semipro-admin/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>semipro-admin</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="semipro-admin-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="semipro-admin:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import red.semipro.common.Crypto;
 import red.semipro.domain.enums.RegisterStatus;
-import red.semipro.domain.model.Account;
+import red.semipro.domain.model.account.Account;
 import red.semipro.domain.service.account.AccountService;
 import red.semipro.share.email.EmailDocument;
 import red.semipro.share.email.EmailHelper;

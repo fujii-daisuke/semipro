@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+    <title>オプション</title>
+</head>
+<body>
+<main class="uk-margin" layout:fragment="content">
+    <div class="uk-flex uk-flex-center">
+        <div class="uk-card uk-card-default uk-width-xxlarge">
+            <div class="uk-card-header">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-expand">
+                        <h3 class="uk-card-title uk-margin-remove-bottom">セミナー編集</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-card-body">
+                <ul class="uk-child-width-expand" uk-tab>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${optionForm.seminarId}__/goal}'|">目標設定</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${optionForm.seminarId}__/overview}'|">概要</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${optionForm.seminarId}__/contents}'|">本文</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${optionForm.seminarId}__/ticket}'|">チケット</a></li>
+                    <li class="uk-active"><a href="#">オプション</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${optionForm.seminarId}__/identification}'|">本人確認</a></li>
+                </ul>
+                <div class="uk-text-lead uk-text-bolder uk-text-center uk-margin-medium">オプションを活用しましょう</div>
+                <form class="uk-form-horizontal"
+                      enctype="multipart/form-data"
+                      th:action="@{/seminars/edit/__${optionForm.seminarId}__/option/save}"
+                      th:object="${optionForm}"
+                      method="post">
+                    <input type="hidden" th:fileld="*{seminarId}">
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold">セミナー撮影オプション</label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <label class="uk-margin-large-left"><input type="radio"
+                                                                       class="uk-radio"
+                                                                       th:name="shootingSupport"
+                                                                       th:checked="*{shootingSupport == null or !shootingSupport}"
+                                                                       th:value="false">不要</label>
+                            <label class="uk-margin-large-left"><input type="radio"
+                                                                       class="uk-radio"
+                                                                       th:name="shootingSupport"
+                                                                       th:checked="*{shootingSupport != null and shootingSupport}"
+                                                                       th:value="true">必要</label>
+                            <div th:if="${#fields.hasErrors('shootingSupport')}"
+                                 th:errors="*{shootingSupport}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold">セミナー動画編集オプション</label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <label class="uk-margin-large-left"><input type="radio"
+                                                                       class="uk-radio"
+                                                                       th:name="shootingEditSupport"
+                                                                       th:checked="*{shootingEditSupport == null or !shootingEditSupport}"
+                                                                       th:value="false">不要</label>
+                            <label class="uk-margin-large-left"><input type="radio"
+                                                                       class="uk-radio"
+                                                                       th:name="shootingEditSupport"
+                                                                       th:checked="*{shootingEditSupport != null and shootingEditSupport}"
+                                                                       th:value="true">必要</label>
+                            <div th:if="${#fields.hasErrors('shootingEditSupport')}"
+                                 th:errors="*{shootingEditSupport}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold">セミナー動画販売オプション</label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <label class="uk-margin-large-left"><input type="radio"
+                                                                       class="uk-radio"
+                                                                       th:name="movieSalesSupport"
+                                                                       th:checked="*{movieSalesSupport == null or !movieSalesSupport}"
+                                                                       th:value="false">不要</label>
+                            <label class="uk-margin-large-left"><input type="radio"
+                                                                       class="uk-radio"
+                                                                       th:name="movieSalesSupport"
+                                                                       th:checked="*{movieSalesSupport != null and movieSalesSupport}"
+                                                                       th:value="true">必要</label>
+                            <div th:if="${#fields.hasErrors('movieSalesSupport')}"
+                                 th:errors="*{movieSalesSupport}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="uk-text-center uk-margin uk-margin-medium-top">
+                        <button type="button" class="submit-button uk-button uk-button-primary uk-margin-right" name="action" th:value="save">　保　存　</button>
+                        <button type="button" class="submit-button uk-button uk-button-secondary uk-margin-left" name="action" th:value="preview">プレビュー</button>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block th:fragment="script">
+    <script type="text/javascript" th:inline="javascript">
+      $(document).ready(function () {
+        $('.submit-button').on('click', function () {
+          var form = $(this).parents('form');
+          $('<input>').attr({
+            'type': 'hidden',
+            'name': 'action',
+            'value': $(this).val()
+          }).appendTo(form);
+          form.submit();
+        });
+      });
+    </script>
+</th:block>
+</body>
+</html>

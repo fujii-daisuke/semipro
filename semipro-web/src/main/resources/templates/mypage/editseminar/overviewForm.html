@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+    <title>概要</title>
+</head>
+<body>
+<main class="uk-margin" layout:fragment="content">
+    <div class="uk-flex uk-flex-center">
+        <div class="uk-card uk-card-default uk-width-xxlarge">
+            <div class="uk-card-header">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-expand">
+                        <h3 class="uk-card-title uk-margin-remove-bottom">セミナー編集</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-card-body">
+                <ul class="uk-child-width-expand" uk-tab>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${overviewForm.seminarId}__/goal}'|">目標設定</a></li>
+                    <li class="uk-active"><a href="#">概要</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${overviewForm.seminarId}__/contents}'|">本文</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${overviewForm.seminarId}__/ticket}'|">チケット</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${overviewForm.seminarId}__/option}'|">オプション</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${overviewForm.seminarId}__/identification}'|">本人確認</a></li>
+                </ul>
+                <div class="uk-text-lead uk-text-bolder uk-text-center uk-margin-medium">セミナーの概要を設定しましょう</div>
+                <form class="uk-form-horizontal"
+                      enctype="multipart/form-data"
+                      th:action="@{/seminars/edit/{seminarId}/overview/save(seminarId = ${overviewForm.seminarId})}"
+                      th:object="${overviewForm}"
+                      method="post">
+                    <input type="hidden" th:fileld="*{seminarId}">
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold" for="title">タイトル
+                            <span class="uk-label uk-label-danger uk-margin-left uk-text-top">必須</span></label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <input type="text"
+                                   id="title"
+                                   class="uk-input uk-form-small uk-form-width-large"
+                                   th:classappend="${#fields.hasErrors('title') ? 'uk-form-danger':''}"
+                                   th:field="*{title}"
+                                   maxlength="40"
+                                   placeholder="あなただけのオリジナルタイトルを設定してください">
+                            <div th:if="${#fields.hasErrors('title')}"
+                                 th:errors="*{title}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold" for="summary">概要</label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <textarea
+                                id="summary"
+                                class="uk-textarea uk-form-small"
+                                th:classappend="${#fields.hasErrors('summary') ? 'uk-form-danger':''}"
+                                th:field="*{summary}"
+                                maxlength="150"
+                                rows="5"
+                                placeholder="3行程度で概要をまとめましょう"></textarea>
+                            <div th:if="${#fields.hasErrors('summary')}"
+                                 th:errors="*{summary}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold" for="lecturer-profile">講師プロフィール</label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <textarea
+                                id="lecturer-profile"
+                                class="uk-textarea uk-form-small"
+                                th:classappend="${#fields.hasErrors('lecturerProfile') ? 'uk-form-danger':''}"
+                                th:field="*{lecturerProfile}"
+                                maxlength="150"
+                                rows="10"
+                                placeholder="講師プロフィールを設定しましょう"></textarea>
+                            <div th:if="${#fields.hasErrors('lecturerProfile')}"
+                                 th:errors="*{lecturerProfile}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold">メイン画像
+                            <span class="uk-label uk-label-danger uk-margin-left uk-text-top">必須</span></label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <button class="main-image-upload uk-button uk-button-default uk-margin" type="button" tabindex="-1">Select</button>
+                            <div class="uk-inline">
+                                <div class="main-image-preview" style="max-width: 848px; max-height: 428px;">
+                                    <img th:if="*{mainImageUrl}" th:src="*{mainImageUrl + '?' + #strings.randomAlphanumeric(10)}">
+                                </div>
+                                <div class="main-image-delete-overlay uk-overlay uk-overlay-default uk-position-top-left"
+                                     th:classappend="*{(mainImageUrl == null) ? 'uk-invisible' : ''}">
+                                    <a class="main-image-delete" href="#">削除</a>
+                                </div>
+                            </div>
+                            <!--
+                            <div uk-form-custom="target: true">
+                                <input type="file"
+                                       th:field="*{mainImage}">
+                                <input class="uk-input uk-form-width-large uk-form-small"
+                                       type="text"
+                                       placeholder="セミナー画像を設定しょましょう"
+                                       disabled
+                                       th:classappend="${#fields.hasErrors('mainImage') ? 'uk-form-danger':''}">
+                                <div th:if="${#fields.hasErrors('mainImage')}"
+                                     th:errors="*{mainImage}"
+                                     class="uk-text-small uk-text-danger">error
+                                </div>
+                            </div>
+                            -->
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="uk-text-center uk-margin uk-margin-medium-top">
+                        <button type="button" class="submit-button uk-button uk-button-primary uk-margin-right" name="action" th:value="save">　保　存　</button>
+                        <button type="button" class="submit-button uk-button uk-button-secondary uk-margin-left" name="action" th:value="preview">プレビュー</button>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block th:fragment="script">
+    <script type="text/javascript" th:inline="javascript">
+
+      $('.submit-button').on('click', function () {
+        var form = $(this).parents('form');
+        $('<input>').attr({
+          'type': 'hidden',
+          'name': 'action',
+          'value': $(this).val()
+        }).appendTo(form);
+        form.submit();
+      });
+
+      const csrfName = /*[[${_csrf.parameterName}]]*/ '';
+      const csrfValue = /*[[${_csrf.token}]]*/ '';
+      const seminarId = /*[[${overviewForm.seminarId}]]*/ null;
+      const action = "/seminars/edit/overview/image/upload"
+
+      $('.main-image-upload').on('click', function () {
+        selectLocalImage();
+      });
+
+      /**
+       * Step1. select local image
+       *
+       */
+      function selectLocalImage() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.click();
+
+        // Listen upload local image and save to server
+        input.onchange = () => {
+          const file = input.files[0];
+
+          // file type is only image.
+          if (/^image\//.test(file.type)) {
+            return this.saveToServer(file);
+          } else {
+            console.warn('You could only upload images.');
+          }
+        };
+      }
+
+      /**
+       * Step2. save to server
+       *
+       * @param {File} file
+       */
+      function saveToServer(file) {
+        const fd = new FormData();
+        fd.append('image', file);
+        fd.append('seminarId', seminarId);
+        fd.append(csrfName, csrfValue);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', action, false);
+
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            // this is callback data: url
+            insertToEditor(xhr.responseText);
+          } else {
+            alert(xhr.responseText)
+          }
+        };
+        xhr.send(fd);
+      }
+
+      /**
+       * Step3. insert image url to rich editor.
+       *
+       * @param {string} url
+       */
+      function insertToEditor(url) {
+        $('.main-image-preview').children().remove();
+        $('<img>').attr({
+          src: url + '?' + Math.random().toString(32).substring(2)
+        }).prependTo('.main-image-preview');
+        $('.main-image-delete-overlay').removeClass("uk-invisible");
+      }
+
+      $('.main-image-delete').on('click', function () {
+        if (!confirm('画像を削除します。一度削除すると取り消せません。よろしいですか？')) {
+          return false;
+        }
+        $.ajax({
+          type: "GET",
+          url: '/seminars/edit/' + seminarId + '/overview/image/delete'
+        }).done(function (data, textStatus, jqXHR) {
+          $('.main-image-preview').children().remove();
+          $('.main-image-delete-overlay').addClass("uk-invisible");
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+          alert("ファイル削除に失敗しました。画面を再表示後、再度実施してください。");
+        });
+      });
+
+    </script>
+</th:block>
+</body>
+</html>

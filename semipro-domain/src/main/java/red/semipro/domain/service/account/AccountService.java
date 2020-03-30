@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import red.semipro.domain.enums.RegisterStatus;
-import red.semipro.domain.model.Account;
+import red.semipro.domain.model.account.Account;
 import red.semipro.domain.repository.account.AccountRepository;
 
 /**
@@ -88,16 +88,4 @@ public class AccountService {
         @NotNull final RegisterStatus registerStatus) {
         accountRepository.updateRegisterStatus(accountId, registerStatus);
     }
-
-    /**
-     * StripeアカウントIDを更新します
-     *
-     * @param accountId       アカウントID
-     * @param stripeAccountId StripeアカウントID
-     */
-    public void updateStripeAccountId(@Nonnull final Long accountId,
-        @NotNull final String stripeAccountId) {
-        accountRepository.updateStripeAccountId(accountId, stripeAccountId);
-    }
-
 }

@@ -5,15 +5,81 @@
 
 <mapper namespace="red.semipro.domain.repository.identification.IdentificationRepository">
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <resultMap id="resultMap" type="red.semipro.domain.model.identification.Identification">
+        <id property="id" column="id"/>
+        <result property="seminarId" column="seminar_id"/>
+        <result property="businessType" column="business_type"/>
+        <result property="ip" column="ip"/>
+        <result property="individual.lastName" column="last_name"/>
+        <result property="individual.firstName" column="first_name"/>
+        <result property="individual.lastNameKana" column="last_name_kana"/>
+        <result property="individual.firstNameKana" column="first_name_kana"/>
+        <result property="individual.dobYear" column="dob_year"/>
+        <result property="individual.dobMonth" column="dob_month"/>
+        <result property="individual.dobDay" column="dob_day"/>
+        <result property="individual.gender" column="gender"/>
+        <result property="individual.phone" column="individual_phone"/>
+        <result property="company.companyName" column="company_name"/>
+        <result property="company.companyNameKana" column="company_name_kana"/>
+        <result property="company.tax" column="tax"/>
+        <result property="company.phone" column="company_phone"/>
+        <result property="address.postalCode" column="postal_code"/>
+        <result property="address.state" column="state"/>
+        <result property="address.city" column="city"/>
+        <result property="address.town" column="town"/>
+        <result property="address.line1" column="line1"/>
+        <result property="address.line2" column="line2"/>
+        <result property="address.stateKana" column="state_kana"/>
+        <result property="address.cityKana" column="city_kana"/>
+        <result property="address.townKana" column="town_kana"/>
+        <result property="address.line1Kana" column="line1_kana"/>
+        <result property="address.line2Kana" column="line2_kana"/>
+    </resultMap>
+
+    <select id="findOneWithDetails" resultMap="resultMap">
+        SELECT
+        i.id
+        , i.seminar_id
+        , i.business_type
+        , i.ip
+        , individual.last_name
+        , individual.first_name
+        , individual.last_name_kana
+        , individual.first_name_kana
+        , individual.dob_year
+        , individual.dob_month
+        , individual.dob_day
+        , individual.gender
+        , individual.phone individual_phone
+        , company.company_name
+        , company.company_name_kana
+        , company.tax
+        , company.phone company_phone
+        , address.postal_code
+        , address.state
+        , address.city
+        , address.town
+        , address.line1
+        , address.line2
+        , address.state_kana
+        , address.city_kana
+        , address.town_kana
+        , address.line1_kana
+        , address.line2_kana
+        FROM
+        identification i
+        LEFT OUTER JOIN identification_individual individual ON i.id = individual.identification_id
+        LEFT OUTER JOIN identification_company company ON i.id = company.identification_id
+        LEFT OUTER JOIN identification_address address ON i.id = address.identification_id
+        WHERE
+        seminar_id = #{seminarId}
+    </select>
+
+    <insert id="initialize" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO identification (
             seminar_id
-            , business_type
-            , ip
         ) VALUES (
             #{seminarId}
-            , #{businessType.value}
-            , #{ip}
         )
     </insert>
 

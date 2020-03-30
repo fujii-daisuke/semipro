@@ -23,6 +23,7 @@
         <module>semipro-web</module>
         <module>semipro-domain</module>
         <module>semipro-common</module>
+        <module>semipro-admin</module>
     </modules>
 
     <properties>
@@ -39,7 +40,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -71,6 +71,12 @@
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
             <version>3.0.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.terasoluna.gfw/terasoluna-gfw-common -->
+        <dependency>
+            <groupId>org.terasoluna.gfw</groupId>
+            <artifactId>terasoluna-gfw-common</artifactId>
+            <version>5.5.1.RELEASE</version>
         </dependency>
     </dependencies>
 

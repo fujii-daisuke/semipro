@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    th:lang="${#locale.language}">
+    <body>
+        <head>
+            <title>左メニュー</title>
+        </head>
+        <th:block th:fragment="nav">
+            <nav class="uk-width-1-5">
+                <ul class="uk-list uk-list-divider">
+                    <li class="uk-text-nowrap"><a th:onclick="|location.href='@{/seminars}'|">セミナー検索</a></li>
+                    <li class="uk-text-nowrap">List item 2</li>
+                    <li class="uk-text-nowrap">List item 3</li>
+                </ul>
+            </nav>
+        </th:block>
+    </body>
+</html>

@@ -1,11 +1,9 @@
 package red.semipro.domain.repository.seminar;
 
 import java.util.List;
-
 import javax.annotation.Nonnull;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
 import org.springframework.stereotype.Repository;
 import red.semipro.domain.model.seminar.SeminarTicket;
 

@@ -32,9 +32,9 @@ public interface SeminarEntrySummaryRepository {
     /**
      * セミナー申込者サマリを更新します
      *
-     * @param seminarEntrySummary セミナー申込者サマリ
+     * @param seminarId セミナーID
      * @return 更新件数
      */
-    int update(@Nonnull final SeminarEntrySummary seminarEntrySummary);
+    int countUp(@Nonnull final Long seminarId);
 
 }
