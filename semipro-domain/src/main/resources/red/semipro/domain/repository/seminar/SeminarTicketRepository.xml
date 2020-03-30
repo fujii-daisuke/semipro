@@ -7,7 +7,7 @@
     namespace="red.semipro.domain.repository.seminar.SeminarTicketRepository">
 
     <resultMap id="seminarTicketResultMap" type="red.semipro.domain.model.seminar.SeminarTicket">
-        <result property="id" column="id"/>
+        <id property="id" column="ticket_id"/>
         <result property="seminarId" column="seminar_id"/>
         <result property="name" column="name"/>
         <result property="price" column="price"/>
@@ -16,14 +16,14 @@
 
     <select id="findAll" resultMap="seminarTicketResultMap">
         SELECT
-            id
+            seminar_ticket.id ticket_id
             , seminar_id
             , name
             , price
             , capacity
         FROM seminar_ticket
         WHERE
-            seminar_id = #{seminarId}
+            seminar_ticket.seminar_id = #{seminarId}
         ORDER BY price
     </select>
 

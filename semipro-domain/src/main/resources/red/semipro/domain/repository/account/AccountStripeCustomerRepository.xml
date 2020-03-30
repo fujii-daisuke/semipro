@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="red.semipro.domain.repository.account.AccountStripeCustomerRepository">
+
+    <resultMap id="accountStripeCustomer" type="red.semipro.domain.model.account.AccountStripeCustomer">
+        <result property="id" column="id"/>
+        <result property="accountId" column="account_id"/>
+        <result property="stripeCustomerId" column="stripe_customer_id"/>
+    </resultMap>
+
+    <select id="findOne" resultMap="accountStripeCustomer">
+        SELECT
+            id
+            , account_id
+            , stripe_customer_id
+        FROM account_stripe_customer
+        WHERE
+        account_id = #{accountId}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO account_stripe_customer (
+            account_id
+            , stripe_customer_id
+        ) VALUES (
+            #{accountId}
+            , #{stripeCustomerId}
+        )
+    </insert>
+
+</mapper>

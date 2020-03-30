@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+    <title>本文</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/styles/default.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        #editor {
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+<main class="uk-margin" layout:fragment="content">
+    <div class="uk-flex uk-flex-center">
+        <div class="uk-card uk-card-default uk-width-xxlarge">
+            <div class="uk-card-header">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-expand">
+                        <h3 class="uk-card-title uk-margin-remove-bottom">セミナー編集</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-card-body">
+                <ul class="uk-child-width-expand" uk-tab>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${contentsForm.seminarId}__/goal}'|">目標設定</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${contentsForm.seminarId}__/overview}'|">概要</a></li>
+                    <li class="uk-active"><a href="#">本文</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${contentsForm.seminarId}__/ticket}'|">チケット</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${contentsForm.seminarId}__/option}'|">オプション</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${contentsForm.seminarId}__/identification}'|">本人確認</a></li>
+                </ul>
+                <div class="uk-text-lead uk-text-bolder uk-text-center uk-margin-medium">セミナーの本文を設定しましょう</div>
+                <form id="contents-form"
+                      class="uk-form-horizontal"
+                      enctype="multipart/form-data"
+                      th:action="@{/seminars/edit/__${contentsForm.seminarId}__/contents/save}"
+                      th:object="${contentsForm}"
+                      method="post">
+                    <input type="hidden" th:fileld="*{seminarId}">
+                    <input type="file" name="file" id="editor-file" class="uk-hidden">
+                    <input type="hidden" name="contents">
+                    <div th:if="${#fields.hasErrors('contents')}"
+                         th:errors="*{contents}"
+                         class="uk-text-small uk-text-danger">error
+                    </div>
+                    <div id="editor"></div>
+                    <hr>
+                    <p class="uk-text-center uk-margin uk-margin-medium-top">
+                        <button type="button" class="submit-button uk-button uk-button-primary uk-margin-right" name="action" th:value="save">　保　存　</button>
+                        <button type="button" class="submit-button uk-button uk-button-secondary uk-margin-left" name="action" th:value="preview">プレビュー</button>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block th:fragment="script">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+
+      $('.submit-button').on('click', function () {
+        var form = $(this).parents('form');
+        $('<input>').attr({
+          'type': 'hidden',
+          'name': 'action',
+          'value': $(this).val()
+        }).appendTo(form);
+        form.submit();
+      });
+
+      var toolbarOptions = [
+        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+        ['blockquote', 'code-block'],
+
+        [{'header': 1}, {'header': 2}],               // custom button values
+        [{'list': 'ordered'}, {'list': 'bullet'}],
+        [{'indent': '-1'}, {'indent': '+1'}],          // outdent/indent
+        [{'direction': 'rtl'}],                         // text direction
+
+        [{'size': ['small', false, 'large', 'huge']}],  // custom dropdown
+        [{'header': [1, 2, 3, 4, 5, 6, false]}],
+
+        [{'color': []}, {'background': []}],          // dropdown with defaults from theme
+        [{'align': []}],
+
+        ['image', 'video'],
+
+        ['clean']                                         // remove formatting button
+      ];
+      var editor = new Quill('#editor', {
+        modules: {
+          syntax: true,
+          toolbar: toolbarOptions
+        },
+//        placeholder: 'Compose an epic...',
+        theme: 'snow'
+      });
+
+      // 登録内容を復元
+      editor.setContents(JSON.parse(/*[[${contentsForm.contents}]]*/ ''));
+
+      // DB登録アクション
+      var form = document.getElementById("contents-form"); // get form by ID
+      form.onsubmit = function () { // onsubmit do this first
+        var contents = document.querySelector('input[name=contents]'); // set name input var
+        contents.value = JSON.stringify(editor.getContents()); // populate name input with quill data
+//        contents.value = document.getElementById("editor").getElementsByClassName("ql-editor")[0].innerHTML;
+        return true; // submit form
+      }
+
+      const csrfName = /*[[${_csrf.parameterName}]]*/ '';
+      const csrfValue = /*[[${_csrf.token}]]*/ '';
+      const seminarId = /*[[${contentsForm.seminarId}]]*/ null;
+
+      /**
+       * Step1. select local image
+       *
+       */
+      function selectLocalImage() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.click();
+
+        // Listen upload local image and save to server
+        input.onchange = () => {
+          const file = input.files[0];
+
+          // file type is only image.
+          if (/^image\//.test(file.type)) {
+            saveToServer(file);
+          } else {
+            console.warn('You could only upload images.');
+          }
+        };
+      }
+
+      /**
+       * Step2. save to server
+       *
+       * @param {File} file
+       */
+      function saveToServer(file) {
+        const fd = new FormData();
+        fd.append('image', file);
+        fd.append('seminarId', seminarId);
+        fd.append('seminarImageType', 'contents');
+        fd.append(csrfName, csrfValue);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/seminars/edit/contents/image/upload', true);
+
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            // this is callback data: url
+            const url = xhr.responseText;
+            insertToEditor(url);
+          }
+        };
+        xhr.send(fd);
+      }
+
+      /**
+       * Step3. insert image url to rich editor.
+       *
+       * @param {string} url
+       */
+      function insertToEditor(url) {
+        // push image url to rich editor.
+        const range = editor.getSelection();
+        editor.insertEmbed(range.index, 'image', url);
+      }
+
+      // quill editor add image handler
+      editor.getModule('toolbar').addHandler('image', () => {
+        selectLocalImage();
+      });
+
+    </script>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+    <title>目標設定</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link th:href="@{/css/flatpickr.min.css}" rel="stylesheet">
+</head>
+<body>
+<main class="uk-margin" layout:fragment="content">
+    <div class="uk-flex uk-flex-center">
+        <div class="uk-card uk-card-default uk-width-xxlarge">
+            <div class="uk-card-header">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-expand">
+                        <span class="uk-card-title uk-margin-remove-bottom">セミナー編集</span>
+                        <span th:insert="mypage/editseminar/_apply::apply(__${goalForm.seminarId}__)">
+                            <button type="button">申請する</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-card-body">
+                <ul class="uk-child-width-expand" uk-tab>
+                    <li class="uk-active"><a href="#">目標設定</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${goalForm.seminarId}__/overview}'|">概要</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${goalForm.seminarId}__/contents}'|">本文</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${goalForm.seminarId}__/ticket}'|">チケット</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${goalForm.seminarId}__/option}'|">オプション</a></li>
+                    <li><a th:onclick="|location.href='@{/seminars/edit/__${goalForm.seminarId}__/identification}'|">本人確認</a></li>
+                </ul>
+                <div class="uk-text-lead uk-text-bolder uk-text-center uk-margin-medium">セミナーの目標を設定しましょう</div>
+                <form class="uk-form-horizontal"
+                      th:action="@{/seminars/edit/__${goalForm.seminarId}__/goal/save}"
+                      th:object="${goalForm}"
+                      method="post">
+                    <input type="hidden" th:fileld="*{seminarId}">
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold" for="minimum-number">最低開催人数
+                            <span class="uk-label uk-label-danger uk-margin-left uk-text-top">必須</span></label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <input type="text"
+                                   id="minimum-number"
+                                   class="uk-input uk-form-small uk-form-width-medium uk-margin-right"
+                                   th:classappend="${#fields.hasErrors('minimumNumber') ? 'uk-form-danger':''}"
+                                   th:field="*{minimumNumber}"
+                                   maxlength="5"
+                                   placeholder="（例）30"><span class="uk-text-bottom">人</span>
+                            <div th:if="${#fields.hasErrors('minimumNumber')}"
+                                 th:errors="*{minimumNumber}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold" for="entry-ending-date">募集終了日
+                            <span class="uk-label uk-label-danger uk-margin-left uk-text-top">必須</span></label></label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <input type="text"
+                                   data-uk
+                                   id="entry-ending-date"
+                                   class="uk-input uk-form-small uk-form-width-medium"
+                                   th:classappend="${#fields.hasErrors('entryEndingAt') ? 'uk-form-danger':''}"
+                                   th:field="*{entryEndingAt}"
+                                   placeholder="（例）2020-03-01">
+                            <div th:if="${#fields.hasErrors('entryEndingAt')}"
+                                 th:errors="*{entryEndingAt}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold">募集方式
+                            <span class="uk-label uk-label-danger uk-margin-left uk-text-top">必須</span></label></label></label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <label><input type="radio"
+                                          id="all-in"
+                                          class="uk-radio"
+                                          th:name="successCondition"
+                                          th:checked="*{successCondition != null and successCondition.value == 'all-in'}"
+                                          th:value="all-in">All-In方式</label><br/>
+                            <label><input type="radio"
+                                          id="all-or-nothing"
+                                          class="uk-radio"
+                                          th:name="successCondition"
+                                          th:checked="*{successCondition != null and successCondition.value == 'all-or-nothing'}"
+                                          th:value="all-or-nothing">All-or-Nothing方式</label>
+                            <div th:if="${#fields.hasErrors('successCondition')}"
+                                 th:errors="*{successCondition}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold">セミナータイプ</label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <label><input type="radio"
+                                          id="offline"
+                                          class="uk-radio"
+                                          th:name="seminarType"
+                                          th:checked="*{seminarType != null and seminarType.value == 'offline'}"
+                                          th:value="offline">オフラインセミナー</label><br/>
+                            <label><input type="radio"
+                                          id="online"
+                                          class="uk-radio"
+                                          th:name="seminarType"
+                                          th:checked="*{seminarType != null and seminarType.value == 'online'}"
+                                          th:value="online">オンラインセミナー</label><br/>
+                            <label><input type="radio"
+                                          id="both"
+                                          class="uk-radio"
+                                          th:name="seminarType"
+                                          th:checked="*{seminarType != null and seminarType.value == 'both'}"
+                                          th:value="both">同時</label>
+                            <div th:if="${#fields.hasErrors('seminarType')}"
+                                 th:errors="*{seminarType}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold" for="seminarGoal-starting-date">セミナー開始日時</label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <input type="text"
+                                   data-uk
+                                   id="seminarGoal-starting-date"
+                                   class="uk-input uk-form-small uk-width-1-2"
+                                   th:classappend="${#fields.hasErrors('seminarStartingAt') ? 'uk-form-danger':''}"
+                                   th:field="*{seminarStartingAt}"
+                                   placeholder="（例）2020-04-01 14:00">
+                            <div th:if="${#fields.hasErrors('seminarStartingAt')}"
+                                 th:errors="*{seminarStartingAt}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold" for="seminarGoal-ending-date">セミナー終了日時</label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <input type="text"
+                                   data-uk
+                                   id="seminarGoal-ending-date"
+                                   class="uk-input uk-form-small uk-width-1-2"
+                                   th:classappend="${#fields.hasErrors('seminarEndingAt') ? 'uk-form-danger':''}"
+                                   th:field="*{seminarEndingAt}"
+                                   placeholder="（例）2020-04-01 16:00">
+                            <div th:if="${#fields.hasErrors('seminarEndingAt')}"
+                                 th:errors="*{seminarEndingAt}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium seminarGoal-type-offline-area"
+                         th:classappend="*{(seminarType != null and seminarType.value == 'offline')? '' : 'uk-hidden' }">
+                        <div class="uk-margin">
+                            <label class="uk-form-label uk-text-bold">会場</label>
+                            <div class="uk-form-controls uk-form-controls-text">
+                                <label><input type="radio"
+                                              id="place-support"
+                                              class="uk-radio"
+                                              th:name="placeForm.placeArrangement"
+                                              th:checked="*{placeForm.placeArrangement != null and placeForm.placeArrangement.value == 'request'}"
+                                              th:value="request">セミプロに任せる</label><br/>
+                                <label><input type="radio"
+                                              id="place-myself"
+                                              class="uk-radio"
+                                              th:name="placeForm.placeArrangement"
+                                              th:checked="*{placeForm.placeArrangement != null and placeForm.placeArrangement.value == 'myself'}"
+                                              th:value="myself">自分で手配する</label>
+                                <div th:if="${#fields.hasErrors('placeForm.placeArrangement')}"
+                                     th:errors="*{placeForm.placeArrangement}"
+                                     class="uk-text-small uk-text-danger">error
+                                </div>
+                            </div>
+                            <div class="uk-margin-medium place-input-area"
+                                 th:classappend="*{(placeForm.placeArrangement != null and placeForm.placeArrangement.value == 'myself')? '' : 'uk-hidden' }">
+                                <div class="uk-margin">
+                                    <label class="uk-form-label uk-text-bold" for="prefecture-id">都道府県</label>
+                                    <div class="uk-form-controls uk-form-controls-text">
+                                        <select class="uk-select uk-form-small" id="prefecture-id" th:field="*{placeForm.prefectureId}">
+                                            <option value=""></option>
+                                            <option th:each="pref:${prefectures}"
+                                                    th:value="${pref.id}"
+                                                    th:selected="${pref.id == goalForm.placeForm.prefectureId}">[[${pref.name}]]
+                                            </option>
+                                        </select>
+                                        <div th:if="${#fields.hasErrors('placeForm.prefectureId')}"
+                                             th:errors="*{placeForm.prefectureId}"
+                                             class="uk-text-small uk-text-danger">error
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-margin-medium">
+                                    <label class="uk-form-label uk-text-bold" for="city-id">市区町村</label>
+                                    <div class="uk-form-controls uk-form-controls-text">
+                                        <select class="uk-select uk-form-small" id="city-id" th:field="*{placeForm.cityId}">
+                                            <option th:each="city:${cities}"
+                                                    th:value="${city.id}"
+                                                    th:selected="${city.id == goalForm.placeForm.cityId}">[[${city.name}]]
+                                            </option>
+                                        </select>
+                                        <div th:if="${#fields.hasErrors('placeForm.cityId')}"
+                                             th:errors="*{placeForm.cityId}"
+                                             class="uk-text-small uk-text-danger">error
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-margin-medium">
+                                    <label class="uk-form-label uk-text-bold" for="address">以降の住所</label>
+                                    <div class="uk-form-controls uk-form-controls-text">
+                                        <input type="text"
+                                               id="address"
+                                               class="uk-input uk-form-small uk-form-width-large"
+                                               th:classappend="${#fields.hasErrors('placeForm.address') ? 'uk-form-danger':''}"
+                                               th:field="*{placeForm.address}"
+                                               placeholder="">
+                                        <div th:if="${#fields.hasErrors('placeForm.address')}"
+                                             th:errors="*{placeForm.address}"
+                                             class="uk-text-small uk-text-danger">error
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-margin-medium">
+                                    <label class="uk-form-label uk-text-bold" for="place">会場名</label>
+                                    <div class="uk-form-controls uk-form-controls-text">
+                                        <input type="text"
+                                               id="place"
+                                               class="uk-input uk-form-small uk-form-width-large"
+                                               th:classappend="${#fields.hasErrors('placeForm.place') ? 'uk-form-danger':''}"
+                                               th:field="*{placeForm.place}"
+                                               placeholder="">
+                                        <div th:if="${#fields.hasErrors('placeForm.place')}"
+                                             th:errors="*{placeForm.place}"
+                                             class="uk-text-small uk-text-danger">error
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="uk-text-center uk-margin uk-margin-medium-top">
+                        <button type="button" class="submit-button uk-button uk-button-primary uk-margin-right" name="action" th:value="save">　保　存　</button>
+                        <button type="button" class="submit-button uk-button uk-button-secondary uk-margin-left" name="action" th:value="preview">プレビュー</button>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block th:fragment="script">
+    <script th:src="@{/js/flatpickr.min.js}"></script>
+    <script th:src="@{/js/apply-seminar.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
+      $(document).ready(function () {
+
+        $('.submit-button').on('click', function () {
+          var form = $(this).parents('form');
+          $('<input>').attr({
+            'type': 'hidden',
+            'name': 'action',
+            'value': $(this).val()
+          }).appendTo(form);
+          form.submit();
+        });
+
+        flatpickr('#entry-ending-date');
+        flatpickr('#seminarGoal-starting-date', {enableTime: true});
+        flatpickr('#seminarGoal-ending-date', {enableTime: true});
+
+        $('[name=seminarType]').on('change', function () {
+          if ($('input[name=seminarType]:checked').val() === 'offline') {
+            $('.seminarGoal-type-offline-area').removeClass('uk-hidden');
+          } else {
+            $('.seminarGoal-type-offline-area').addClass('uk-hidden');
+            $('.place-input-area').addClass('uk-hidden');
+          }
+        });
+
+        $('[name="placeForm.placeArrangement"]').on('change', function () {
+          if ($('input[name="placeForm.placeArrangement"]:checked').val() === 'myself') {
+            $('.place-input-area').removeClass('uk-hidden');
+          } else {
+            $('.place-input-area').addClass('uk-hidden');
+          }
+        });
+
+        $('#prefecture-id').on('change', function () {
+          $.ajax({
+            type: "GET",
+            url: location.pathname + "/searchCityList",
+            dataType: 'json',
+            data: {'prefectureId': $('#prefecture-id').val()}
+          }).done(function (data, textStatus, jqXHR) {
+            $('#city-id').html('');//一度select内を空に
+            for (var i in data) {
+              $('#city-id').append($('<option></option>')
+              .val(data[i].id)
+              .text(data[i].name));
+            }
+          }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus);
+          });
+        });
+
+      });
+    </script>
+</th:block>
+</body>
+
+</html>

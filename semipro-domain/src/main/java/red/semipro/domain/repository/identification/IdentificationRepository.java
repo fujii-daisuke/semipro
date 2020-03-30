@@ -1,6 +1,7 @@
 package red.semipro.domain.repository.identification;
 
 import javax.annotation.Nonnull;
+import javax.validation.constraints.NotNull;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import red.semipro.domain.model.identification.Identification;
@@ -12,13 +13,15 @@ import red.semipro.domain.model.identification.Identification;
 @Mapper
 public interface IdentificationRepository {
 
+    Identification findOneWithDetails(@NotNull final Long seminarId);
+
     /**
-     * 本人確認を登録します
+     * 本人確認を初期登録します
      *
-     * @param identification 本人確認
+     * @param seminarId セミナーID
      * @return 登録件数
      */
-    int insert(@Nonnull final Identification identification);
+    int initialize(@Nonnull final Long seminarId);
 
     /**
      * 本人確認を更新します

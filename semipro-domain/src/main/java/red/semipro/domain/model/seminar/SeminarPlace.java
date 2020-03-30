@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import red.semipro.domain.enums.PlaceArrangement;
-import red.semipro.domain.model.City;
-import red.semipro.domain.model.Prefecture;
+import red.semipro.domain.model.address.City;
+import red.semipro.domain.model.address.Prefecture;
 
 /**
  * セミナー開催地 - model

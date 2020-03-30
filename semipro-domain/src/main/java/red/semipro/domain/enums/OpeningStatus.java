@@ -8,6 +8,7 @@ import java.util.Arrays;
 public enum OpeningStatus {
     DRAFT("draft"),
     APPLYING("applying"),
+    STRIPE_REGISTERED("stripe_registered"),
     OPENING("opening"),
     CLOSED("closed");
 
