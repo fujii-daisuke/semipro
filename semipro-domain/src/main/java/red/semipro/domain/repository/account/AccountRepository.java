@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import red.semipro.domain.enums.RegisterStatus;
-import red.semipro.domain.model.Account;
+import red.semipro.domain.model.account.Account;
 
 /**
  * アカウント - repository
@@ -59,13 +59,4 @@ public interface AccountRepository {
     int updateRegisterStatus(@Nonnull @Param("accountId") Long accountId,
         @Nonnull @Param("registerStatus") RegisterStatus registerStatus);
 
-    /**
-     * StripeAccountIdを更新します
-     *
-     * @param accountId       アカウントID
-     * @param stripeAccountId StripeアカウントID
-     * @return 更新件数
-     */
-    int updateStripeAccountId(@Nonnull @Param("accountId") Long accountId,
-        @Nonnull @Param("stripeAccountId") String stripeAccountId);
 }

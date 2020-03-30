@@ -13,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import red.semipro.domain.service.userdetails.AccountUserDetailsService;
+import red.semipro.share.userdetails.AccountUserDetailsService;
 
 /**
  * Spring Security - configuration
@@ -30,8 +30,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     private static final String[] authenticateActionArray =
         {
-            "/seminars/create/**",
+            "/seminars/edit/**",
+            "/seminars/**/preview",
+            "/seminars/**/apply",
             "/seminars/created/**",
+            "/seminars/**/entry/**",
             "/upload/image/**",
         };
 

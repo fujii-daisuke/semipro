@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+    <title>セミナー検索</title>
+</head>
+<body>
+<main class="uk-margin" layout:fragment="content">
+    <div class="uk-container">
+        <div class="uk-text-left" uk-grid>
+            <nav class="uk-width-1-5" th:insert="layout/_left_nav::nav">左メニュー</nav>
+            <div class="uk-width-4-5">
+                <div th:if="${page != null and !#lists.isEmpty(page.content)}" th:remove="tag">
+                    <ul class="uk-list uk-list-large uk-list-divider">
+                        <th:block th:each="seminar, parentStat:${page.content}">
+                            <li>
+                                <div>
+                                    <span th:text="${seminar.openingStatus.value}">編集中</span>
+                                </div>
+                                <a class="uk-text-large"
+                                   th:href="@{/seminars/__${seminar.id}__/detail}"
+                                   th:text="${seminar.overview.title != null ? seminar.overview.title : '未タイトル'}">>title</a></li>
+                        </th:block>
+                    </ul>
+                    <ul class="uk-pagination uk-flex-center uk-margin">
+                        <li th:classappend="${page.firstPage}?'uk-disabled':''">
+                            <a th:href="@{${page.url}(page=0,size=${page.size})}"><span uk-pagination-previous></span></a>
+                        </li>
+                        <li class= "page-item" th:classappend="${item.current}? 'uk-active' : ''" th:each="item : ${page.items}">
+                            <a th:href='@{${page.url}(page=${item.number-1},size=${page.size})}' th:text="${item.number}">1</a>
+                        </li>
+                        <li th:classappend="${page.lastPage}? 'uk-disabled' : ''">
+                            <a th:href="@{${page.url}(page=${page.totalPages - 1},size=${page.size})}"><span uk-pagination-next></span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block th:fragment="script"></th:block>
+</body>
+</html>

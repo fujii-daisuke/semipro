@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+    <title>ログイン</title>
+</head>
+<body>
+    <main layout:fragment="content">
+        <div class="uk-container uk-margin">
+            <div class="uk-flex uk-flex-center">
+                <div class="uk-card uk-card-default">
+                    <div class="uk-card-header">
+                        <div class="uk-grid-small uk-flex-middle" uk-grid>
+                            <div class="uk-width-expand">
+                              <h3 class="uk-card-title uk-margin-remove-bottom">ログイン</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-card-body">
+                        <form class="uk-form-stacked" th:action="@{/authenticate}" th:object="${loginForm}" method="post">
+                            <p th:if="${param.error}" class="uk-text-small uk-text-danger" th:text="#{login.failed}"></p>
+                            <div class="uk-margin">
+                                <label for="username">ユーザー名</label>
+                                <div class="uk-form-controls">
+                                    <input type="text"
+                                           id="username"
+                                           class="uk-input uk-form-small uk-form-width-large"
+                                           th:classappend="${#fields.hasErrors('username') ? 'uk-form-danger':''}"
+                                           th:field="*{username}">
+                                </div>
+                            </div>
+                            <div class="uk-margin">
+                                <label for="password">パスワード</label>
+                                <div class="uk-form-controls">
+                                    <input type="password"
+                                           id="password"
+                                           class="uk-input uk-form-small uk-form-width-large"
+                                           th:classappend="${#fields.hasErrors('password') ? 'uk-form-danger':''}"
+                                           th:field="*{password}">
+                                </div>
+                            </div>
+                            <p class="uk-text-center uk-margin">
+                                <button type="submit" class="uk-button uk-button-primary">ログイン</button>
+                            </p>
+                          </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <th:block th:fragment="script"></th:block>
+</body>
+</html>

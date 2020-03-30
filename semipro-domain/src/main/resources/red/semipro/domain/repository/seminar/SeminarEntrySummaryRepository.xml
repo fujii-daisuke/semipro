@@ -28,9 +28,9 @@
         )
     </insert>
 
-    <update id="update">
+    <update id="countUp">
         UPDATE seminar_entry_summary SET
-            entry_count = #{entryCount}
+            entry_count = entry_count + 1
             , updated_at = CURRENT_TIMESTAMP
         WHERE
             seminar_id = #{seminarId}

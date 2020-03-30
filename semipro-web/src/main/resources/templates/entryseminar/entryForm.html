@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+    <title>お支払い方法を選択</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <style type="text/css">
+        /**
+         * The CSS shown here will not be introduced in the Quickstart guide, but shows
+         * how you can use CSS to style your Element's container.
+         */
+        .StripeElement {
+            box-sizing: border-box;
+
+            height: 40px;
+
+            padding: 10px 12px;
+
+            border: 1px solid transparent;
+            border-radius: 4px;
+            background-color: white;
+
+            box-shadow: 0 1px 3px 0 #e6ebf1;
+            -webkit-transition: box-shadow 150ms ease;
+            transition: box-shadow 150ms ease;
+        }
+
+        .StripeElement--focus {
+            box-shadow: 0 1px 3px 0 #cfd7df;
+        }
+
+        .StripeElement--invalid {
+            border-color: #fa755a;
+        }
+
+        .StripeElement--webkit-autofill {
+            background-color: #fefde5 !important;
+        }
+    </style>
+</head>
+<body>
+<main class="uk-margin" layout:fragment="content">
+    <div class="uk-container">
+        <div uk-grid>
+            <div class="uk-width-3-5">
+                <h4>申し込まれるチケット</h4>
+                <table class="uk-table uk-table-middle uk-table-divider">
+                    <thead>
+                    <tr>
+                        <th class="uk-width-small">チケット名</th>
+                        <th class="uk-width-small">価格</th>
+                        <th class="uk-width-small">定員</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="ticket: ${seminar.ticketList}">
+                        <td th:text="${ticket.name}">ticket name</td>
+                        <td><span th:text="${ticket.price}">5000</span>円</td>
+                        <td><span th:text="${ticket.capacity}">10</span>人</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <h4>ご登録のクレジットカード</h4>
+                <form th:action="@{/seminars/{seminarId}/entry/{ticketId}/confirm(seminarId=${seminar.id}, ticketId=${seminar.ticketList.get(0).id})}"
+                      th:object="${entrySeminarForm}"
+                      method="post">
+                    <table class="uk-table uk-table-middle uk-table-divider" th:if="${customerCards != null and customerCards.size() > 0}">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th class="uk-width-small">カード種別</th>
+                            <th class="uk-width-small">有効期限</th>
+                            <th class="uk-width-auto">カード番号</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="card: ${customerCards}">
+                            <td><input type="radio" name="selectedStripeCustomerCardId" th:value="${card.id}" th:checked="*{selectedStripeCustomerCardId}"></td>
+                            <td><span th:text="${card.brand}">visa</span></td>
+                            <td><span th:text="${card.expMonth}">10</span>月/<span th:text="${card.expYear}">2020</span>年</td>
+                            <td><span th:text="${'************' + card.last4}">************4343</span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p class="uk-text-center uk-margin uk-margin-medium-top" th:if="${customerCards != null and customerCards.size() > 0}">
+                        <button class="uk-button uk-button-primary uk-align-center">確認画面へ</button>
+                    </p>
+                </form>
+                <a href="#" class="add-card">カードを追加</a>
+                <form action="/charge" method="post" id="payment-form" class="uk-hidden">
+                    <div class="form-row">
+                        <label for="card-element">
+                            クレジットカード情報を入力して下さい
+                        </label>
+                        <div id="card-element">
+                            <!-- A Stripe Element will be inserted here. -->
+                        </div>
+                        <div class="uk-margin">
+                            <span class="uk-text-small">このクレジットカード情報は当社では保持せず、決済代行会社であるStripe.incにて安全に管理されます。</span>
+                        </div>
+                        <!-- Used to display form errors. -->
+                        <div id="card-errors" role="alert" class="uk-text-danger"></div>
+                    </div>
+
+                    <button class="uk-button uk-button-secondary uk-align-center">クレジットカード登録</button>
+                </form>
+            </div>
+            <div class="uk-width-2-5">
+                <div class="uk-card uk-card-default uk-card-body">
+                    <p><img th:src="${seminar.mainImageUrl}"></p>
+                    <div class="uk-text-small">現在の参加者数</div>
+                    <div class="uk-margin-medium-bottom">
+                        <span class="uk-heading-small uk-text-bold uk-margin-small" th:text="${seminar.entrySummary.entryCount}">10</span>
+                        <span class="uk-text-large uk-text-bold"> / 40人</span>
+                        <div>最低開催人数は<span th:text="${seminar.goal.minimumNumber}">20</span>人</div>
+                    </div>
+                    <div class="uk-text-small">募集終了まで残り</div>
+                    <div>
+                        <span class="uk-heading-small uk-text-bold uk-margin-small" th:text="${seminar.goal.entryRemainingDays + ' 日'}">10</span>
+                    </div>
+                </div>
+                <div class="uk-margin-medium">
+                    <div class="uk-tile uk-tile-muted uk-padding-small">
+                        <p th:if="${seminar.goal.successCondition.isAllIn()}">
+                            このセミナーは、All-In方式です。<br/>
+                            最低開催人数に関わらず、<span th:text="${seminar.goal.formattedEntryEndingAt()}">2020/03/01 23:59:59</span>
+                            までに集まった金額がファンディングされます。
+                        </p>
+                        <p th:if="${seminar.goal.successCondition.isAllOrNothing()}">
+                            このセミナーは、All-or-Nothing方式です。<br/>
+                            最低開催人数を達成した場合にのみ、2020/02/28 23:59:59までに集まった金額がファンディングされます。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block th:fragment="script">
+    <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+    <script>
+
+        $(".add-card").on("click", function() {
+          $("#payment-form").removeClass("uk-hidden");
+        });
+
+      var token = $("meta[name='_csrf']").attr("content");
+      var header = $("meta[name='_csrf_header']").attr("content");
+      $(document).ajaxSend(function (e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+      });
+
+      // Create a Stripe client.
+      var stripe = Stripe('pk_test_kfHrwK9IL4ArC9ZsATw8ymhQ00w6t7mFJl');
+
+      // Create an instance of Elements.
+      var elements = stripe.elements();
+
+      // Custom styling can be passed to options when creating an Element.
+      // (Note that this demo uses a wider set of styles than the guide below.)
+      var style = {
+        base: {
+          color: '#32325d',
+          fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+          fontSmoothing: 'antialiased',
+          fontSize: '16px',
+          '::placeholder': {
+            color: '#aab7c4'
+          }
+        },
+        invalid: {
+          color: '#fa755a',
+          iconColor: '#fa755a'
+        }
+      };
+
+      // Create an instance of the card Element.
+      var card = elements.create('card', {style: style});
+
+      // Add an instance of the card Element into the `card-element` <div>.
+      card.mount('#card-element');
+
+      // Handle real-time validation errors from the card Element.
+      card.addEventListener('change', function (event) {
+        var displayError = document.getElementById('card-errors');
+        if (event.error) {
+          displayError.textContent = event.error.message;
+        } else {
+          displayError.textContent = '';
+        }
+      });
+
+      // Handle form submission.
+      var form = document.getElementById('payment-form');
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        stripe.createToken(card).then(function (result) {
+          if (result.error) {
+            // Inform the user if there was an error.
+            var errorElement = document.getElementById('card-errors');
+            errorElement.textContent = result.error.message;
+          } else {
+            // Send the token to your server.
+            stripeTokenHandler(result.token);
+          }
+        });
+      });
+
+      // Submit the form with the token ID.
+      function stripeTokenHandler(token) {
+        // Insert the token ID into the form so it gets submitted to the server
+        var form = document.getElementById('payment-form');
+        var hiddenInput = document.createElement('input');
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'stripeToken');
+        hiddenInput.setAttribute('value', token.id);
+        form.appendChild(hiddenInput);
+
+        // Submit the form
+//        form.submit();
+//        alert(token.id);
+
+        $.ajax({
+          type: "POST",
+          url: "/stripe/add-card",
+          dataType: 'json',
+          data: {'token': token.id}
+        }).done(function (data, textStatus, jqXHR) {
+            location.reload();
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+          alert(jqXHR.responseText);
+        });
+      }
+    </script>
+</th:block>
+</body>
+</html>

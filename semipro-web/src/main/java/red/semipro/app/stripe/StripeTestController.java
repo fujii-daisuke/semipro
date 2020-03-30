@@ -9,10 +9,15 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = "stripe")
 public class StripeTestController {
 
-    @GetMapping(value = "createToken")
-    public ModelAndView input(ModelAndView model) {
-        model.setViewName("bancAccountForm");
+    @GetMapping(value = "create/bank-account-token")
+    public ModelAndView createBankAccountToken(ModelAndView model) {
+        model.setViewName("stripe/bancAccountForm");
         return model;
     }
 
+    @GetMapping(value = "create/credit-card-token")
+    public ModelAndView createCreditCardToken(ModelAndView model) {
+        model.setViewName("stripe/creditCardForm");
+        return model;
+    }
 }

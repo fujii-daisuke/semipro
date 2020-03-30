@@ -24,8 +24,8 @@ spring:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
-  thymeleaf:
-    cache: false
+    thymeleaf:
+      cache: false
   servlet:
     multipart:
       enabled: true
@@ -34,10 +34,11 @@ spring:
 
 server:
   port: 8080
-#  port: 8085 
+#  port: 8085
+  address: 127.0.0.1
 logging:
   level:
-    root: debug
+    root: info
     org.springframework.web: debug
     red.semipro: debug
     red.semipro.domain.repository: debug
