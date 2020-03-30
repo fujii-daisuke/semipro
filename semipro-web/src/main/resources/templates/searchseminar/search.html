@@ -11,27 +11,30 @@
 </head>
 <body>
 <main class="uk-margin" layout:fragment="content">
-    <div class="uk-container">
+    <div class="uk-container-small uk-align-center">
         <div th:if="${page != null and !#lists.isEmpty(page.content)}" th:remove="tag">
             <ul class="uk-list uk-list-large uk-list-divider">
                 <th:block th:each="seminar, parentStat:${page.content}">
                     <li>
-                        <div class="uk-child-width-expand@s" uk-grid>
-                            <div class="uk-grid-item-match">
+                        <div uk-grid>
+                            <div class="uk-width-auto">
                                 <div class="uk-card uk-card-default uk-card-body">
-                                    <a th:href="@{/seminars/{seminarId}/reserve(seminarId=${seminar.id})}">
-                                        <img th:src="${seminar.imagePath}" th:alt="${seminar.title}" class="img-fluid">
+                                    <a th:href="@{/seminars/{seminarId}/detail(seminarId=${seminar.id})}">
+                                        <img th:src="${#seminarImageHelper.getMainImageUrl(seminar.id, seminar.overview.mainImageExtension)}"
+                                             th:alt="${seminar.overview.title}"
+                                             style="max-width: 200px;">
                                     </a>
                                 </div>
                             </div>
-                            <div>
-                                <a th:href="@{/seminars/{seminarId}/reserve(seminarId=${seminar.id})}">
-                                    <h3 th:text="${seminar.title}">title</h3>
+                            <div class="uk-width-auto">
+                                <a th:href="@{/seminars/{seminarId}/detail(seminarId=${seminar.id})}">
+                                    <h3 th:text="${seminar.overview.title}">title</h3>
                                 </a>
                                 <p>
-                                    <div th:text="${seminar.summary}">summary</div>
-                                    <div class="uk-margin">[[${#temporals.format(seminar.startingAt, 'yyyy年MM月dd日')}]] 開催</div>
-                                    <div class="uk-margin" th:text="${seminar.remainingStatus()}">remaining status</div>
+                                    <div th:text="${seminar.overview.summary}">summary</div>
+                                    <div class="uk-margin">
+                                        <span th:text="${'残り' + seminar.goal.entryRemainingDays + '日'}">残り20日</span>
+                                    </div>
                                 </p>
                             </div>
                         </div>

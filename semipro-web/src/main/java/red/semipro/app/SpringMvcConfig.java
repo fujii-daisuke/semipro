@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenInterceptor;
 import red.semipro.share.converter.StringToBusinessTypeConverter;
@@ -57,5 +58,15 @@ public class SpringMvcConfig implements WebMvcConfigurer {
             .addPathPatterns("/**")
             .excludePathPatterns("/resources/**")
             .excludePathPatterns("/**/*.html");
+    }
+
+    /*
+     *  Dispatcher configuration for serving static resources
+     */
+    @Override
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        // Register resource handler for CSS and JS
+        registry.addResourceHandler("/resources/**")
+            .addResourceLocations("classpath:/static/");
     }
 }

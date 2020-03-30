@@ -31,4 +31,10 @@ public class Identification implements Serializable {
     @NotNull
     private String ip;
 
+    private IdentificationIndividual individual;
+
+    private IdentificationCompany company;
+
+    private IdentificationAddress address;
+
 }

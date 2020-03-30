@@ -5,56 +5,11 @@
 
 <mapper namespace="red.semipro.domain.repository.seminar.SeminarPlaceRepository">
 
-    <resultMap id="resultMap" type="red.semipro.domain.model.seminar.SeminarPlace">
-        <result property="seminarId" column="seminar_id"/>
-        <result property="placeArrangement" column="place_arrangement"/>
-        <result property="prefecture.id" column="prefecture_id"/>
-        <result property="city.id" column="city_id"/>
-        <result property="address" column="address"/>
-        <result property="place" column="place"/>
-    </resultMap>
-
-    <sql id="baseSelectPhrase">
-        SELECT
-            seminar_id
-            , place_arrangement
-            , prefecture_id
-            , city_id
-            , address
-            , place
-    </sql>
-
-    <select id="findOne" resultMap="resultMap">
-        <include refid="baseSelectPhrase"/>
-        FROM seminar_place
-        WHERE
-        seminar_id = #{seminarId}
-    </select>
-
-
-    <insert id="insert">
+    <insert id="initialize">
         INSERT INTO seminar_place (
-        seminar_id
-        , place_arrangement
-        <if test="prefecture != null">
-            , prefecture_id
-        </if>
-        <if test="city != null">
-            , city_id
-        </if>
-        , address
-        , place
+            seminar_id
         ) VALUES (
-        #{seminarId}
-        , #{placeArrangement.value}
-        <if test="prefecture != null">
-            , #{prefecture.id}
-        </if>
-        <if test="city != null">
-            , #{city.id}
-        </if>
-        , #{address}
-        , #{place}
+            #{seminarId}
         )
     </insert>
 

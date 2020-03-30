@@ -1,9 +1,13 @@
 package red.semipro.domain.service.seminar;
 
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.terasoluna.gfw.common.exception.BusinessException;
+import org.terasoluna.gfw.common.message.ResultMessages;
+import red.semipro.domain.common.constants.MessageId;
 import red.semipro.domain.model.seminar.SeminarContents;
 import red.semipro.domain.repository.seminar.SeminarContentsRepository;
 
@@ -16,25 +20,32 @@ import red.semipro.domain.repository.seminar.SeminarContentsRepository;
 public class SeminarContentsService {
 
     private final SeminarContentsRepository seminarContentsRepository;
+    private final EditableSeminarSharedService editableSeminarSharedService;
 
     /**
      * セミナーコンテンツを取得します
      *
-     * @param seminarId 　セミナーID
+     * @param seminarId     　セミナーID
+     * @param accountId     アカウントID
      * @return セミナーコンテンツ
      */
-    public SeminarContents findOne(@Nonnull final Long seminarId) {
-        return seminarContentsRepository.findOne(seminarId);
-    }
+    public SeminarContents findOneEditable(@Nonnull final Long seminarId,
+        @Nonnull final Long accountId) {
 
-    /**
-     * セミナーコンテンツを登録します
-     *
-     * @param seminarId 　セミナーID
-     * @return 登録件数
-     */
-    public int initialize(@Nonnull final Long seminarId) {
-        return seminarContentsRepository.initialize(seminarId);
+        if (Objects
+            .isNull(editableSeminarSharedService.findOne(seminarId, accountId))) {
+            ResultMessages message = ResultMessages.error().add(
+                MessageId.E_WEB_0404);
+            throw new BusinessException(message);
+        }
+
+        SeminarContents seminarContents = seminarContentsRepository.findOne(seminarId);
+        if (Objects.isNull(seminarContents)) {
+            ResultMessages message = ResultMessages.error().add(
+                MessageId.E_WEB_0500);
+            throw new BusinessException(message);
+        }
+        return seminarContents;
     }
 
     /**
@@ -43,7 +54,10 @@ public class SeminarContentsService {
      * @param seminarContents 　セミナーコンテンツ
      * @return 更新件数
      */
-    public int update(@Nonnull final SeminarContents seminarContents) {
+    public int save(@Nonnull final SeminarContents seminarContents,
+        @Nonnull final Long accountId) {
+
+        findOneEditable(seminarContents.getSeminarId(), accountId);
         return seminarContentsRepository.update(seminarContents);
     }
 }

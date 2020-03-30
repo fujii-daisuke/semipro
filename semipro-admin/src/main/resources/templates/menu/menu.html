@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/layout}"
+    th:lang="${#locale.language}">
+    <head>
+        <title>メニュー</title>
+    </head>
+    <body>
+        <main layout:fragment="content">
+            <div class="uk-container">
+                <div class="uk-text-left" uk-grid>
+                    <nav class="uk-width-1-5" th:insert="layout/_left_nav::nav">左メニュー</nav>
+                    <div class="uk-width-4-5">
+                        メニュー画面です。
+                    </div>
+                </div>
+            </div>
+        </main>
+        <th:block th:fragment="script"></th:block>
+    </body>
+</html>

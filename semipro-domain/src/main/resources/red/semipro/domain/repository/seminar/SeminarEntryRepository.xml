@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="red.semipro.domain.repository.seminar.SeminarEntryRepository">
+
+    <select id="countBySeminarIdAndTicketId" resultType="_int">
+        SELECT
+            COUNT(*)
+        FROM
+        seminar_entry
+        WHERE
+        seminar_id = #{seminarId}
+        AND seminar_ticket_id = #{seminarTicketId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO seminar_entry (
+            seminar_id
+            , account_id
+            , seminar_ticket_id
+            , stripe_customer_card_id
+        ) VALUES (
+            #{seminarId}
+            , #{accountId}
+            , #{seminarTicketId}
+            , #{stripeCustomerCardId}
+        )
+    </insert>
+
+    <select id="existsEntry" resultType="_boolean">
+        SELECT
+            COUNT(id) > 0
+        FROM seminar_entry
+        WHERE
+        seminar_id = #{seminarId}
+        AND account_id = #{accountId}
+    </select>
+
+</mapper>

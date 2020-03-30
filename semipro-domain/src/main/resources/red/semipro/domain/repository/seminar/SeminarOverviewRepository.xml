@@ -5,29 +5,24 @@
 
 <mapper namespace="red.semipro.domain.repository.seminar.SeminarOverviewRepository">
 
-    <resultMap id="resultMap" type="red.semipro.domain.model.seminar.SeminarOverview">
-        <result property="seminarId" column="seminar_id"/>
+    <resultMap id="seminarOverviewResultMap" type="red.semipro.domain.model.seminar.SeminarOverview">
+        <id property="seminarId" column="seminar_id"/>
         <result property="title" column="title"/>
         <result property="summary" column="summary"/>
         <result property="lecturerProfile" column="lecturer_profile"/>
         <result property="mainImageExtension" column="main_image_extension"/>
     </resultMap>
 
-    <sql id="baseSelectPhrase">
+    <select id="findOne" resultMap="seminarOverviewResultMap">
         SELECT
-            seminar_id
-            , title
-            , summary
-            , lecturer_profile
-            , main_image_extension
-    </sql>
-
-    <select id="findOne" resultMap="resultMap">
-        <include refid="baseSelectPhrase"/>
-        FROM
-        seminar_overview
+        seminar_overview.seminar_id
+        , seminar_overview.title
+        , seminar_overview.summary
+        , seminar_overview.lecturer_profile
+        , seminar_overview.main_image_extension
+        FROM seminar_overview
         WHERE
-        seminar_id = #{seminarId}
+        seminar_overview.seminar_id = #{seminarId}
     </select>
 
     <insert id="initialize">

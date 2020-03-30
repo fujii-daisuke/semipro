@@ -1,14 +1,25 @@
 package red.semipro.domain.service.seminar;
 
+import java.util.Collections;
+import java.util.List;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import red.semipro.domain.enums.OpeningStatus;
-import red.semipro.domain.model.Account;
-import red.semipro.domain.model.Seminar;
+import red.semipro.domain.model.account.Account;
+import red.semipro.domain.model.seminar.Seminar;
+import red.semipro.domain.model.seminar.SeminarSearchCriteria;
+import red.semipro.domain.repository.identification.IdentificationRepository;
+import red.semipro.domain.repository.seminar.SeminarContentsRepository;
+import red.semipro.domain.repository.seminar.SeminarEntrySummaryRepository;
+import red.semipro.domain.repository.seminar.SeminarGoalRepository;
+import red.semipro.domain.repository.seminar.SeminarOptionRepository;
+import red.semipro.domain.repository.seminar.SeminarOverviewRepository;
+import red.semipro.domain.repository.seminar.SeminarPlaceRepository;
 import red.semipro.domain.repository.seminar.SeminarRepository;
 
 /**
@@ -20,63 +31,53 @@ import red.semipro.domain.repository.seminar.SeminarRepository;
 public class SeminarService {
 
     private final SeminarRepository seminarRepository;
+    private final SeminarGoalRepository seminarGoalRepository;
+    private final SeminarPlaceRepository seminarPlaceRepository;
+    private final SeminarOverviewRepository seminarOverviewRepository;
+    private final SeminarContentsRepository seminarContentsRepository;
+    private final SeminarOptionRepository seminarOptionRepository;
+    private final IdentificationRepository identificationRepository;
+    private final SeminarEntrySummaryRepository seminarEntrySummaryRepository;
 
     /**
-     * セミナー目標を取得します
+     * セミナー初期状態を登録します
      *
-     * @param seminarId セミナーID
-     * @return セミナー目標
+     * @param accountId アカウントID
+     * @return seminar セミナー
      */
-    public Seminar findOne(@Nonnull final Long seminarId) {
-        return seminarRepository.findOne(seminarId);
-    }
-
-    /**
-     * アカウントIDからセミナー目標を取得します
-     *
-     * @param seminarId     セミナーID
-     * @param accountId     アカウントID
-     * @param openingStatus 公開ステータス
-     * @return セミナー目標
-     */
-    public Seminar findOneBy(@Nonnull final Long seminarId,
-        @Nonnull final Long accountId,
-        @Nullable final OpeningStatus openingStatus) {
-        return seminarRepository.findOneBy(seminarId, accountId, openingStatus);
-    }
-
-    /**
-     * セミナー目標初期状態を作成します
-     *
-     * @param account アカウント
-     * @return セミナー目標
-     */
-    public Seminar initialize(@Nonnull final Account account) {
+    public Seminar initialize(@Nonnull final Long accountId) {
         Seminar seminar = Seminar.builder()
-            .account(account)
             .openingStatus(OpeningStatus.DRAFT)
+            .account(Account.builder().id(accountId).build())
             .build();
-        seminarRepository.initialize(seminar);
+        seminarRepository.insert(seminar);
+        seminarGoalRepository.initialize(seminar.getId());
+        seminarPlaceRepository.initialize(seminar.getId());
+        seminarOverviewRepository.initialize(seminar.getId());
+        seminarContentsRepository.initialize(seminar.getId());
+        seminarOptionRepository.initialize(seminar.getId());
+        identificationRepository.initialize(seminar.getId());
+        seminarEntrySummaryRepository.initialize(seminar.getId());
         return seminar;
     }
 
     /**
-     * セミナー目標を更新します
+     * セミナー一覧を取得します
      *
-     * @param seminar セミナー目標
+     * @param criteria 検索条件
+     * @param pageable ページネーション
+     * @return セミナー一覧
      */
-    public void update(@Nonnull final Seminar seminar) {
-        seminarRepository.update(seminar);
+    public Page<Seminar> search(SeminarSearchCriteria criteria, Pageable pageable) {
+
+        long total = seminarRepository.countByCriteria(criteria);
+        List<Seminar> content;
+        if (0 < total) {
+            content = seminarRepository.findPageByCriteria(criteria, pageable);
+        } else {
+            content = Collections.emptyList();
+        }
+        return new PageImpl<Seminar>(content, pageable, total);
     }
 
-    /**
-     * 公開ステータスを更新します
-     *
-     * @param seminarId セミナーID
-     * @param openingStatus 公開ステータス
-     */
-    public void updateOpeningStatus(@Nonnull final Long seminarId,
-        @NotNull final OpeningStatus openingStatus) {
-        seminarRepository.updateOpeningStatus(seminarId, openingStatus);
-    }
 }

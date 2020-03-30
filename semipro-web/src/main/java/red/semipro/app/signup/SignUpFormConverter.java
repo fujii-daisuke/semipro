@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import red.semipro.domain.model.Account;
+import red.semipro.domain.model.account.Account;
 
 /**
  * 会員登録フォーム - converter

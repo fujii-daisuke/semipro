@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+    <header layout:fragment="header">
+        <div uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; bottom: #transparent-sticky-navbar">
+            <nav class="uk-navbar-container uk-margin" uk-navbar>
+                <div class="uk-navbar-left">
+                    <a class="uk-navbar-item uk-logo" href="/">セミプロ</a>
+                    <div class="uk-navbar-item">
+                        <div>管理サイト</div>
+                    </div>
+                </div>
+            <div class="uk-navbar-right">
+                <ul class="uk-navbar-nav">
+                    <li sec:authorize="isAuthenticated()">
+                        <a href="#" sec:authentication="name" uk-icon="triangle-down">>user name</a>
+                        <div class="uk-navbar-dropdown">
+                            <ul class="uk-nav uk-navbar-dropdown-nav">
+                                <li><a th:href="@{/logout}">ログアウト</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            </nav>
+        </div>
+    </header>
+</body>
+</html>

@@ -1,63 +1,94 @@
 package red.semipro.domain.repository.seminar;
 
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.validation.constraints.NotNull;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import red.semipro.domain.enums.OpeningStatus;
-import red.semipro.domain.model.Seminar;
+import red.semipro.domain.model.seminar.Seminar;
+import red.semipro.domain.model.seminar.SeminarSearchCriteria;
 
 /**
- * セミナー目標 - repository
+ * セミナー - repository
  */
 @Repository
 @Mapper
 public interface SeminarRepository {
 
+    Seminar findByIdAndOpeningStatusAndAccountId(
+        @Nonnull final Long id,
+        @Nonnull final OpeningStatus openingStatus,
+        @Nonnull final Long accountId);
+
+    Seminar findOneWithDetails(@Nonnull @Param("id") final Long id);
+
+    Seminar findOneWithDetailsByIdAndAccountId(
+        @Nonnull @Param("id") final Long id,
+        @Nullable @Param("accountId") Long accountId);
+
+    Seminar findOneWithDetailsByIdAndOpeningStatusAndAccountId(
+        @Nonnull @Param("id") final Long id,
+        @Nullable @Param("openingStatus") OpeningStatus openingStatus,
+        @Nullable @Param("accountId") Long accountId);
+
+    Seminar findOneWithDetailsByIdAndOpeningStatusList(
+        @Nonnull @Param("id") final Long id,
+        @Nullable @Param("openingStatusList") List<OpeningStatus> openingStatusList);
+
+    Seminar findOneWithDetailsByIdAndOpeningStatusAndSeminarTicketId(
+        @Nonnull @Param("id") final Long id,
+        @Nonnull @Param("openingStatus") OpeningStatus openingStatus,
+        @Nonnull @Param("seminarTicketId") Long seminarTicketId);
+
     /**
-     * セミナー目標を取得します
+     * セミナー詳細を取得します
      *
      * @param id セミナーID
-     * @return セミナー目標
+     * @return セミナー詳細
      */
-    Seminar findOne(@Nonnull final Long id);
+    Seminar findOneWithDetailsForUpdate(
+        @Nonnull @Param("id") final Long id,
+        @Nonnull @Param("openingStatus") final OpeningStatus openingStatus);
 
     /**
-     * セミナー目標を取得します
-     *
-     * @param id            　セミナーID
-     * @param accountId     　アカウントID
-     * @param openingStatus 公開ステータス
-     * @return セミナー目標
-     */
-    Seminar findOneBy(@Nonnull @Param("id") final Long id,
-        @Nonnull @Param("accountId") final Long accountId,
-        @Nullable @Param("openingStatus") final OpeningStatus openingStatus);
-
-    /**
-     * セミナー目標初期状態を登録します
-     *
-     * @param seminar セミナー目標
-     * @return 登録件数
-     */
-    int initialize(@Nonnull final Seminar seminar);
-
-    /**
-     * セミナー目標を更新します
+     * セミナーを登録します
      *
      * @param seminar セミナー
-     * @return 更新件数
+     * @return セミナー
      */
-    int update(@Nonnull final Seminar seminar);
+    int insert(@Nonnull Seminar seminar);
 
     /**
-     * 公開ステータスを更新する
+     * 公開ステータスを更新します
      *
-     * @param seminarId     セミナーID
+     * @param id            セミナーID
      * @param openingStatus 公開ステータス
+     * @return 更新件数
      */
-    void updateOpeningStatus(@Nonnull @Param("seminarId") final Long seminarId,
-        @NotNull @Param("openingStatus") final OpeningStatus openingStatus);
+    int updateOpeningStatus(
+        @Nonnull @Param("id") final Long id,
+        @Nonnull @Param("openingStatus") final OpeningStatus openingStatus);
+
+    /**
+     * セミナー検索結果件数を取得
+     *
+     * @param criteria 検索条件
+     * @return 検索結果件数
+     */
+    long countByCriteria(@Nonnull final @Param("criteria") SeminarSearchCriteria criteria);
+
+    /**
+     * セミナーサマリー一覧を取得する
+     *
+     * @param criteria 検索条件
+     * @param pageable ページネーション
+     * @return セミナーサマリー一覧
+     */
+    List<Seminar> findPageByCriteria(
+        @Nonnull @Param("criteria") final SeminarSearchCriteria criteria,
+        @Nonnull @Param("pageable") final Pageable pageable);
+
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+    namespace="red.semipro.domain.repository.admin.AdminRepository">
+
+    <resultMap id="account" type="red.semipro.domain.model.admin.Admin">
+        <result property="id" column="id"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="username" column="username"/>
+    </resultMap>
+
+    <select id="findByUsername" resultMap="account">
+        SELECT
+        id
+        , email
+        , password
+        , username
+        FROM account
+        WHERE
+        username = #{username}
+    </select>
+
+
+</mapper>

@@ -52,7 +52,7 @@ public class StripeTest {
     public void createCustomerCard() throws StripeException {
         Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
 
-        Customer customer = Customer.retrieve("cus_GSWxccCcQQKyp5");
+        Customer customer = Customer.retrieve("cus_GsmIMNtJEIByOf");
         CustomerUpdateParams params = CustomerUpdateParams.builder()
             .setSource("tok_1FviVSEQOFvWv0QlStjagAPx")
             .build();

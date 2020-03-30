@@ -6,13 +6,12 @@
 <mapper
     namespace="red.semipro.domain.repository.account.AccountRepository">
 
-    <resultMap id="account" type="red.semipro.domain.model.Account">
+    <resultMap id="account" type="red.semipro.domain.model.account.Account">
         <result property="id" column="id"/>
         <result property="email" column="email"/>
         <result property="password" column="password"/>
         <result property="username" column="username"/>
         <result property="registerStatus" column="register_status"/>
-        <result property="stripeAccountId" column="stripe_account_id"/>
     </resultMap>
 
     <sql id="baseSelectPhrase">
@@ -22,7 +21,6 @@
             , password
             , username
             , register_status
-            , stripe_account_id
     </sql>
 
     <sql id="baseFromPhrase">
@@ -73,14 +71,6 @@
     <update id="updateRegisterStatus">
         UPDATE account SET
             register_status = #{registerStatus.value}
-            , updated_at = current_timestamp
-        WHERE
-            id = #{accountId}
-    </update>
-
-    <update id="updateStripeAccountId">
-        UPDATE account SET
-            stripe_account_id = #{stripeAccountId}
             , updated_at = current_timestamp
         WHERE
             id = #{accountId}

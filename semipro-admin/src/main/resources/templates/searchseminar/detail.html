@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+    <title>セミナー詳細</title>
+</head>
+<body>
+<main class="uk-margin" layout:fragment="content">
+    <div class="uk-container">
+        <div class="uk-text-left" uk-grid>
+            <nav class="uk-width-1-5" th:insert="layout/_left_nav::nav">左メニュー</nav>
+            <div class="uk-width-4-5">
+                <div class="uk-flex uk-flex-left">
+                    <div class="uk-card uk-card-default uk-width-xxlarge">
+                        <div class="uk-card-header">
+                            <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                <div class="uk-width-expand">
+                                    <span class="uk-card-title uk-margin-remove-bottom">セミナー詳細</span>
+                                    <span class="uk-align-right">
+                                        <button type="button"
+                                                id="stripe-register-seminar"
+                                                th:if="${seminar.openingStatus.value == 'applying'}"
+                                                class="uk-button uk-button-primary">Stripe会員登録を行う</button>
+                                        <button type="button"
+                                                id="approve-seminar"
+                                                th:if="${seminar.openingStatus.value == 'stripe_registered'}"
+                                                class="uk-button uk-button-primary">承認する</button>
+                                        <span class="uk-label"
+                                              th:if="${seminar.openingStatus.value != 'applying' and seminar.openingStatus.value != 'stripe_registered'}"
+                                              th:text="${seminar.openingStatus.value}">draft</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-card-body">
+                            <a class="uk-button uk-button-secondary"
+                               th:href="${previewUrl}" target="_blank">プレビュー</a>
+                            <p th:text="${seminar.overview.title}">title</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block th:fragment="script">
+    <script type="text/javascript" th:inline="javascript">
+      const seminarId = /*[[${seminar.id}]]*/ '';
+
+      $("#stripe-register-seminar").on("click", function () {
+        const result = window.confirm("Stripe会員登録を行います。宜しいですか？")
+        if (result) {
+          location.href = '/seminars/' + seminarId + '/register-stripe-customer';
+        }
+      });
+
+      $("#approve-seminar").on("click", function () {
+        const result = window.confirm("承認します。宜しいですか？")
+        if (result) {
+          location.href = '/seminars/' + seminarId + '/approve';
+        }
+      });
+
+    </script>
+</th:block>
+</body>
+</html>

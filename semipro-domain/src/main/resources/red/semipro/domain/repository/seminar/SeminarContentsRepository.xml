@@ -5,19 +5,18 @@
 
 <mapper namespace="red.semipro.domain.repository.seminar.SeminarContentsRepository">
 
-    <resultMap id="resultMap" type="red.semipro.domain.model.seminar.SeminarContents">
-        <result property="seminarId" column="seminar_id"/>
+    <resultMap id="seminarContentsResultMap" type="red.semipro.domain.model.seminar.SeminarContents">
+        <id property="seminarId" column="seminar_id"/>
         <result property="contents" column="contents"/>
     </resultMap>
 
-    <select id="findOne" resultMap="resultMap">
+    <select id="findOne" resultMap="seminarContentsResultMap">
         SELECT
-            seminar_id
-            , contents
-        FROM
-        seminar_contents
+        seminar_contents.seminar_id
+        , seminar_contents.contents
+        FROM seminar_contents
         WHERE
-        seminar_id = #{seminarId}
+        seminar_contents.seminar_id = #{seminarId}
     </select>
 
     <insert id="initialize">
