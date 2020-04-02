@@ -13,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import red.semipro.admin.share.userdetails.AdminUserDetailsService;
+import red.semipro.domain.service.userdetails.AdminUserDetailsService;
 
 /**
  * Spring Security - configuration

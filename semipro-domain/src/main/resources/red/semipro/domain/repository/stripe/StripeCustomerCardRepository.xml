@@ -11,6 +11,18 @@
         <result property="cardId" column="card_id"/>
     </resultMap>
 
+    <select id="findByAccountIdAndCardId" resultMap="stripeCustomerCard">
+        SELECT
+            id
+            , stripe_customer_id
+            , card_id
+        FROM account_stripe_customer
+        INNER JOIN stripe_customer_card ON account_stripe_customer.stripe_customer_id = stripe_customer_card.stripe_customer_id
+        WHERE
+        account_stripe_customer.account_id = #{accountId}
+        AND stripe_customer_card.card_id = #{cardId}
+    </select>
+
     <select id="findAll" resultMap="stripeCustomerCard">
         SELECT
             id
@@ -30,15 +42,5 @@
             , #{cardId}
         )
     </insert>
-
-    <select id="hasCard" resultType="_boolean">
-        SELECT
-            COUNT(stripe_customer_card.card_id) > 0
-        FROM account_stripe_customer
-        INNER JOIN stripe_customer_card ON account_stripe_customer.stripe_customer_id = stripe_customer_card.stripe_customer_id
-        WHERE
-        account_stripe_customer.account_id = #{accountId}
-        AND stripe_customer_card.card_id = #{cardId}
-    </select>
 
 </mapper>

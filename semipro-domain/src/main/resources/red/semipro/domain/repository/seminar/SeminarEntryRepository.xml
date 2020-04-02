@@ -5,6 +5,40 @@
 
 <mapper namespace="red.semipro.domain.repository.seminar.SeminarEntryRepository">
 
+    <resultMap id="seminarEntryResultMap" type="red.semipro.domain.model.seminar.SeminarEntry">
+        <result property="id" column="id"/>
+        <result property="seminar_id" column="seminar_id"/>
+        <result property="accountId" column="account_id"/>
+        <result property="stripeCustomerCardId" column="stripe_customer_card_id"/>
+        <result property="stripeChargeId" column="stripe_charge_id"/>
+        <association property="ticket" javaType="red.semipro.domain.model.seminar.SeminarTicket">
+            <id property="id" column="ticket_id"/>
+            <result property="seminar_id" column="ticket_seminar_id"/>
+            <result property="name" column="ticket_name"/>
+            <result property="price" column="ticket_price"/>
+            <result property="capacity" column="ticket_capacity"/>
+        </association>
+    </resultMap>
+
+    <select id="findAllWithTicketsBySeminarId" resultMap="seminarEntryResultMap">
+        SELECT
+            seminar_entry.id
+            , seminar_id
+            , account_id
+            , seminar_ticket.id ticket_id
+            , seminar_ticket.seminar_id ticket_seminar_id
+            , seminar_ticket.name ticket_name
+            , seminar_ticket.price ticket_price
+            , seminar_ticket.capacity ticket_capacity
+            , stripe_customer_card_id
+            , stripe_charge_id
+        FROM
+        seminar_entry
+        LEFT OUTER JOIN seminar_ticket ON seminar_entry.seminar_ticket_id = seminar_ticket.id
+        WHERE
+        seminar_id = #{seminarId}
+    </select>
+
     <select id="countBySeminarIdAndTicketId" resultType="_int">
         SELECT
             COUNT(*)
@@ -15,17 +49,48 @@
         AND seminar_ticket_id = #{seminarTicketId}
     </select>
 
+    <select id="countBySeminarId" resultType="_int">
+        SELECT
+            COUNT(*)
+        FROM
+        seminar_entry
+        WHERE
+        seminar_id = #{seminarId}
+    </select>
+
+    <resultMap id="seminarEntryCountResultMap" type="red.semipro.domain.model.seminar.SeminarEntryCount">
+        <id property="seminarId" column="seminar_id"/>
+        <result property="count" column="count"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <select id="countBySeminarIdGroupBySeminarTicketId" resultMap="seminarEntryCountResultMap">
+        SELECT
+            seminar_entry.seminar_id
+            , COUNT(seminar_ticket.id) count
+            , seminar_ticket.name
+        FROM
+        seminar_entry
+        INNER JOIN seminar_ticket ON seminar_entry.seminar_ticket_id = seminar_ticket.id
+        WHERE
+        seminar_entry.seminar_id = #{seminarId}
+        GROUP BY
+        seminar_ticket.id, seminar_ticket.name
+    </select>
+
     <insert id="insert">
         INSERT INTO seminar_entry (
             seminar_id
             , account_id
             , seminar_ticket_id
             , stripe_customer_card_id
+            , stripe_charge_id
         ) VALUES (
             #{seminarId}
-            , #{accountId}
-            , #{seminarTicketId}
+            , #{account.id}
+            , #{ticket.id}
             , #{stripeCustomerCardId}
+            , #{stripeChargeId}
         )
     </insert>
 

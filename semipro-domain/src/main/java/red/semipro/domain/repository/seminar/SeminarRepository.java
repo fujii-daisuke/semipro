@@ -1,5 +1,6 @@
 package red.semipro.domain.repository.seminar;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -91,4 +92,7 @@ public interface SeminarRepository {
         @Nonnull @Param("criteria") final SeminarSearchCriteria criteria,
         @Nonnull @Param("pageable") final Pageable pageable);
 
+    List<Seminar> findAllEndOfRecruitment(
+        @Nonnull @Param("openingStatus") final OpeningStatus openingStatus,
+        @Nonnull @Param("executionDateTime") final LocalDateTime executionDateTime);
 }

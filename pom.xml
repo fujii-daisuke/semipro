@@ -24,6 +24,7 @@
         <module>semipro-domain</module>
         <module>semipro-common</module>
         <module>semipro-admin</module>
+        <module>semipro-batch</module>
     </modules>
 
     <properties>
@@ -60,11 +61,6 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.modelmapper</groupId>
-            <artifactId>modelmapper</artifactId>
-            <version>0.7.5</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305 -->
         <dependency>

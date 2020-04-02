@@ -15,11 +15,12 @@ import red.semipro.domain.model.stripe.StripeCustomerCard;
 @Mapper
 public interface StripeCustomerCardRepository {
 
-    List<StripeCustomerCard> findAll(@NotNull final String stripeCustomerId);
+    StripeCustomerCard findByAccountIdAndCardId(
+        @Nonnull @Param("accountId") final Long accountId,
+        @Nonnull @Param("cardId") final String cardId);
+
+    List<StripeCustomerCard> findAll(@Nonnull final String stripeCustomerId);
 
     int insert(@NotNull final StripeCustomerCard stripeCustomerCard);
-
-    boolean hasCard(@Nonnull @Param("accountId") final Long accountId,
-        @Nonnull @Param("cardId") final String cardId);
 
 }

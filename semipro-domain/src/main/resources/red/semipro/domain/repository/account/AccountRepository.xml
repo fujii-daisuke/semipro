@@ -61,7 +61,7 @@
             , username
             , register_status
         ) VALUES (
-            #{email},
+            #{email}
             , #{password}
             , #{username}
             , #{registerStatus.value}

@@ -1,15 +1,25 @@
 package red.semipro.domain.service.account;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.terasoluna.gfw.common.exception.BusinessException;
+import org.terasoluna.gfw.common.message.ResultMessages;
+import red.semipro.common.Crypto;
+import red.semipro.domain.common.constants.MessageId;
 import red.semipro.domain.enums.RegisterStatus;
 import red.semipro.domain.model.account.Account;
 import red.semipro.domain.repository.account.AccountRepository;
+import red.semipro.domain.service.email.EmailDocumentType;
+import red.semipro.domain.service.email.EmailInput;
+import red.semipro.domain.service.email.EmailSharedService;
 
 /**
  * アカウント - service
@@ -20,18 +30,14 @@ import red.semipro.domain.repository.account.AccountRepository;
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final EmailSharedService emailSharedService;
 
-    /**
-     * メールアドレスからアカウントを取得します
-     *
-     * @param email          メールアドレス
-     * @param registerStatus 登録ステータス
-     * @return アカウント
-     */
-    public Account findByEmail(@Nonnull final String email,
-        @Nonnull final RegisterStatus registerStatus) {
-        return accountRepository.findByEmail(email, registerStatus);
-    }
+    @Value("${custom.application.email.fromEmail}")
+    private String fromEmail;
+    @Value("${custom.application.schema}")
+    private String schema;
+    @Value("${custom.application.domain}")
+    private String domain;
 
     /**
      * メールアドレスが登録済みか判定します
@@ -63,29 +69,50 @@ public class AccountService {
      * @param account アカウント
      * @return アカウント
      */
-    public Account register(@Nonnull final Account account) {
+    public Account provisionalRegister(@Nonnull final Account account) {
+
         accountRepository.insert(account);
+
+        Map<String, Object> variableMap = new HashMap<String, Object>();
+        variableMap.put("schema", schema);
+        variableMap.put("domain", domain);
+        variableMap.put("account", account);
+        variableMap.put("activationKey", (new Crypto()).encrypto(account.getId().toString()));
+
+        emailSharedService.sendMail(EmailInput.builder()
+            .emailDocumentType(EmailDocumentType.ACTIVATION)
+            .variableMap(variableMap)
+            .recipientEmail(account.getEmail())
+            .fromEmail(fromEmail)
+            .locale(LocaleContextHolder.getLocale())
+            .build());
+
         return account;
     }
 
-    /**
-     * アカウントIDからアカウントを取得します
-     *
-     * @param accountId アカウントID
-     * @return アカウント
-     */
-    public Account findOne(@Nonnull final Long accountId) {
-        return accountRepository.findOne(accountId);
-    }
+    public Account activate(@Nonnull final String activationKey) {
 
-    /**
-     * 登録ステータスを更新します
-     *
-     * @param accountId      アカウントID
-     * @param registerStatus 登録ステータス
-     */
-    public void updateRegisterStatus(@Nonnull final Long accountId,
-        @NotNull final RegisterStatus registerStatus) {
-        accountRepository.updateRegisterStatus(accountId, registerStatus);
+        Crypto crypto = new Crypto();
+        String accountId = crypto.decrypto(activationKey);
+        Account account = accountRepository.findOne(Long.valueOf(accountId));
+
+        if (Objects.isNull(account)
+            || !RegisterStatus.PROVISIONAL.equals(account.getRegisterStatus())) {
+
+            ResultMessages message = ResultMessages.error().add(MessageId.E_WEB_0500);
+            throw new BusinessException(message);
+        }
+
+        accountRepository.updateRegisterStatus(account.getId(), RegisterStatus.REGULAR);
+
+        emailSharedService.sendMail(EmailInput.builder()
+            .emailDocumentType(EmailDocumentType.ACTIVATED)
+            .variableMap(Map.of("account", account))
+            .recipientEmail(account.getEmail())
+            .fromEmail(fromEmail)
+            .locale(LocaleContextHolder.getLocale())
+            .build());
+
+        return account;
     }
 }
