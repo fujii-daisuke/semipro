@@ -1,5 +1,6 @@
 package red.semipro.app.entryseminar;
 
+import com.stripe.exception.StripeException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,10 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import red.semipro.domain.enums.OpeningStatus;
+import red.semipro.domain.helper.stripe.customercard.CustomerCard;
+import red.semipro.domain.helper.stripe.customercard.StripeCardHelper;
 import red.semipro.domain.service.seminar.SeminarSharedService;
-import red.semipro.share.stripe.CustomerCard;
-import red.semipro.share.stripe.StripeCardHelper;
-import red.semipro.share.userdetails.AccountUserDetails;
+import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 /**
  * セミナー予約 - controller
@@ -45,7 +46,7 @@ public class EntrySeminarController {
         @AuthenticationPrincipal final AccountUserDetails accountUserDetails,
         @PathVariable("seminarId") final Long seminarId,
         @PathVariable final Long ticketId,
-        ModelAndView model) {
+        ModelAndView model) throws StripeException {
 
         List<CustomerCard> customerCards = entrySeminarHelper
             .findStripeCustomerCardList(accountUserDetails.getAccount().getId());
@@ -71,7 +72,7 @@ public class EntrySeminarController {
         @PathVariable final Long ticketId,
         @ModelAttribute("entrySeminarForm") @Validated EntrySeminarForm form,
         BindingResult result,
-        ModelAndView model) {
+        ModelAndView model) throws StripeException {
 
         List<CustomerCard> customerCards = entrySeminarHelper
             .findStripeCustomerCardList(accountUserDetails.getAccount().getId());
@@ -103,7 +104,7 @@ public class EntrySeminarController {
         @PathVariable final Long ticketId,
         @ModelAttribute("entrySeminarForm") @Validated EntrySeminarForm form,
         BindingResult result,
-        ModelAndView model) {
+        ModelAndView model) throws StripeException {
 
         model.addObject("seminar",
             seminarSharedService

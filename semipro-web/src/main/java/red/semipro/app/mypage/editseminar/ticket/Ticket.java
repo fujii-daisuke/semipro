@@ -23,7 +23,7 @@ public class Ticket implements Serializable {
 
     @NotNull
     @Min(value = 1)
-    private Integer price;
+    private Long price;
 
     @NotNull
     @Min(value = 1)

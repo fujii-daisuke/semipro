@@ -43,4 +43,8 @@ public class Account implements Serializable {
      */
     private RegisterStatus registerStatus;
 
+    private AccountStripeConnect stripeConnect;
+
+    private AccountStripeCustomer stripeCustomer;
+
 }

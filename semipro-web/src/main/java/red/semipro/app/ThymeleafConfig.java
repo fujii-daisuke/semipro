@@ -27,8 +27,8 @@ public class ThymeleafConfig implements ApplicationContextAware, WebMvcConfigure
         this.applicationContext = applicationContext;
     }
 
-    @Bean
-    public SpringResourceTemplateResolver templateResolver(){
+//    @Bean
+    private SpringResourceTemplateResolver templateResolver(){
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setApplicationContext(this.applicationContext);
         templateResolver.setPrefix("classpath:/templates/");
@@ -40,8 +40,8 @@ public class ThymeleafConfig implements ApplicationContextAware, WebMvcConfigure
         return templateResolver;
     }
 
-    @Bean
-    public SpringTemplateEngine templateEngine(){
+//    @Bean
+    private SpringTemplateEngine templateEngine(){
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setEnableSpringELCompiler(true); // Compiled SpringEL should speed up executions
         templateEngine.setTemplateResolver(templateResolver());

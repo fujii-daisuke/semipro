@@ -1,0 +1,10 @@
+[# th:text="${account.username}" /]様
+
+この度は、セミプロ会員へご登録ありがとうございます。
+以下、URLにアクセスし会員登録を完了させて下さい。
+[# th:text="${schema}" /]://[# th:text="${domain}" /]/accounts/[# th:text="${activationKey}" /]/activation
+
+----------------------------------------------
+『 誰でもノーリスクでセミナーが開催できるサービス 』
+セミプロ
+http://www.semipro.red

@@ -1,10 +1,12 @@
 package red.semipro.domain.repository.seminar;
 
+import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import red.semipro.domain.model.seminar.SeminarEntry;
+import red.semipro.domain.model.seminar.SeminarEntryCount;
 
 /**
  * セミナーエントリー - repository
@@ -13,6 +15,9 @@ import red.semipro.domain.model.seminar.SeminarEntry;
 @Mapper
 public interface SeminarEntryRepository {
 
+    List<SeminarEntry> findAllWithTicketsBySeminarId(
+        @Nonnull @Param("seminarId") final Long seminarId);
+
     /**
      * セミナーエントリーを取得します
      *
@@ -20,8 +25,13 @@ public interface SeminarEntryRepository {
      * @param seminarTicketId チケットID
      * @return 件数
      */
-    Integer countBySeminarIdAndTicketId(@Nonnull @Param("seminarId") final Long seminarId,
+    int countBySeminarIdAndTicketId(@Nonnull @Param("seminarId") final Long seminarId,
         @Nonnull @Param("seminarTicketId") final Long seminarTicketId);
+
+    int countBySeminarId(@Nonnull @Param("seminarId") final Long seminarId);
+
+    List<SeminarEntryCount> countBySeminarIdGroupBySeminarTicketId(
+        @Nonnull @Param("seminarId") final Long seminarId);
 
     /**
      * セミナー概要を登録します

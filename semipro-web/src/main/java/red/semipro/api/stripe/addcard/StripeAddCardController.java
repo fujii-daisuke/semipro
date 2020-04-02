@@ -1,6 +1,5 @@
 package red.semipro.api.stripe.addcard;
 
-import com.stripe.exception.StripeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import red.semipro.share.userdetails.AccountUserDetails;
+import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 /**
  * Stripe カード情報登録 - controller
@@ -34,7 +33,7 @@ public class StripeAddCardController {
         try {
             return ResponseEntity
                 .ok(stripeAddCardHelper.addCard(accountUserDetails.getAccount().getId(), token));
-        } catch (StripeException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body("エラーが発生しました、お手数ですが、時間を置いて再度アクセスして下さい");
         }

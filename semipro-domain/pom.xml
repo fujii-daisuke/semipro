@@ -10,14 +10,12 @@
     <name>semipro-domain</name>
     <description>Domain Module</description>
 
-    <!-- point.1 -->
     <parent>
         <groupId>red.semipro</groupId>
         <artifactId>semipro</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <!-- point.2 -->
     <dependencies>
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -46,6 +44,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.stripe</groupId>
+            <artifactId>stripe-java</artifactId>
+            <version>16.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring5</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

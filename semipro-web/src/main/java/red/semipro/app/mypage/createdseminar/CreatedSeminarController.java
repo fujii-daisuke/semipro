@@ -16,7 +16,7 @@ import red.semipro.common.PageWrapper;
 import red.semipro.domain.model.seminar.Seminar;
 import red.semipro.domain.model.seminar.SeminarSearchCriteria;
 import red.semipro.domain.service.seminar.SeminarService;
-import red.semipro.share.userdetails.AccountUserDetails;
+import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 /**
  * 作成済みセミナー - controller
