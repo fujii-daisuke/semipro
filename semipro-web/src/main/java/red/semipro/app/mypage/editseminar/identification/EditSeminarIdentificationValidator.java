@@ -7,8 +7,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.SmartValidator;
 import org.springframework.validation.Validator;
 import red.semipro.domain.enums.BusinessType;
-import red.semipro.domain.service.account.AccountService;
-import red.semipro.share.stripe.StripeConnectHelper;
 
 /**
  * 本人確認 - validator
@@ -18,8 +16,6 @@ import red.semipro.share.stripe.StripeConnectHelper;
 public class EditSeminarIdentificationValidator implements Validator {
 
     private final SmartValidator smartValidator;
-    private final AccountService accountService;
-    private final StripeConnectHelper stripeConnectHelper;
 
     @Override
     public boolean supports(Class<?> clazz) {

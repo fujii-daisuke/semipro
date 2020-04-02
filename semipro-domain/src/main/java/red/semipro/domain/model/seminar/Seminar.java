@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import red.semipro.domain.enums.OpeningStatus;
+import red.semipro.domain.enums.SuccessCondition;
 import red.semipro.domain.model.account.Account;
 
 /**
@@ -69,5 +70,18 @@ public class Seminar implements Serializable {
      * メイン画像Url
      */
     private String mainImageUrl;
+
+    public boolean isEstablish() {
+
+        if (SuccessCondition.ALL_IN.equals(goal.getSuccessCondition())) {
+            return true;
+        } else {
+            if (entrySummary.getEntryCount() >= goal.getMinimumNumber()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 
 }

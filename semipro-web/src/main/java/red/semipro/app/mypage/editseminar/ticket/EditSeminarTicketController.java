@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenCheck;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenType;
-import red.semipro.share.userdetails.AccountUserDetails;
+import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 /**
  * セミナーチケット - controller

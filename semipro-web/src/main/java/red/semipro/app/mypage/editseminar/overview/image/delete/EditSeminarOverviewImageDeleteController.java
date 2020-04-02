@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import red.semipro.share.userdetails.AccountUserDetails;
+import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 /**
  * メイン画像削除 - controller

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import red.semipro.domain.model.seminar.Seminar;
 import red.semipro.domain.service.seminar.SeminarService;
-import red.semipro.share.userdetails.AccountUserDetails;
+import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 @Controller
 @RequestMapping("seminars/create")
