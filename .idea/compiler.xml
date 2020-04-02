@@ -7,14 +7,16 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="semipro-admin" />
-        <module name="semipro-web" />
-        <module name="semipro-common" />
         <module name="semipro-domain" />
+        <module name="semipro-batch" />
+        <module name="semipro-common" />
+        <module name="semipro-web" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="semipro" target="12" />
       <module name="semipro-admin" target="12" />
+      <module name="semipro-batch" target="12" />
       <module name="semipro-common" target="12" />
       <module name="semipro-domain" target="12" />
       <module name="semipro-web" target="12" />
@@ -23,6 +25,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="semipro-admin" options="-parameters" />
+      <module name="semipro-batch" options="-parameters" />
       <module name="semipro-common" options="-parameters" />
       <module name="semipro-domain" options="-parameters" />
       <module name="semipro-web" options="-parameters" />

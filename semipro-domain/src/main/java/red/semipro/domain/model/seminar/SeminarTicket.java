@@ -33,7 +33,7 @@ public class SeminarTicket implements Serializable {
 
     /** チケット価格 */
     @NotNull
-    private Integer price;
+    private Long price;
 
     /** 定員 */
     @NotNull

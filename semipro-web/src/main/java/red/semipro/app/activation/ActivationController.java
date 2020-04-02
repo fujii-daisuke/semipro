@@ -1,6 +1,5 @@
 package red.semipro.app.activation;
 
-import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -8,39 +7,33 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import red.semipro.domain.service.account.AccountService;
 
 /**
  * アクティベーション - controller
  */
 @Controller
-@RequestMapping(value = "activation")
+@RequestMapping(value = "accounts")
 @RequiredArgsConstructor
 @Slf4j
 public class ActivationController {
 
-    private final ActivationHelper activationHelper;
+    private final AccountService accountService;
 
     /**
      * アクティベーションのリクエストを受け付けます
      *
      * @param activationKey アクティベーションキー
      * @param model         ModelAndView
-     * @param locale        Locale
      * @return ModelAndView
-     * @throws Exception アクティベーションキーの復号化失敗時に発生します
      */
-    @GetMapping(value = "{activationKey}/register")
+    @GetMapping(value = "{activationKey}/activation")
     public ModelAndView activation(@PathVariable("activationKey") String activationKey,
-        ModelAndView model, Locale locale) throws Exception {
+        ModelAndView model) {
 
-        try {
-            activationHelper.activate(activationKey, locale);
-        } catch (IllegalStateException e) {
-            log.warn(e.getMessage());
-            model.setViewName("redirect:/activation/failure");
-            return model;
-        }
-        model.setViewName("redirect:/activation/completed");
+        accountService.activate(activationKey);
+
+        model.setViewName("redirect:/accounts/activation/completed");
         return model;
     }
 
@@ -50,7 +43,7 @@ public class ActivationController {
      * @param model ModelAndView
      * @return ModelAndView
      */
-    @GetMapping(value = "failure")
+    @GetMapping(value = "activation/failure")
     public ModelAndView failure(ModelAndView model) {
         model.setViewName("activation/failure");
         return model;
@@ -62,7 +55,7 @@ public class ActivationController {
      * @param model ModelAndView
      * @return ModelAndView
      */
-    @GetMapping(value = "completed")
+    @GetMapping(value = "activation/completed")
     public ModelAndView completed(ModelAndView model) {
         model.setViewName("activation/completed");
         return model;

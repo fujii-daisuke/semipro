@@ -1,18 +1,21 @@
 package red.semipro.app.entryseminar;
 
+import com.google.common.collect.Lists;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Card;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import red.semipro.domain.model.account.AccountStripeCustomer;
-import red.semipro.domain.service.account.AccountStripeCustomerService;
+import red.semipro.domain.repository.account.AccountStripeCustomerRepository;
 import red.semipro.domain.service.entry.EntrySeminarInput;
 import red.semipro.domain.service.entry.EntrySeminarService;
-import red.semipro.share.stripe.CustomerCard;
-import red.semipro.share.stripe.CustomerCardConverter;
-import red.semipro.share.stripe.StripeCardHelper;
+import red.semipro.domain.helper.stripe.customercard.CustomerCard;
+import red.semipro.domain.helper.stripe.customercard.CustomerCardConverter;
+import red.semipro.domain.helper.stripe.customercard.StripeCardHelper;
 
 /**
  * セミナー予約 - helper
@@ -22,26 +25,35 @@ import red.semipro.share.stripe.StripeCardHelper;
 @Transactional
 public class EntrySeminarHelper {
 
-    private final AccountStripeCustomerService accountStripeCustomerService;
+    private final AccountStripeCustomerRepository accountStripeCustomerRepository;
     private final StripeCardHelper stripeCardHelper;
     private final CustomerCardConverter customerCardConverter;
     private final EntrySeminarService entrySeminarService;
 
-    public List<CustomerCard> findStripeCustomerCardList(@Nonnull final Long accountId) {
+    public List<CustomerCard> findStripeCustomerCardList(@Nonnull final Long accountId)
+        throws StripeException {
 
         AccountStripeCustomer accountStripeCustomer =
-            accountStripeCustomerService.findOne(accountId);
+            accountStripeCustomerRepository.findOne(accountId);
 
-        return Optional.ofNullable(accountStripeCustomer)
-            .map(a -> customerCardConverter.convert(stripeCardHelper.list(a.getStripeCustomerId())))
-            .orElse(List.of());
+        if (Objects.isNull(accountStripeCustomer)) {
+            return List.of();
+        }
+
+        List<Card> cardList = stripeCardHelper.list(accountStripeCustomer.getStripeCustomerId());
+        List<CustomerCard> customerCardList = Lists.newArrayList();
+        for (Card card: cardList) {
+            customerCardList.add(customerCardConverter.convert(card));
+        }
+
+        return customerCardList;
     }
 
     public void entry(
         @Nonnull final Long seminarId,
         @Nonnull final Long ticketId,
         @Nonnull final Long entryAccountId,
-        @Nonnull final String stripeCustomerCardId) {
+        @Nonnull final String stripeCustomerCardId) throws StripeException {
 
         EntrySeminarInput entrySeminarInput = EntrySeminarInput.builder()
             .seminarId(seminarId)

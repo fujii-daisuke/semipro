@@ -52,6 +52,16 @@
             <id property="id" column="account_id"/>
             <result property="email" column="email"/>
             <result property="username" column="username"/>
+            <association property="stripeConnect" javaType="red.semipro.domain.model.account.AccountStripeConnect">
+                <id property="id" column="account_stripe_connect_id"/>
+                <result property="accountId" column="account_stripe_connect_account_id"/>
+                <result property="stripeConnectAccountId" column="stripe_connect_account_id"/>
+            </association>
+            <association property="stripeCustomer" javaType="red.semipro.domain.model.account.AccountStripeCustomer">
+                <id property="id" column="account_stripe_customer_id"/>
+                <result property="accountId" column="account_stripe_customer_account_id"/>
+                <result property="stripeCustomerId" column="stripe_customer_id"/>
+            </association>
         </association>
         <association property="overview" javaType="red.semipro.domain.model.seminar.SeminarOverview">
             <id property="seminarId" column="overview_seminar_id"/>
@@ -127,6 +137,14 @@
         FOR UPDATE
     </select>
 
+    <select id="findAllEndOfRecruitment" resultMap="seminarResultMap">
+        <include refid="baseSelectPhrase"/>
+        <include refid="baseFromPhrase"/>
+        WHERE
+        seminar.opening_status = #{openingStatus.value}
+        AND #{executionDateTime} <![CDATA[ > ]]> seminar_goal.entry_ending_at
+    </select>
+
     <select id="countByCriteria" resultType="_long">
         SELECT COUNT(*)
         <include refid="baseFromPhrase"/>
@@ -169,6 +187,15 @@
         , account.id account_id
         , account.email
         , account.username
+
+        , account_stripe_connect.id account_stripe_connect_id
+        , account_stripe_connect.account_id account_stripe_connect_account_id
+        , account_stripe_connect.stripe_connect_account_id
+
+        , account_stripe_customer.id account_stripe_customer_id
+        , account_stripe_customer.account_id account_stripe_customer_account_id
+        , account_stripe_customer.stripe_customer_id
+
         , seminar_overview.seminar_id overview_seminar_id
         , seminar_overview.title
         , seminar_overview.summary
@@ -198,6 +225,8 @@
     <sql id="baseFromPhrase">
         FROM seminar
         INNER JOIN account ON seminar.account_id = account.id
+        LEFT OUTER JOIN account_stripe_connect ON account.id = account_stripe_connect.account_id
+        LEFT OUTER JOIN account_stripe_customer ON account.id = account_stripe_customer.account_id
         LEFT OUTER JOIN seminar_goal ON seminar.id = seminar_goal.seminar_id
         LEFT OUTER JOIN seminar_overview ON seminar.id = seminar_overview.seminar_id
         LEFT OUTER JOIN seminar_contents ON seminar.id = seminar_contents.seminar_id

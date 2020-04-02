@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/semipro.iml" filepath="$PROJECT_DIR$/semipro.iml" />
       <module fileurl="file://$PROJECT_DIR$/semipro-admin/semipro-admin.iml" filepath="$PROJECT_DIR$/semipro-admin/semipro-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/semipro-batch/semipro-batch.iml" filepath="$PROJECT_DIR$/semipro-batch/semipro-batch.iml" />
       <module fileurl="file://$PROJECT_DIR$/semipro-common/semipro-common.iml" filepath="$PROJECT_DIR$/semipro-common/semipro-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/semipro-domain/semipro-domain.iml" filepath="$PROJECT_DIR$/semipro-domain/semipro-domain.iml" />
       <module fileurl="file://$PROJECT_DIR$/semipro-web/semipro-web.iml" filepath="$PROJECT_DIR$/semipro-web/semipro-web.iml" />

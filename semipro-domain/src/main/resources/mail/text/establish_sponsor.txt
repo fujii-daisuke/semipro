@@ -1,0 +1,25 @@
+[# th:text="${account.username}" /]様
+
+[# th:text="${seminar.overview.title}" /]の募集が終了しました。
+[# th:if="${seminar.goal.successCondition.value == 'all-or-nothing'}"]
+最低開催人数に達しましたので、セミナー開催決定となります。
+[/]
+[# th:if="${seminar.goal.successCondition.value == 'all-in'}"]
+セミナー開催決定となります。
+[/]
+
+申し込み者数は以下のようになっております。
+[# th:each="entryCount : ${entryCounts}"]
+  - [(${entryCount.name})]: [(${entryCount.count})]
+[/]
+
+申し込まれたチケット料金は
+ご指定の銀行口座にお振込み致しました。
+ご確認の程、よろしくお願い致します。
+
+セミナー成功を心よりお祈り申し上げます。
+
+----------------------------------------------
+『 誰でもノーリスクでセミナーが開催できるサービス 』
+セミプロ
+http://www.semipro.red

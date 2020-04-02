@@ -21,7 +21,7 @@ import org.terasoluna.gfw.web.token.transaction.TransactionTokenType;
 import red.semipro.domain.model.address.Prefecture;
 import red.semipro.domain.service.address.CityService;
 import red.semipro.domain.service.address.PrefectureService;
-import red.semipro.share.userdetails.AccountUserDetails;
+import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 /**
  * セミナー目標 - controller

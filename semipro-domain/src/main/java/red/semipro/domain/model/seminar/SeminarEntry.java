@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import red.semipro.domain.model.account.Account;
 
 /**
  * セミナーエントリー - model
@@ -28,18 +29,22 @@ public class SeminarEntry implements Serializable {
     private Long seminarId;
 
     /**
-     * 申し込みアカウントID
+     * 申し込みアカウント
      */
-    private Long accountId;
+    private Account account;
 
     /**
-     * 申し込みセミナーチケットID
+     * 申し込みセミナーチケット
      */
-    private Long seminarTicketId;
+    private SeminarTicket ticket;
 
     /**
      * Stripe顧客カードID
      */
     private String stripeCustomerCardId;
 
+    /**
+     * StripeチャージID
+     */
+    private String stripeChargeId;
 }
