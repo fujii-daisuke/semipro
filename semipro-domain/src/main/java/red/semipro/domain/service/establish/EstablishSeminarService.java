@@ -39,7 +39,8 @@ public class EstablishSeminarService {
     @Value("${custom.application.email.fromEmail}")
     private String fromEmail;
 
-    public void establish(@Nonnull final Long seminarId) throws StripeException {
+    public void establish(@Nonnull final Long seminarId, @Nonnull final LocalDate executionDate)
+        throws StripeException {
 
         log.info("セミナーID: " + seminarId + "の開催可否処理を開始します");
 
@@ -47,8 +48,9 @@ public class EstablishSeminarService {
             .findOneWithDetailsForUpdate(seminarId, OpeningStatus.OPENING);
 
         // check date
-        if (seminar.getGoal().getEntryEndingAt().isBefore(LocalDate.now())) {
-            log.info("seminar entry ending at before now date. seminar_id = " + seminarId);
+        if (executionDate.isBefore(seminar.getGoal().getEntryEndingAt())
+            || executionDate.isEqual(seminar.getGoal().getEntryEndingAt())) {
+            log.info("now date is before seminar entry ending at. seminar_id = " + seminarId);
             return;
         }
 

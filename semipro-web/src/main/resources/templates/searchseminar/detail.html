@@ -9,7 +9,7 @@
 </head>
 <body>
 <main class="uk-margin" layout:fragment="content">
-  <div class="uk-container" th:object="${seminar}">
+  <div class="uk-container" th:object="${output.seminar}">
     <div class="uk-margin uk-text-center">
       <h1 class="uk-heading-small" th:text="*{overview.title}">title</h1>
       <div class="uk-text-meta">
@@ -68,7 +68,10 @@
               <td><span th:text="${ticket.capacity}">10</span>人</td>
               <td>
                 <a class="uk-button uk-button-danger"
+                   th:unless="${output.isEntered(ticket.id)}"
                    th:href="@{/seminars/{seminarId}/entry/{ticketId}(seminarId=*{id}, ticketId=${ticket.id})}">申し込み</a>
+                <a class="uk-button uk-button-danger uk-disabled"
+                   th:if="${output.isEntered(ticket.id)}">申し込み済み</a>
               </td>
             </tr>
             </tbody>

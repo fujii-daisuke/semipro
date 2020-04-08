@@ -9,13 +9,12 @@ import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import red.semipro.domain.model.account.AccountStripeCustomer;
-import red.semipro.domain.repository.account.AccountStripeCustomerRepository;
-import red.semipro.domain.service.entry.EntrySeminarInput;
-import red.semipro.domain.service.entry.EntrySeminarService;
 import red.semipro.domain.helper.stripe.customercard.CustomerCard;
 import red.semipro.domain.helper.stripe.customercard.CustomerCardConverter;
 import red.semipro.domain.helper.stripe.customercard.StripeCardHelper;
+import red.semipro.domain.model.account.AccountStripeCustomer;
+import red.semipro.domain.repository.account.AccountStripeCustomerRepository;
+import red.semipro.domain.service.entry.EntrySeminarService;
 
 /**
  * セミナー予約 - helper
@@ -49,20 +48,4 @@ public class EntrySeminarHelper {
         return customerCardList;
     }
 
-    public void entry(
-        @Nonnull final Long seminarId,
-        @Nonnull final Long ticketId,
-        @Nonnull final Long entryAccountId,
-        @Nonnull final String stripeCustomerCardId) throws StripeException {
-
-        EntrySeminarInput entrySeminarInput = EntrySeminarInput.builder()
-            .seminarId(seminarId)
-            .ticketId(ticketId)
-            .entryAccountId(entryAccountId)
-            .stripeCustomerCardId(stripeCustomerCardId)
-            .build();
-
-        entrySeminarService.entry(entrySeminarInput);
-
-    }
 }
