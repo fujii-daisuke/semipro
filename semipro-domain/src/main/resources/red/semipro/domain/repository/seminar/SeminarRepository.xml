@@ -97,7 +97,7 @@
         <include refid="baseSelectPhrase"/>
         <include refid="baseFromPhrase"/>
         <include refid="baseWherePhrase"/>
-        AND account_id = #{accountId}
+        AND seminar.account_id = #{accountId}
     </select>
 
     <select id="findOneWithDetailsByIdAndOpeningStatusAndAccountId" resultMap="seminarResultMap">
@@ -105,7 +105,7 @@
         <include refid="baseFromPhrase"/>
         <include refid="baseWherePhrase"/>
             AND seminar.opening_status = #{openingStatus.value}
-            AND account_id = #{accountId}
+            AND seminar.account_id = #{accountId}
     </select>
 
     <select id="findOneWithDetailsByIdAndOpeningStatusList" resultMap="seminarResultMap">
@@ -142,7 +142,7 @@
         <include refid="baseFromPhrase"/>
         WHERE
         seminar.opening_status = #{openingStatus.value}
-        AND #{executionDateTime} <![CDATA[ > ]]> seminar_goal.entry_ending_at
+        AND #{executionDate} <![CDATA[ > ]]> seminar_goal.entry_ending_at
     </select>
 
     <select id="countByCriteria" resultType="_long">
@@ -187,15 +187,12 @@
         , account.id account_id
         , account.email
         , account.username
-
         , account_stripe_connect.id account_stripe_connect_id
         , account_stripe_connect.account_id account_stripe_connect_account_id
         , account_stripe_connect.stripe_connect_account_id
-
         , account_stripe_customer.id account_stripe_customer_id
         , account_stripe_customer.account_id account_stripe_customer_account_id
         , account_stripe_customer.stripe_customer_id
-
         , seminar_overview.seminar_id overview_seminar_id
         , seminar_overview.title
         , seminar_overview.summary

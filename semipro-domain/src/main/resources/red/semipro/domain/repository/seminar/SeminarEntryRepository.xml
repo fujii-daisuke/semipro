@@ -7,13 +7,15 @@
 
     <resultMap id="seminarEntryResultMap" type="red.semipro.domain.model.seminar.SeminarEntry">
         <result property="id" column="id"/>
-        <result property="seminar_id" column="seminar_id"/>
-        <result property="accountId" column="account_id"/>
+        <result property="seminarId" column="seminar_id"/>
+        <result property="account.id" column="account_id"/>
+        <result property="account.username" column="username"/>
+        <result property="account.email" column="email"/>
         <result property="stripeCustomerCardId" column="stripe_customer_card_id"/>
         <result property="stripeChargeId" column="stripe_charge_id"/>
         <association property="ticket" javaType="red.semipro.domain.model.seminar.SeminarTicket">
             <id property="id" column="ticket_id"/>
-            <result property="seminar_id" column="ticket_seminar_id"/>
+            <result property="seminarId" column="ticket_seminar_id"/>
             <result property="name" column="ticket_name"/>
             <result property="price" column="ticket_price"/>
             <result property="capacity" column="ticket_capacity"/>
@@ -23,20 +25,23 @@
     <select id="findAllWithTicketsBySeminarId" resultMap="seminarEntryResultMap">
         SELECT
             seminar_entry.id
-            , seminar_id
-            , account_id
+            , seminar_entry.seminar_id
+            , seminar_entry.account_id
+            , account.username
+            , account.email
             , seminar_ticket.id ticket_id
             , seminar_ticket.seminar_id ticket_seminar_id
             , seminar_ticket.name ticket_name
             , seminar_ticket.price ticket_price
             , seminar_ticket.capacity ticket_capacity
-            , stripe_customer_card_id
-            , stripe_charge_id
+            , seminar_entry.stripe_customer_card_id
+            , seminar_entry.stripe_charge_id
         FROM
         seminar_entry
         LEFT OUTER JOIN seminar_ticket ON seminar_entry.seminar_ticket_id = seminar_ticket.id
+        INNER JOIN account ON seminar_entry.account_id = account.id
         WHERE
-        seminar_id = #{seminarId}
+        seminar_entry.seminar_id = #{seminarId}
     </select>
 
     <select id="countBySeminarIdAndTicketId" resultType="_int">
@@ -76,6 +81,16 @@
         seminar_entry.seminar_id = #{seminarId}
         GROUP BY
         seminar_ticket.id, seminar_ticket.name
+    </select>
+
+    <select id="findAllBySeminarIdAndAccountId" resultType="long">
+        SELECT
+            seminar_ticket_id
+        FROM
+        seminar_entry
+        WHERE
+        seminar_id = #{seminarId}
+        AND account_id = #{accountId}
     </select>
 
     <insert id="insert">

@@ -1,6 +1,6 @@
 package red.semipro.batch.endrecruitmentseminar;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,7 +18,7 @@ public class EndRecruitmentSeminarTask {
 
         log.info("セミナー募集終了処理を開始します");
 
-        endRecruitmentSeminarHelper.execute(LocalDateTime.now());
+        endRecruitmentSeminarHelper.execute(LocalDate.now());
 
         log.info("セミナー募集終了処理を終了します");
 

@@ -1,6 +1,7 @@
 package red.semipro.app.searchseminar;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.data.web.SortDefault.SortDefaults;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,8 @@ import red.semipro.domain.model.seminar.Seminar;
 import red.semipro.domain.model.seminar.SeminarSearchCriteria;
 import red.semipro.domain.service.seminar.SeminarService;
 import red.semipro.domain.service.seminar.SeminarSharedService;
+import red.semipro.domain.service.seminardetail.SeminarDetailService;
+import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 /**
  * セミナー検索 - controller
@@ -30,6 +34,7 @@ import red.semipro.domain.service.seminar.SeminarSharedService;
 public class SearchSeminarController {
 
     private final SeminarService seminarService;
+    private final SeminarDetailService seminarDetailService;
     private final SearchSeminarFormConverter seminarFormConverter;
     private final SeminarSharedService seminarSharedService;
 
@@ -76,12 +81,18 @@ public class SearchSeminarController {
      * @return ModelAndView
      */
     @GetMapping(value = "seminars/{seminarId}/detail")
-    public ModelAndView detail(@PathVariable("seminarId") final Long seminarId,
+    public ModelAndView detail(
+        @AuthenticationPrincipal final AccountUserDetails accountUserDetails,
+        @PathVariable("seminarId") final Long seminarId,
         ModelAndView model) {
 
-        model.addObject("seminar",
-            seminarSharedService.findOneWithDetailsByIdAndOpeningStatusList(
-                seminarId, List.of(OpeningStatus.OPENING, OpeningStatus.CLOSED)));
+        model.addObject("output",
+            seminarDetailService.findDetail(
+                seminarId,
+                List.of(OpeningStatus.OPENING, OpeningStatus.CLOSED),
+                Optional.ofNullable(accountUserDetails)
+                    .map(a -> a.getAccount().getId())
+                    .orElse(null)));
 
         model.setViewName("searchseminar/detail");
         return model;
