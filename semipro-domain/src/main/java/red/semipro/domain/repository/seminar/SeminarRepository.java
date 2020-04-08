@@ -1,6 +1,6 @@
 package red.semipro.domain.repository.seminar;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -94,5 +94,5 @@ public interface SeminarRepository {
 
     List<Seminar> findAllEndOfRecruitment(
         @Nonnull @Param("openingStatus") final OpeningStatus openingStatus,
-        @Nonnull @Param("executionDateTime") final LocalDateTime executionDateTime);
+        @Nonnull @Param("executionDate") final LocalDate executionDate);
 }
