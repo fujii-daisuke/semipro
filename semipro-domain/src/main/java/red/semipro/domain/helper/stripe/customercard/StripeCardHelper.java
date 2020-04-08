@@ -66,4 +66,15 @@ public class StripeCardHelper {
 
     }
 
+    public Card retrieve(@Nonnull final String stripeCustomerId, @Nonnull final String cardId)
+        throws StripeException {
+
+        Stripe.apiKey = STRIPE_API_KEY;
+
+        Customer customer =
+            Customer.retrieve(stripeCustomerId);
+
+        return (Card) customer.getSources().retrieve(cardId);
+    }
+
 }

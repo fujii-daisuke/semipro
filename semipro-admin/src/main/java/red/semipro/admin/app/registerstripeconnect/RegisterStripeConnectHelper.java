@@ -50,5 +50,6 @@ public class RegisterStripeConnectHelper {
             .stripeConnectAccountId(stripeAccount.getId())
             .build());
 
+        seminarSharedService.save(seminarId, OpeningStatus.STRIPE_REGISTERED);
     }
 }

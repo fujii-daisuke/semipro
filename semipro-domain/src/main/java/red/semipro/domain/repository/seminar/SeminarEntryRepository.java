@@ -25,7 +25,8 @@ public interface SeminarEntryRepository {
      * @param seminarTicketId チケットID
      * @return 件数
      */
-    int countBySeminarIdAndTicketId(@Nonnull @Param("seminarId") final Long seminarId,
+    int countBySeminarIdAndTicketId(
+        @Nonnull @Param("seminarId") final Long seminarId,
         @Nonnull @Param("seminarTicketId") final Long seminarTicketId);
 
     int countBySeminarId(@Nonnull @Param("seminarId") final Long seminarId);
@@ -41,6 +42,17 @@ public interface SeminarEntryRepository {
      */
     int insert(@Nonnull final SeminarEntry seminarEntry);
 
-    boolean existsEntry(@Nonnull @Param("seminarId") final Long seminarId,
+    boolean existsEntry(
+        @Nonnull @Param("seminarId") final Long seminarId,
+        @Nonnull @Param("accountId") final Long accountId);
+
+    /**
+     * エントリー済みのチケットID一覧を取得します
+     * @param seminarId セミナーID
+     * @param accountId アカウントID
+     * @return チケットIDリスト
+     */
+    List<Long> findAllBySeminarIdAndAccountId(
+        @Nonnull @Param("seminarId") final Long seminarId,
         @Nonnull @Param("accountId") final Long accountId);
 }

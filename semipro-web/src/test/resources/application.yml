@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/semipro?autoReconnect=true&useSSL=false
     username: semipro
@@ -29,8 +31,8 @@ spring:
   servlet:
     multipart:
       enabled: true
-      maxFileSize: 10Mb
-      maxRequestSize: 10Mb
+      maxFileSize: 10MB
+      maxRequestSize: 10MB
 
 server:
   port: 8080
@@ -77,9 +79,11 @@ custom:
       http
     domain:
       localhost:8080
-  # 秒/分/時/日/月/曜日
+    # 秒/分/時/日/月/曜日
     cron:
       eventon: 0 0 3 * * *
     email:
       fromEmail: d.ziifuu@gmail.com
   aws.s3.bucket: semipro-dev
+  aws.s3.seminar.path: upload/seminar/
+  stripe.api.key: sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn

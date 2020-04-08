@@ -1,6 +1,5 @@
 package red.semipro.domain.service.seminar;
 
-import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
@@ -63,39 +62,6 @@ public class SeminarSharedService {
                 seminarId,
                 openingStatus,
                 accountId);
-
-        if (Objects.isNull(seminar)) {
-            ResultMessages message = ResultMessages.error().add(
-                MessageId.E_WEB_0404);
-            throw new BusinessException(message);
-        }
-        return seminar;
-    }
-
-    public Seminar findOneWithDetailsByIdAndOpeningStatusList(
-        @Nonnull final Long seminarId,
-        @Nonnull final List<OpeningStatus> openingStatusList) {
-
-        Seminar seminar =
-            seminarRepository.findOneWithDetailsByIdAndOpeningStatusList(
-                seminarId, openingStatusList);
-
-        if (Objects.isNull(seminar)) {
-            ResultMessages message = ResultMessages.error().add(
-                MessageId.E_WEB_0404);
-            throw new BusinessException(message);
-        }
-        return seminar;
-    }
-
-    public Seminar findOneWithDetailsByIdAndOpeningStatusAndSeminarTicketId(
-        @Nonnull final Long seminarId,
-        @Nonnull final OpeningStatus openingStatus,
-        @Nonnull final Long seminarTicketId) {
-
-        Seminar seminar =
-            seminarRepository.findOneWithDetailsByIdAndOpeningStatusAndSeminarTicketId(
-                seminarId, openingStatus, seminarTicketId);
 
         if (Objects.isNull(seminar)) {
             ResultMessages message = ResultMessages.error().add(

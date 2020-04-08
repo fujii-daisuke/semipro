@@ -19,7 +19,7 @@
         , email
         , password
         , username
-        FROM account
+        FROM admin
         WHERE
         username = #{username}
     </select>
