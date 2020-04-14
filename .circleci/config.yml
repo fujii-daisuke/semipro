@@ -15,6 +15,8 @@ orbs:
   maven: circleci/maven@0.0.12
 
 jobs:
+  build:
+    - maven/test # checkout, build, test, and upload test results
   deploy:
     docker:
       - image: cdssnc/aws-cli
@@ -29,8 +31,10 @@ workflows:
   version: 2
   build_deploy:
     jobs:
-      - maven/test # checkout, build, test, and upload test results
+      - build
       - deploy:
+          requires:
+            - build
           filters:
             branches:
               only: master
