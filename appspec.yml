@@ -1,5 +1,5 @@
 version: 0.0
 os: linux
 files:
-  - source: ./
+  - source: ./pom.xml
     destination: /home/ec2-user/tmp
