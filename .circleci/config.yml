@@ -19,6 +19,8 @@ executors:
     docker:
       - image: 'codeaches/openjdk:12-jdk'
 
+working_directory: '~/build-work'
+
 jobs:
   deploy:
     docker:
