@@ -2,6 +2,7 @@
 <project version="4">
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/semipro-admin" />
+    <file type="web" url="file://$PROJECT_DIR$/semipro-batch" />
     <file type="web" url="file://$PROJECT_DIR$/semipro-web" />
   </component>
   <component name="JavaScriptSettings">
