@@ -68,9 +68,9 @@ jobs:
 #            --github-location repository="${DEPLOY_REPOSITORY}",commitId="${CIRCLE_SHA1}"
       - attach_workspace:
           at: ~/circleci-semipro
-      - run:
-          name: "awscli をインストール"
-          command: sudo pip install awscli
+#      - run:
+#          name: "awscli をインストール"
+#          command: sudo pip install awscli
       - run:
           name: "S3 にデプロイ"
           command: aws s3 sync ~/circleci-semipro/semipro-web/target/semipro-web-0.0.1-SNAPSHOT.war s3://semipro-deploy/production/ ¥
