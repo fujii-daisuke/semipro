@@ -67,7 +67,7 @@ jobs:
 #            --deployment-group-name ${DEPLOY_GROUP} ¥
 #            --github-location repository="${DEPLOY_REPOSITORY}",commitId="${CIRCLE_SHA1}"
       - attach_workspace:
-          - at: ~/circleci-semipro
+          at: ~/circleci-semipro
       - run:
           name: "awscli をインストール"
           command: sudo pip install awscli
