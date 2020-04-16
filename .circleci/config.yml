@@ -74,7 +74,7 @@ jobs:
 #          command: sudo pip install awscli
       - run:
           name: "S3 にデプロイ"
-          command: aws s3 sync ~/circleci-semipro/semipro-web/target/semipro-web-0.0.1-SNAPSHOT.war s3://semipro-deploy/production/ --delete
+          command: aws s3 sync ~/circleci-semipro/ s3://semipro-deploy/production/ --delete
 workflows:
   version: 2
   build_deploy:
