@@ -39,19 +39,23 @@ jobs:
       - run: mvn package # 実際のテストを実行します
       - store_test_results:
           path: semipro-web/target/surefire-reports
-      - store_artifacts:
-          path: semipro-admin/target/semipro-admin-0.0.1-SNAPSHOT.war
-      - store_artifacts:
-          path: semipro-batch/target/semipro-batch-0.0.1-SNAPSHOT.war
-      - store_artifacts:
-          path: semipro-web/target/semipro-web-0.0.1-SNAPSHOT.war
+#      - store_artifacts:
+#          path: semipro-admin/target/semipro-admin-0.0.1-SNAPSHOT.war
+#      - store_artifacts:
+#          path: semipro-batch/target/semipro-batch-0.0.1-SNAPSHOT.war
+#      - store_artifacts:
+#          path: semipro-web/target/semipro-web-0.0.1-SNAPSHOT.war
 
+      - run: |
+          mkdir ~/circleci-semipro/target
+          cp ~/circleci-semipro/semipro-admin/target/semipro-admin-0.0.1-SNAPSHOT.war ~/circleci-semipro/target
+          cp ~/circleci-semipro/semipro-batch/target/semipro-batch-0.0.1-SNAPSHOT.war ~/circleci-semipro/target
+          cp ~/circleci-semipro/semipro-web/target/semipro-web-0.0.1-SNAPSHOT.war ~/circleci-semipro/target
+          cp ~/circleci-semipro/appspec.yml ~/circleci-semipro/target
       - persist_to_workspace:
           root: ~/circleci-semipro
           paths:
-            - semipro-admin/target/semipro-admin-0.0.1-SNAPSHOT.war
-            - semipro-batch/target/semipro-batch-0.0.1-SNAPSHOT.war
-            - semipro-web/target/semipro-web-0.0.1-SNAPSHOT.war
+            - target
 
   deploy:
     docker:
@@ -80,7 +84,7 @@ jobs:
 #          command: aws s3 sync ~/circleci-semipro/semipro-web/target/ s3://semipro-deploy/production/web/ --delete
       - run:
           name: "Run AWS CodeDeploy"
-          command: aws deploy push --application-name ${DEPLOY_APPLICATION} --description "This is a revision for the application semipro web app." --ignore-hidden-files --s3-location s3://semipro-deploy/production/web/semipro-web.zip --source ~/circleci-semipro/semipro-web/target/
+          command: aws deploy push --application-name ${DEPLOY_APPLICATION} --description "This is a revision for the application semipro app." --ignore-hidden-files --s3-location s3://semipro-deploy/production/semipro-app.zip --source ~/circleci-semipro/target/
 workflows:
   version: 2
   build_deploy:
