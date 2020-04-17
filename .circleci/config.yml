@@ -58,9 +58,9 @@ jobs:
       - image: cdssnc/aws-cli
 #      - image: circleci/python:2.7-jessie
     steps:
-#      - run:
-#          name: "Set AWS region"
-#          command: aws configure set region ap-northeast-1
+      - run:
+          name: "Set AWS region"
+          command: aws configure set region ap-northeast-1
 #      - run:
 #          name: "Run AWS CodeDeploy"
 #          command: aws deploy create-deployment ¥
