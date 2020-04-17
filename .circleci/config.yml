@@ -80,11 +80,11 @@ jobs:
 #          command: aws s3 sync ~/circleci-semipro/semipro-web/target/ s3://semipro-deploy/production/web/ --delete
       - run:
           name: "Run AWS CodeDeploy"
-          command: aws deploy push ¥
-            --application-name ${DEPLOY_APPLICATION} ¥
-            --description "This is a revision for the application semipro web app." ¥
-            --ignore-hidden-files ¥
-            --s3-location s3://semipro-deploy/production/web/semipro-web.zip ¥
+          command: aws deploy push \
+            --application-name ${DEPLOY_APPLICATION} \
+            --description "This is a revision for the application semipro web app." \
+            --ignore-hidden-files \
+            --s3-location s3://semipro-deploy/production/web/semipro-web.zip \
             --source ~/circleci-semipro/semipro-web/target/
 workflows:
   version: 2
