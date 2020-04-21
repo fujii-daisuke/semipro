@@ -31,6 +31,9 @@ spring:
       maxFileSize: 10MB
       maxRequestSize: 10MB
 
+tomcat:
+  ajp:
+    port:8090
 server:
   port: 8080
   address: 127.0.0.1
