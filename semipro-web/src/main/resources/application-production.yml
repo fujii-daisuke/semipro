@@ -1,0 +1,72 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/semipro?autoReconnect=true&useSSL=false
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driverClassName: com.mysql.jdbc.Driver
+    tomcat:
+      maxActive: 4
+      maxIdle: 4
+      minIdle: 0
+      initialSize: 4
+  messages:
+    basename: i18n/messages
+    cacheDuration: -1
+    encoding: UTF-8
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SMTP_USER}
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+  thymeleaf:
+    cache: false
+  servlet:
+    multipart:
+      enabled: true
+      maxFileSize: 10MB
+      maxRequestSize: 10MB
+
+server:
+  port: 8080
+  address: 127.0.0.1
+logging:
+  level:
+    root: info
+    org.springframework.web: debug
+    red.semipro: debug
+    red.semipro.domain.repository: debug
+
+mybatis:
+#  mapperLocations: classpath:sqlMapper/*.xml
+  type-handlers-package: red.semipro.domain.typehandler
+
+cloud.aws:
+  stack:
+    auto: false
+  credentials:
+    accessKey: ${AWS_ACCESS_KEY}
+    secretKey: ${AWS_SECRET_KEY}
+  region:
+    static: ap-northeast-1
+    auto: false
+
+# application settings
+custom:
+  application:
+    schema:
+      https
+    domain:
+      www.semipro.red
+  # 秒/分/時/日/月/曜日
+    cron:
+      eventon: 0 0 3 * * 0
+    email:
+      fromEmail: red.semipro@gmail.com
+  aws.s3.bucket: semipro-production
+  aws.s3.seminar.path: upload/seminar/
+  stripe.api.key: ${STRIPE_API_KEY}
