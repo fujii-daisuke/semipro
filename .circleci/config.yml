@@ -83,13 +83,13 @@ jobs:
 #          name: "webを S3 にデプロイ"
 #          command: aws s3 sync ~/circleci-semipro/semipro-web/target/ s3://semipro-deploy/production/web/ --delete
       - run:
-          name: "deploy on s3"
+          name: "Run S3 Push"
           command: >-
             aws deploy push
             --application-name ${DEPLOY_APPLICATION}
             --description "This is a revision for the application semipro app."
             --ignore-hidden-files
-            --s3-location s3://${S3_BUCKET}/${S3_KEY}
+            --s3-location s3://semipro-deploy/production/semipro-app.zip
             --source ~/circleci-semipro/target/
       - run:
           name: "Run AWS CodeDeploy"
