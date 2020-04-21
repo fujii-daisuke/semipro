@@ -62,6 +62,7 @@ jobs:
       - image: cdssnc/aws-cli
 #      - image: circleci/python:2.7-jessie
     steps:
+      - run: env > ~/.env
       - run:
           name: "Set AWS region"
           command: aws configure set region ap-northeast-1
@@ -88,7 +89,7 @@ jobs:
             aws deploy push
             --application-name ${DEPLOY_APPLICATION}
             --description "This is a revision for the application semipro app."
-            --s3-location "s3://${S3_BUCKET}/${S3_KEY}"
+            --s3-location s3://${S3_BUCKET}/${S3_KEY}
             --source ~/circleci-semipro/target/
             --ignore-hidden-files
       - run:
