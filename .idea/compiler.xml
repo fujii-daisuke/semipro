@@ -8,9 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="semipro-batch" />
         <module name="semipro-common" />
-        <module name="semipro-web" />
         <module name="semipro-admin" />
         <module name="semipro-domain" />
+      </profile>
+      <profile name="Annotation profile for semipro" enabled="true">
+        <sourceOutputDir name="../target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="semipro-web" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
