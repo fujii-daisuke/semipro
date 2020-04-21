@@ -3,11 +3,8 @@ spring:
     allow-bean-definition-overriding: true
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/semipro?autoReconnect=true&useSSL=false
-    username: semipro
-    password: password
-    #    url: jdbc:mysql://semipro.cluster-ciifr12zggfw.ap-northeast-1.rds.amazonaws.com:3306/semipro?autoReconnect=true&useSSL=false
-    #    username: fujii_daisuke
-    #    password: orehatsuiteiru
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driverClassName: com.mysql.jdbc.Driver
     tomcat:
       maxActive: 4
@@ -21,8 +18,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: red.semipro@gmail.com
-    password: qozxlzjnydjasnbr
+    username: ${SMTP_USER}
+    password: ${SMTP_PASSWORD}
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
@@ -36,7 +33,6 @@ spring:
 
 server:
   port: 8080
-#  port: 8085
   address: 127.0.0.1
 logging:
   level:
@@ -44,20 +40,6 @@ logging:
     org.springframework.web: debug
     red.semipro: debug
     red.semipro.domain.repository: debug
-
-# application settings
-#custom:
-#  application:
-#    key1: app_a
-#    key2: app_b
-#    key3: ajToeoe04jtmtU
-#  domain:
-#    key1: domain_c
-#    key2: domain_d
-#  common:
-#    key1: common_e
-#    key2: common_f
-#    datePattern: yyyy-MM-dd
 
 mybatis:
   #  mapperLocations: classpath:sqlMapper/*.xml
@@ -67,10 +49,10 @@ cloud.aws:
   stack:
     auto: false
   credentials:
-    accessKey: AKIA47C5VUL4TKOZN7EX
-    secretKey: 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
+    accessKey: ${AWS_ACCESS_KEY}
+    secretKey: ${AWS_SECRET_KEY}
   region:
-    static: ap-northeast-1
+    static: ${AWS_REGION}
     auto: false
 
 # application settings
@@ -87,4 +69,4 @@ custom:
       fromEmail: d.ziifuu@gmail.com
   aws.s3.bucket: semipro-dev
   aws.s3.seminar.path: upload/seminar/
-  stripe.api.key: sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn
+  stripe.api.key: ${STRIPE_API_KEY}
