@@ -33,7 +33,7 @@ spring:
 
 tomcat:
   ajp:
-    port:8090
+    port:8085
 server:
   port: 8080
   address: 127.0.0.1
