@@ -33,7 +33,7 @@ spring:
 
 tomcat:
   ajp:
-    port:8085
+    port: 8085
 server:
   port: 8080
   address: 127.0.0.1
@@ -45,7 +45,7 @@ logging:
     red.semipro.domain.repository: debug
 
 mybatis:
-#  mapperLocations: classpath:sqlMapper/*.xml
+  #  mapperLocations: classpath:sqlMapper/*.xml
   type-handlers-package: red.semipro.domain.typehandler
 
 cloud:
@@ -59,11 +59,9 @@ cloud:
 # application settings
 custom:
   application:
-    schema:
-      https
-    domain:
-      www.semipro.red
-  # 秒/分/時/日/月/曜日
+    schema: https
+    domain: www.semipro.red
+    # 秒/分/時/日/月/曜日
     cron:
       eventon: 0 0 3 * * 0
     email:
