@@ -1,5 +1,5 @@
 #!/bin/bash
-export FOLDER=/home/ec2-user/tmp/
+export FOLDER=/tmp/semipro-release/
 
 if [ -d $FOLDER ]
 then
