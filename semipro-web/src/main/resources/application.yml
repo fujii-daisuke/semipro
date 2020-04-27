@@ -45,15 +45,26 @@ mybatis:
   #  mapperLocations: classpath:sqlMapper/*.xml
   type-handlers-package: red.semipro.domain.typehandler
 
-cloud.aws:
-  stack:
-    auto: false
-  credentials:
-    accessKey: ${AWS_ACCESS_KEY}
-    secretKey: ${AWS_SECRET_KEY}
-  region:
-    static: ${AWS_REGION}
-    auto: false
+#cloud.aws:
+#  stack:
+#    auto: false
+#  credentials:
+#    accessKey: ${AWS_ACCESS_KEY}
+#    secretKey: ${AWS_SECRET_KEY}
+#  region:
+#    static: ${AWS_REGION}
+#    auto: false
+
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      auto: false
+      static: ap-northeast-1
+#    credentials:
+#      instanceProfile: false
+#      profileName:
 
 # application settings
 custom:
