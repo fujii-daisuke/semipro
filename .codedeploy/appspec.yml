@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: ./
-    destination: /home/ec2-user/tmp
+    destination: /tmp/semipro-release
 hooks:
   BeforeInstall:
     - location: scripts/before_install.sh
