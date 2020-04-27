@@ -51,7 +51,7 @@ jobs:
           cp ~/circleci-semipro/semipro-admin/target/semipro-admin-0.0.1-SNAPSHOT.war ~/circleci-semipro/target
           cp ~/circleci-semipro/semipro-batch/target/semipro-batch-0.0.1-SNAPSHOT.war ~/circleci-semipro/target
           cp ~/circleci-semipro/semipro-web/target/semipro-web-0.0.1-SNAPSHOT.war ~/circleci-semipro/target
-          cp ~/circleci-semipro/appspec.yml ~/circleci-semipro/target
+          cp ~/circleci-semipro/.codedeploy/* ~/circleci-semipro/target/
       - persist_to_workspace:
           root: ~/circleci-semipro
           paths:
