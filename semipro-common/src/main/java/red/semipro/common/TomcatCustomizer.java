@@ -16,6 +16,8 @@ public class TomcatCustomizer implements WebServerFactoryCustomizer<TomcatServle
         if (ajpPort != 0) {
             factory.setProtocol("AJP/1.3");
             factory.setPort(ajpPort);
+            factory.getTomcatConnectorCustomizers()
+                .add(c -> c.setAttribute("secretRequired", false));
         }
     }
 }
