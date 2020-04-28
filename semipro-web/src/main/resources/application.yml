@@ -2,7 +2,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/semipro?autoReconnect=true&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/semipro?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driverClassName: com.mysql.jdbc.Driver
