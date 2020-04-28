@@ -7,7 +7,7 @@
         <packaging>war</packaging>
       </options>
     </properties>
-    <root id="archive" name="semipro-web-0.0.1-SNAPSHOT.war">
+    <root id="archive" name="semipro-web.war">
       <element id="artifact" artifact-name="semipro-web:war exploded" />
     </root>
   </artifact>
