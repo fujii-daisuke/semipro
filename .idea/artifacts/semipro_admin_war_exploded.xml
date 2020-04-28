@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="semipro-admin:war exploded">
-    <output-path>$PROJECT_DIR$/semipro-admin/target/semipro-admin-0.0.1-SNAPSHOT</output-path>
+    <output-path>$PROJECT_DIR$/semipro-admin/target/semipro-admin</output-path>
     <properties id="maven-jee-properties">
       <options>
         <exploded>true</exploded>
@@ -131,7 +131,7 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/semipro-admin/target/semipro-admin-0.0.1-SNAPSHOT/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/semipro-admin/target/semipro-admin/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="semipro-admin/web/Web" />
     </root>

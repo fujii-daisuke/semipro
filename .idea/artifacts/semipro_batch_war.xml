@@ -7,7 +7,7 @@
         <packaging>war</packaging>
       </options>
     </properties>
-    <root id="archive" name="semipro-batch-0.0.1-SNAPSHOT.war">
+    <root id="archive" name="semipro-batch.war">
       <element id="artifact" artifact-name="semipro-batch:war exploded" />
     </root>
   </artifact>
