@@ -41,4 +41,8 @@
             <version>8.11.4</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>semipro-common</finalName>
+    </build>
 </project>

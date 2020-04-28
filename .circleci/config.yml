@@ -48,9 +48,9 @@ jobs:
 
       - run: |
           mkdir ~/circleci-semipro/target
-          cp ~/circleci-semipro/semipro-admin/target/semipro-admin-0.0.1-SNAPSHOT.war ~/circleci-semipro/target
-          cp ~/circleci-semipro/semipro-batch/target/semipro-batch-0.0.1-SNAPSHOT.war ~/circleci-semipro/target
-          cp ~/circleci-semipro/semipro-web/target/semipro-web-0.0.1-SNAPSHOT.war ~/circleci-semipro/target
+          cp ~/circleci-semipro/semipro-admin/target/semipro-admin.war ~/circleci-semipro/target
+          cp ~/circleci-semipro/semipro-batch/target/semipro-batch.war ~/circleci-semipro/target
+          cp ~/circleci-semipro/semipro-web/target/semipro-web.war ~/circleci-semipro/target
           cp -r ~/circleci-semipro/.codedeploy/* ~/circleci-semipro/target/
       - persist_to_workspace:
           root: ~/circleci-semipro
