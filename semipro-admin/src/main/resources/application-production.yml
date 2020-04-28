@@ -33,9 +33,9 @@ spring:
 
 tomcat:
   ajp:
-    port: 8085
+    port: 8086
 server:
-  port: 8080
+  port: 8081
   address: 127.0.0.1
 logging:
   level:
