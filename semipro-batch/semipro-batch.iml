@@ -37,6 +37,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-web:5.2.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:5.2.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:5.2.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context:5.2.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.2.5.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework.boot:spring-boot-starter-tomcat:2.2.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: jakarta.annotation:jakarta.annotation-api:1.3.5" level="project" />
@@ -54,6 +55,7 @@
     <orderEntry type="module" module-name="semipro-common" />
     <orderEntry type="library" name="Maven: javax.validation:validation-api:2.0.1.Final" level="project" />
     <orderEntry type="library" name="Maven: javax.xml.bind:jaxb-api:2.3.1" level="project" />
+    <orderEntry type="library" name="Maven: javax.activation:javax.activation-api:1.2.0" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.libphonenumber:libphonenumber:8.11.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-mail:2.2.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.sun.mail:jakarta.mail:1.6.5" level="project" />
@@ -74,25 +76,6 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.10.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.10.3" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-starter-aws:2.1.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-aws-autoconfigure:2.1.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.30" level="project" />
-    <orderEntry type="library" name="Maven: javax.activation:javax.activation-api:1.2.0" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-aws-context:2.1.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-aws-core:2.1.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-core:1.11.415" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.12" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.13" level="project" />
-    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.13" level="project" />
-    <orderEntry type="library" name="Maven: software.amazon.ion:ion-java:1.0.2" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.10.3" level="project" />
-    <orderEntry type="library" name="Maven: joda-time:joda-time:2.10.5" level="project" />
-    <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-s3:1.11.415" level="project" />
-    <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-kms:1.11.415" level="project" />
-    <orderEntry type="library" name="Maven: com.amazonaws:jmespath-java:1.11.415" level="project" />
-    <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-ec2:1.11.415" level="project" />
-    <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-cloudformation:1.11.415" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-context:5.2.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.2.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.2.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-to-slf4j:2.12.1" level="project" />
@@ -135,6 +118,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.6.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.2.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.2.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.30" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.terasoluna.gfw:terasoluna-gfw-common:5.5.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.aspectj:aspectjrt:1.9.5" level="project" />
