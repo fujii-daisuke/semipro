@@ -5,7 +5,7 @@
     <!-- デフォルト設定読み込み -->
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
-    <property name="logFileName" value="semipro-web"/>
+    <property name="logFileName" value="semipro-admin"/>
 
     <!--production環境用設定 -->
     <springProfile name="production">
