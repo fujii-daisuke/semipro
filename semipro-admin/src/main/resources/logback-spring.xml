@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <!-- デフォルト設定読み込み -->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <property name="logFileName" value="semipro-web"/>
+
+    <!--production環境用設定 -->
+    <springProfile name="production">
+        <property name="logFilePath" value="/var/log/semipro-admin/"/>
+    </springProfile>
+
+    <!-- アプリケーションログのファイル書き出し -->
+    <appender name="APPLICATION_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>%date{yyMMdd HH:mm:ss.SSS},%X{request_id},%m%n</pattern>
+        </encoder>
+        <!--ファイル名 -->
+        <file>${logFilePath}${logFileName}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logFilePath}${logFileName}-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <maxHistory>3</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss} %-5level [%thread] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--rootログレベルと使用出力ルール -->
+    <root level="INFO">
+        <appender-ref ref="APPLICATION_LOG"/>
+    </root>
+</configuration>
