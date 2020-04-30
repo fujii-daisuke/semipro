@@ -33,8 +33,8 @@ public class SearchSeminarController {
     private final SearchSeminarFormConverter seminarFormConverter;
     private final SeminarSharedService seminarSharedService;
 
-    @Value("${custom.front.url}")
-    private String FRONT_URL;
+    @Value("${custom.application.web-root}")
+    private String WEB_ROOT;
 
     /**
      * セミナー一覧を表示します
@@ -91,6 +91,6 @@ public class SearchSeminarController {
      * @return セミナープレビュー画面URL
      */
     private String getPreviewUrl(@NotNull final Long seminarId) {
-        return FRONT_URL + "seminars/" + seminarId + "/preview";
+        return WEB_ROOT + "seminars/" + seminarId + "/preview";
     }
 }
