@@ -14,7 +14,7 @@
 - semipro-domain セミプロのドメインロジックです。  
 - semipro-common プロジェクト共通処理です。  
 
-### 使用技術
+## 使用技術
 - WEBフレームワークにSpringBootを使用しています。  
 - Mavenマルチモジュール構成にてプロジェクトを構成しています。  
 - セミナーチケット購入や、セミナーキャンセル時のキャッシュバック等の決済にはSprite APIを使用しています。  
@@ -47,7 +47,7 @@ aws codedeployにて本番環境にて自動デプロイしています。
 ## 本番環境
 本番環境にはcircleciにてビルドして作成された実行可能JarとapacheをAJPで連携して起動しています。  
 本番環境は、VPC、EC2、ELBを組み合わせて構成しています。  
-
+　　
 ## Demo
  [https://www.semipro.red/](https://www.semipro.red/) 
  
