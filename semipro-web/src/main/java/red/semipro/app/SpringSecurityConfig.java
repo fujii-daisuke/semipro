@@ -30,6 +30,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     private static final String[] authenticateActionArray =
         {
+            "/seminars/create/**",
             "/seminars/edit/**",
             "/seminars/**/preview",
             "/seminars/**/apply",
