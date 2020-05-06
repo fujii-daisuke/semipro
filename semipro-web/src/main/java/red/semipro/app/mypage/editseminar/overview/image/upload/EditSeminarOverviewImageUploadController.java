@@ -36,7 +36,7 @@ public class EditSeminarOverviewImageUploadController {
         @ModelAttribute @Validated EditSeminarOverviewImageUploadForm form, BindingResult result) {
 
         if (result.hasErrors()) {
-            return ResponseEntity.badRequest().body("ファイルアップロードに失敗しました。画面を再度開き直してください。");
+            return ResponseEntity.badRequest().body("ファイルサイズが上限をオーバーしています。");
         }
 
         final String fileUrl;
