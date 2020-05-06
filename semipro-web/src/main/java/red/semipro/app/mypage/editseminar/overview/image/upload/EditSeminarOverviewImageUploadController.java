@@ -44,6 +44,7 @@ public class EditSeminarOverviewImageUploadController {
             fileUrl = editSeminarOverviewImageUploadHelper
                 .upload(form, accountUserDetails.getAccount());
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body("ファイルアップロードに失敗しました。時間を置いて再度アップロードしてください。");
         }
