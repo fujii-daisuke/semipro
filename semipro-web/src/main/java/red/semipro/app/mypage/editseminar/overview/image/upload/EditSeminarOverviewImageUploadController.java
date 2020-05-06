@@ -1,6 +1,7 @@
 package red.semipro.app.mypage.editseminar.overview.image.upload;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +19,7 @@ import red.semipro.domain.service.userdetails.AccountUserDetails;
 @RestController
 @RequestMapping("seminars/edit/overview")
 @RequiredArgsConstructor
+@Slf4j
 public class EditSeminarOverviewImageUploadController {
 
     private final EditSeminarOverviewImageUploadHelper editSeminarOverviewImageUploadHelper;
@@ -41,10 +43,10 @@ public class EditSeminarOverviewImageUploadController {
 
         final String fileUrl;
         try {
-            fileUrl = editSeminarOverviewImageUploadHelper
-                .upload(form, accountUserDetails.getAccount());
+            fileUrl =
+                editSeminarOverviewImageUploadHelper.upload(form, accountUserDetails.getAccount());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body("ファイルアップロードに失敗しました。時間を置いて再度アップロードしてください。");
         }
