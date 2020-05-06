@@ -12,14 +12,6 @@
         <property name="logFilePath" value="/var/log/semipro-web/"/>
     </springProfile>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <target>System.out</target>
-        <encoder>
-            <charset>UTF-8</charset>
-            <pattern>%d{yyyy/MM/dd HH:mm:ss} %-5level [%thread] - %msg%n</pattern>
-        </encoder>
-    </appender>
-
     <!-- アプリケーションログのファイル書き出し -->
     <appender name="APPLICATION_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder>
