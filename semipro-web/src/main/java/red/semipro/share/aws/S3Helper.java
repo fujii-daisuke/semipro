@@ -4,8 +4,9 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.util.IOUtils;
 import java.io.IOException;
-import javax.validation.constraints.NotNull;
+import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -30,14 +31,15 @@ public class S3Helper {
      * @param path アップロードパス
      * @throws java.io.IOException アップロード失敗時の例外
      */
-    public void upload(@NotNull final MultipartFile file, @NotNull final String path)
+    public void upload(@Nonnull final MultipartFile file, @Nonnull final String path)
         throws IOException {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType("plain/text");
+        metadata.setContentLength(IOUtils.toByteArray(file.getInputStream()).length);
 //        metadata.addUserMetadata("x-amz-meta-title", FilenameUtils.getName(path));
 
-        final PutObjectRequest putObjectRequest = new PutObjectRequest(BUCKET, path,
-            file.getInputStream(), metadata);
+        final PutObjectRequest putObjectRequest =
+            new PutObjectRequest(BUCKET, path, file.getInputStream(), metadata);
         putObjectRequest.setCannedAcl(CannedAccessControlList.PublicRead);
 
         amazonS3.putObject(putObjectRequest);
@@ -48,7 +50,7 @@ public class S3Helper {
      *
      * @param path 削除ファイルパス
      */
-    public void delete(@NotNull final String path) {
+    public void delete(@Nonnull final String path) {
         amazonS3.deleteObject(BUCKET, path);
     }
 
@@ -58,7 +60,7 @@ public class S3Helper {
      * @param path アップロードバス
      * @return URL
      */
-    public String getImageUrl(@NotNull final String path) {
+    public String getImageUrl(@Nonnull final String path) {
         return amazonS3.getUrl(BUCKET, path).toString();
     }
 }
