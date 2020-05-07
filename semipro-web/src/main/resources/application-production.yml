@@ -50,6 +50,8 @@ mybatis:
 
 cloud:
   aws:
+    credentials:
+      instanceProfile: false
     stack:
       auto: false
     region:
