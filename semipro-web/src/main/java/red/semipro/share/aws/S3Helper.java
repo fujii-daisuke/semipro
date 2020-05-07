@@ -1,5 +1,6 @@
 package red.semipro.share.aws;
 
+import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -8,6 +9,7 @@ import com.amazonaws.util.IOUtils;
 import java.io.IOException;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class S3Helper {
 
     private final AmazonS3 amazonS3;
@@ -33,6 +36,11 @@ public class S3Helper {
      */
     public void upload(@Nonnull final MultipartFile file, @Nonnull final String path)
         throws IOException {
+
+        EnvironmentVariableCredentialsProvider credentials = new EnvironmentVariableCredentialsProvider();
+        log.debug("accessKeyId: " + credentials.getCredentials().getAWSAccessKeyId());
+        log.debug("secretKey: " + credentials.getCredentials().getAWSSecretKey());
+
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType("plain/text");
         metadata.setContentLength(IOUtils.toByteArray(file.getInputStream()).length);
