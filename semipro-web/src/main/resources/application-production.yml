@@ -53,7 +53,7 @@ cloud:
     stack:
       auto: false
     region:
-      auto: true
+      auto: false
       static: ap-northeast-1
 
 # application settings
