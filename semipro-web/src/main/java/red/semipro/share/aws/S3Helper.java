@@ -1,6 +1,5 @@
 package red.semipro.share.aws;
 
-import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -37,16 +36,16 @@ public class S3Helper {
     public void upload(@Nonnull final MultipartFile file, @Nonnull final String path)
         throws IOException {
 
-        EnvironmentVariableCredentialsProvider credentials = new EnvironmentVariableCredentialsProvider();
-        log.debug("accessKeyId: " + credentials.getCredentials().getAWSAccessKeyId());
-        log.debug("secretKey: " + credentials.getCredentials().getAWSSecretKey());
-        log.debug("region: " + amazonS3.getRegionName());
-        log.debug("path: " + path);
-        if (amazonS3.doesBucketExistV2(BUCKET)) {
-            log.debug("bucket: " + BUCKET);
-        } else {
-            log.debug("bucket NG");
-        }
+//        EnvironmentVariableCredentialsProvider credentials = new EnvironmentVariableCredentialsProvider();
+//        log.debug("accessKeyId: " + credentials.getCredentials().getAWSAccessKeyId());
+//        log.debug("secretKey: " + credentials.getCredentials().getAWSSecretKey());
+//        log.debug("region: " + amazonS3.getRegionName());
+//        log.debug("path: " + path);
+//        if (amazonS3.doesBucketExistV2(BUCKET)) {
+//            log.debug("bucket: " + BUCKET);
+//        } else {
+//            log.debug("bucket NG");
+//        }
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType("plain/text");
