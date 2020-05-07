@@ -30,7 +30,7 @@
     </appender>
 
     <!--rootログレベルと使用出力ルール -->
-    <root level="debug">
+    <root level="INFO">
         <appender-ref ref="APPLICATION_LOG"/>
     </root>
 </configuration>

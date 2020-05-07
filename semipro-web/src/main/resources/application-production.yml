@@ -41,7 +41,7 @@ logging:
   level:
     root: info
     org.springframework.web: info
-    red.semipro: info
+    red.semipro: debug
     red.semipro.domain.repository: info
 
 mybatis:
