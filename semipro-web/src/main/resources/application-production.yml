@@ -66,6 +66,6 @@ custom:
       eventon: 0 0 3 * * 0
     email:
       fromEmail: red.semipro@gmail.com
-  aws.s3.bucket: semipro-production
+  aws.s3.bucket: semipro-dev
   aws.s3.seminar.path: upload/seminar/
   stripe.api.key: ${STRIPE_API_KEY}
