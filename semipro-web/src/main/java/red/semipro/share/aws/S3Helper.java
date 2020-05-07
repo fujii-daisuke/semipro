@@ -40,6 +40,11 @@ public class S3Helper {
         EnvironmentVariableCredentialsProvider credentials = new EnvironmentVariableCredentialsProvider();
         log.debug("accessKeyId: " + credentials.getCredentials().getAWSAccessKeyId());
         log.debug("secretKey: " + credentials.getCredentials().getAWSSecretKey());
+        if (amazonS3.doesBucketExistV2(BUCKET)) {
+            log.debug("bucket: OK");
+        } else {
+            log.debug("bucket NG");
+        }
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType("plain/text");
