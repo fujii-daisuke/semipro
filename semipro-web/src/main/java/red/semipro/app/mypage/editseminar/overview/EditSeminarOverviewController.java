@@ -1,6 +1,5 @@
 package red.semipro.app.mypage.editseminar.overview;
 
-import java.io.IOException;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -69,7 +68,7 @@ public class EditSeminarOverviewController {
         @RequestParam("action") String action,
         @ModelAttribute("overviewForm") @Validated EditSeminarOverviewForm form,
         BindingResult result,
-        ModelAndView model) throws IllegalAccessException, IOException {
+        ModelAndView model) {
 
         if (!Objects.equals(seminarId, form.getSeminarId())) {
             model.setViewName("redirect:/seminars/edit/" + form.getSeminarId() + "/overview");
