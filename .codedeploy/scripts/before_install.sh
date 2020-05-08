@@ -1,4 +1,7 @@
 #!/bin/bash
+
+systemctl stop httpd.service
+
 export FOLDER=/tmp/semipro-release/
 
 if [ -d $FOLDER ]
