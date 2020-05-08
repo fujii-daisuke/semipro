@@ -3,8 +3,10 @@ package red.semipro.app.mypage.editseminar.identification;
 import java.io.Serializable;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import red.semipro.domain.enums.BusinessType;
 
 /**
@@ -12,6 +14,8 @@ import red.semipro.domain.enums.BusinessType;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class EditSeminarIdentificationForm implements Serializable {
 
     private static final long serialVersionUID = -154773065534593627L;
