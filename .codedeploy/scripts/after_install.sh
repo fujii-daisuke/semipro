@@ -13,11 +13,6 @@ export BATCH_EXECUTE_DIR=/usr/local/bin/semipro-batch/
 export BATCH_JAR_NAME=semipro-batch.jar
 export BATCH_EXECUTE_PATH=${BATCH_EXECUTE_DIR}${BATCH_JAR_NAME}
 
-systemctl stop httpd.service
-systemctl stop semipro-web.servicee
-systemctl stop semipro-admin.service
-systemctl stop semipro-batch.service
-
 rm ${WEB_EXECUTE_PATH}
 cp ${RELEASE_DIR}${WEB_JAR_NAME} ${WEB_EXECUTE_DIR}
 chown semipro.semipro ${WEB_EXECUTE_PATH}
@@ -33,7 +28,4 @@ cp ${RELEASE_DIR}${BATCH_JAR_NAME} ${BATCH_EXECUTE_DIR}
 chown semipro.semipro ${BATCH_EXECUTE_PATH}
 chmod 500 ${BATCH_EXECUTE_PATH}
 
-systemctl start semipro-web.service
-systemctl start semipro-admin.service
-systemctl start semipro-batch.service
 systemctl start httpd.service
