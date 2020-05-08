@@ -27,5 +27,3 @@ rm ${BATCH_EXECUTE_DIR}${BATCH_JAR_NAME}
 cp ${RELEASE_DIR}${BATCH_JAR_NAME} ${BATCH_EXECUTE_DIR}
 chown semipro.semipro ${BATCH_EXECUTE_PATH}
 chmod 500 ${BATCH_EXECUTE_PATH}
-
-systemctl start httpd.service
