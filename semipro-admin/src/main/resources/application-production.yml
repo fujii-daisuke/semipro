@@ -40,9 +40,9 @@ server:
 logging:
   level:
     root: info
-    org.springframework.web: debug
-    red.semipro: debug
-    red.semipro.domain.repository: debug
+    org.springframework.web: info
+    red.semipro: info
+    red.semipro.domain.repository: info
 
 mybatis:
   #  mapperLocations: classpath:sqlMapper/*.xml
