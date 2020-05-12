@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import red.semipro.common.HyphenConverter;
 import red.semipro.domain.enums.BusinessType;
 import red.semipro.domain.model.identification.Identification;
 import red.semipro.domain.model.identification.IdentificationAddress;
@@ -201,8 +202,8 @@ public class EditSeminarIdentificationFormConverter {
             .stateKana(form.getStateKana())
             .cityKana(form.getCityKana())
             .townKana(form.getTownKana())
-            .line1Kana(fullToHalf.transliterate(form.getLine1Kana()))
-            .line2Kana(fullToHalf.transliterate(form.getLine2Kana()))
+            .line1Kana(HyphenConverter.convert(fullToHalf.transliterate(form.getLine1Kana())))
+            .line2Kana(HyphenConverter.convert(fullToHalf.transliterate(form.getLine2Kana())))
             .build();
     }
 }
