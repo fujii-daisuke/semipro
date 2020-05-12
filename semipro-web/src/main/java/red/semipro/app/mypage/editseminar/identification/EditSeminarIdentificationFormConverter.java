@@ -1,5 +1,6 @@
 package red.semipro.app.mypage.editseminar.identification;
 
+import com.ibm.icu.text.Transliterator;
 import java.util.Objects;
 import java.util.Optional;
 import javax.annotation.Nonnull;
@@ -186,6 +187,9 @@ public class EditSeminarIdentificationFormConverter {
      */
     public IdentificationAddress convert(@Nullable final Long identificationId,
         @NotNull final AddressForm form) {
+
+        Transliterator fullToHalf = Transliterator.getInstance("Fullwidth-Halfwidth");
+
         return IdentificationAddress.builder()
             .identificationId(identificationId)
             .postalCode(form.getPostalCode())
@@ -197,8 +201,8 @@ public class EditSeminarIdentificationFormConverter {
             .stateKana(form.getStateKana())
             .cityKana(form.getCityKana())
             .townKana(form.getTownKana())
-            .line1Kana(form.getLine1Kana())
-            .line2Kana(form.getLine2Kana())
+            .line1Kana(fullToHalf.transliterate(form.getLine1Kana()))
+            .line2Kana(fullToHalf.transliterate(form.getLine2Kana()))
             .build();
     }
 }
