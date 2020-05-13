@@ -202,8 +202,8 @@ public class EditSeminarIdentificationFormConverter {
             .stateKana(form.getStateKana())
             .cityKana(form.getCityKana())
             .townKana(form.getTownKana())
-            .line1Kana(HyphenConverter.convert(fullToHalf.transliterate(form.getLine1Kana())))
-            .line2Kana(HyphenConverter.convert(fullToHalf.transliterate(form.getLine2Kana())))
+            .line1Kana(HyphenConverter.convertHalf(fullToHalf.transliterate(form.getLine1Kana())))
+            .line2Kana(HyphenConverter.convertHalf(fullToHalf.transliterate(form.getLine2Kana())))
             .build();
     }
 }
