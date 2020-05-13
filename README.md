@@ -8,11 +8,19 @@
 もちろん、目標人数に達しない場合でも、開催できるよう設定可能です。  
   
 ## システム構成
-- semipro-web ユーザーにセミナーを告知します、また、セミナー主催者はセミナーの作成を行えます。  
-- semipro-admin セミプロ運営者にて、セミナー主催者が登録したセミナーの審査を行います。  
-- semipro-batch セミナー募集終了処理を行います。  
-- semipro-domain セミプロのドメインロジックです。  
-- semipro-common プロジェクト共通処理です。  
+- semipro-web  
+ユーザーは開催中のセミナーの閲覧、申し込みが行えます。  
+セミナー主催者は開催するセミナーを登録します。  
+- semipro-admin  
+セミプロ運営者にて、セミナー主催者が登録したセミナーの審査を行います。  
+審査時はsemipro-webのセミナー登録時に登録する本人確認情報を元にStripアカウントの登録を行います。
+- semipro-batch  
+セミナー募集終了処理を行います。  
+参加人数により開催決定の成否をセミナー主催者と参加者にメール送信します。
+- semipro-domain  
+セミプロのドメインロジックです。  
+- semipro-common  
+プロジェクト共通処理です。  
 
 ## 使用技術
 - WEBフレームワークにSpringBootを使用しています。  
@@ -41,14 +49,35 @@ docker-compose up --build
 - AWS_ACCESS_KEY_ID=別途ご連絡します  
 - AWS_DEFAULT_REGION=ap-northeast-1
   
-## CI/CD
-本番環境へのデプロイにはcircleciにてビルド/テストを実行し  
-aws codedeployにて本番環境にて自動デプロイしています。  
+## CI(Continuous Integration)  
+CircleCIサービスにてビルド/テストを自動化しています。  
+成果物はS3にアップロードしています。  
+[.circleci/congig.yml](https://github.com/fujii-daisuke/semipro/blob/master/.circleci/config.yml){:target="_blank"}
   
-## 本番環境
-本番環境にはcircleciにてビルドして作成された実行可能JarとapacheをAJPで連携して起動しています。  
-本番環境は、VPC、EC2、ELBを組み合わせて構成しています。  
+## CD(Continuous Delivery)  
+本番環境へのデプロイにはAWS CodeDeployを使用しています。  
+S3にアップロードされた成果物を本番環境へデプロイしています。  
+apache停止、tomcat停止、成果物の入れ替え、tomcat起動、apache起動の順序で行なっています。  
+[.codedeploy/appspec.yml](https://github.com/fujii-daisuke/semipro/blob/master/.codedeploy/appspec.yml){:target="_blank"}
+  
+## 本番環境  
+本番環境は、ALB、VPC、EC2を組み合わせて構成しています。  
+１台のEC2にWEB、管理、バッチアプリを設置しています。  
+apacheのバーチャルホストにてWEB、管理アプリへのアクセスを制御しAJP通信にて
+各アプリの実行可能Jarより起動したtomcatと連携しています。  
 　　
 ## Demo
- [https://www.semipro.red/](https://www.semipro.red/) 
- 
+- WEB  
+ [https://www.semipro.red/](https://www.semipro.red/)  
+  - 主催者  
+  ログインEmail: demo.semipro@gmail.com  
+  パスワード: demo.semipro  
+  - 参加者  
+  ログインEmail: customer.semipro@gmail.com  
+  パスワード: 2wsx'UJM  
+  
+- 管理  
+ [https://admin.semipro.red/](https://admin.semipro.red/)  
+ ログインID: demo  
+ パスワード: 2wsx$RFV
+
