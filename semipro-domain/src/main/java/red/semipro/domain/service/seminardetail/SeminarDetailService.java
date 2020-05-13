@@ -36,15 +36,17 @@ public class SeminarDetailService {
                 seminarId, openingStatusList);
 
         if (Objects.isNull(seminar)) {
-            ResultMessages message = ResultMessages.error().add(
-                MessageId.E_WEB_0404);
+            ResultMessages message =
+                ResultMessages.error().add(MessageId.E_WEB_0404);
             throw new BusinessException(message);
         }
 
-        SeminarDetailOutput.SeminarDetailOutputBuilder builder = SeminarDetailOutput.builder().seminar(seminar);
+        SeminarDetailOutput.SeminarDetailOutputBuilder builder =
+            SeminarDetailOutput.builder().seminar(seminar);
 
         if (Objects.nonNull(accountId)) {
-            builder.enteredTicketIds(seminarEntryRepository.findAllBySeminarIdAndAccountId(seminarId, accountId));
+            builder.enteredTicketIds(
+                seminarEntryRepository.findAllBySeminarIdAndAccountId(seminarId, accountId));
         }
 
         return builder.build();
