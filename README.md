@@ -52,13 +52,13 @@ docker-compose up --build
 ## CI(Continuous Integration)  
 CircleCIサービスにてビルド/テストを自動化しています。  
 成果物はS3にアップロードしています。  
-[.circleci/congig.yml](https://github.com/fujii-daisuke/semipro/blob/master/.circleci/config.yml){:target="_blank"}
+[.circleci/congig.yml](https://github.com/fujii-daisuke/semipro/blob/master/.circleci/config.yml)
   
 ## CD(Continuous Delivery)  
 本番環境へのデプロイにはAWS CodeDeployを使用しています。  
 S3にアップロードされた成果物を本番環境へデプロイしています。  
 apache停止、tomcat停止、成果物の入れ替え、tomcat起動、apache起動の順序で行なっています。  
-[.codedeploy/appspec.yml](https://github.com/fujii-daisuke/semipro/blob/master/.codedeploy/appspec.yml){:target="_blank"}
+[.codedeploy/appspec.yml](https://github.com/fujii-daisuke/semipro/blob/master/.codedeploy/appspec.yml)
   
 ## 本番環境  
 本番環境は、ALB、VPC、EC2を組み合わせて構成しています。  
