@@ -42,6 +42,8 @@
         INNER JOIN account ON seminar_entry.account_id = account.id
         WHERE
         seminar_entry.seminar_id = #{seminarId}
+        AND seminar_entry.stripe_transfer_id IS NULL
+        AND seminar_entry.stripe_refund_id IS NULL
     </select>
 
     <select id="countBySeminarIdAndTicketId" resultType="_int">
@@ -52,15 +54,6 @@
         WHERE
         seminar_id = #{seminarId}
         AND seminar_ticket_id = #{seminarTicketId}
-    </select>
-
-    <select id="countBySeminarId" resultType="_int">
-        SELECT
-            COUNT(*)
-        FROM
-        seminar_entry
-        WHERE
-        seminar_id = #{seminarId}
     </select>
 
     <resultMap id="seminarEntryCountResultMap" type="red.semipro.domain.model.seminar.SeminarEntryCount">
@@ -117,5 +110,21 @@
         seminar_id = #{seminarId}
         AND account_id = #{accountId}
     </select>
+
+    <update id="updateStripeTransferId">
+        UPDATE seminar_entry
+        SET stripe_transfer_id = ${stripeTransferId}
+            , updated_at = CURRENT_TIMESTAMP
+        WHERE
+            id = ${id}
+    </update>
+
+    <update id="updateStripeRefundId">
+        UPDATE seminar_entry
+        SET stripe_refund_id = ${stripeRefundId}
+            , updated_at = CURRENT_TIMESTAMP
+        WHERE
+            id = ${id}
+    </update>
 
 </mapper>
