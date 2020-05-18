@@ -1,6 +1,8 @@
 package red.semipro.domain.service.establish;
 
 import com.stripe.exception.StripeException;
+import com.stripe.model.Refund;
+import com.stripe.model.Transfer;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -62,10 +64,12 @@ public class EstablishSeminarService {
             if (seminar.isEstablish()) {
                 // セミナー開催成立の場合
                 // 主催者の口座へ振込
-                stripeTransferHelper.transfer(
+                Transfer transfer = stripeTransferHelper.transfer(
                     seminar.getAccount().getStripeConnect().getStripeConnectAccountId(),
                     entry.getTicket().getPrice(),
                     entry.getId());
+
+                seminarEntryRepository.updateStripeTransferId(entry.getId(), transfer.getId());
 
                 //応募者へセミナー成立メール送信
                 emailSharedService.sendMail(EmailInput.builder()
@@ -79,7 +83,9 @@ public class EstablishSeminarService {
             } else {
                 // セミナー開催非成立の場合
                 // 応募者へキャッシュバック
-                stripeRefundHelper.refund(entry.getStripeChargeId());
+                Refund refund = stripeRefundHelper.refund(entry.getStripeChargeId());
+
+                seminarEntryRepository.updateStripeRefundId(entry.getId(), refund.getId());
 
                 //応募者へセミナー非成立メール送信
                 emailSharedService.sendMail(EmailInput.builder()
