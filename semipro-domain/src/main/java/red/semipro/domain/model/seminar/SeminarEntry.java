@@ -47,4 +47,9 @@ public class SeminarEntry implements Serializable {
      * StripeチャージID
      */
     private String stripeChargeId;
+
+    /**
+     * Stripe送金ID
+     */
+    private String stripeTransferId;
 }

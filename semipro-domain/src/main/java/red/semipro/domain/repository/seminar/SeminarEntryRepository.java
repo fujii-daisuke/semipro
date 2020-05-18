@@ -29,8 +29,11 @@ public interface SeminarEntryRepository {
         @Nonnull @Param("seminarId") final Long seminarId,
         @Nonnull @Param("seminarTicketId") final Long seminarTicketId);
 
-    int countBySeminarId(@Nonnull @Param("seminarId") final Long seminarId);
-
+    /**
+     *
+     * @param seminarId
+     * @return
+     */
     List<SeminarEntryCount> countBySeminarIdGroupBySeminarTicketId(
         @Nonnull @Param("seminarId") final Long seminarId);
 
@@ -42,6 +45,12 @@ public interface SeminarEntryRepository {
      */
     int insert(@Nonnull final SeminarEntry seminarEntry);
 
+    /**
+     *
+     * @param seminarId
+     * @param accountId
+     * @return
+     */
     boolean existsEntry(
         @Nonnull @Param("seminarId") final Long seminarId,
         @Nonnull @Param("accountId") final Long accountId);
@@ -55,4 +64,11 @@ public interface SeminarEntryRepository {
     List<Long> findAllBySeminarIdAndAccountId(
         @Nonnull @Param("seminarId") final Long seminarId,
         @Nonnull @Param("accountId") final Long accountId);
+
+    int updateStripeTransferId(@Nonnull @Param("id") Long id,
+        @Nonnull @Param("stripeTransferId") String stripeTransferId);
+
+    int updateStripeRefundId(@Nonnull @Param("id") Long id,
+        @Nonnull @Param("stripeRefundId") String stripeRefundId);
+
 }
