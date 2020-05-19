@@ -1,4 +1,4 @@
-package red.semipro.app.entryseminar;
+package red.semipro.app.mypage.entryseminar;
 
 import com.stripe.exception.StripeException;
 import java.util.List;
@@ -61,7 +61,7 @@ public class EntrySeminarController {
             .selectedStripeCustomerCardId(
                 customerCards.isEmpty() ? null : customerCards.get(0).getId())
             .build());
-        model.setViewName("entryseminar/entryForm");
+        model.setViewName("mypage/entryseminar/entryForm");
         return model;
     }
 
@@ -85,7 +85,7 @@ public class EntrySeminarController {
 
         if (result.hasErrors()) {
             model.addObject("customerCards", customerCards);
-            model.setViewName("entryseminar/entryForm");
+            model.setViewName("mypage/entryseminar/entryForm");
             return model;
         }
 
@@ -94,7 +94,7 @@ public class EntrySeminarController {
                 .filter(c -> c.getId().equals(form.getSelectedStripeCustomerCardId()))
                 .findFirst()
                 .orElseThrow());
-        model.setViewName("entryseminar/confirm");
+        model.setViewName("mypage/entryseminar/confirm");
         return model;
     }
 
@@ -116,7 +116,7 @@ public class EntrySeminarController {
         if (result.hasErrors()) {
             model.addObject("customerCards", entrySeminarHelper
                 .findStripeCustomerCardList(accountUserDetails.getAccount().getId()));
-            model.setViewName("entryseminar/entryForm");
+            model.setViewName("mypage/entryseminar/entryForm");
             return model;
         }
 

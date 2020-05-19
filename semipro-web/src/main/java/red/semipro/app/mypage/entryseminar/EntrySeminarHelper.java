@@ -1,4 +1,4 @@
-package red.semipro.app.entryseminar;
+package red.semipro.app.mypage.entryseminar;
 
 import com.google.common.collect.Lists;
 import com.stripe.exception.StripeException;
