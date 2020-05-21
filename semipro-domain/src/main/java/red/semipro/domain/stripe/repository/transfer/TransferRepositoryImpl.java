@@ -1,4 +1,4 @@
-package red.semipro.domain.helper.stripe.transfer;
+package red.semipro.domain.stripe.repository.transfer;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -7,14 +7,14 @@ import com.stripe.param.TransferCreateParams;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
+@Repository
 @RequiredArgsConstructor
-public class StripeTransferHelper {
+public class TransferRepositoryImpl implements TransferRepository {
 
-    @Value("${custom.stripe.api.key}")
-    private String STRIPE_API_KEY;
+    @Value("${custom.stripe.secret.key}")
+    private String STRIPE_SECRET_KEY;
 
     /**
      * プラットフォームからコネクトアカウントに送金
@@ -29,7 +29,7 @@ public class StripeTransferHelper {
         @Nonnull final Long amount,
         @Nonnull final Long seminarEntryId) throws StripeException {
 
-        Stripe.apiKey = STRIPE_API_KEY;
+        Stripe.apiKey = STRIPE_SECRET_KEY;
 
         TransferCreateParams params = TransferCreateParams.builder()
             .setAmount(amount)

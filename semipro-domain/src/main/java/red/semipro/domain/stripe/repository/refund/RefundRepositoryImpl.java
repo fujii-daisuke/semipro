@@ -1,4 +1,4 @@
-package red.semipro.domain.helper.stripe.refund;
+package red.semipro.domain.stripe.repository.refund;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -7,14 +7,14 @@ import com.stripe.param.RefundCreateParams;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
+@Repository
 @RequiredArgsConstructor
-public class StripeRefundHelper {
+public class RefundRepositoryImpl implements RefundRepository {
 
-    @Value("${custom.stripe.api.key}")
-    private String STRIPE_API_KEY;
+    @Value("${custom.stripe.secret.key}")
+    private String STRIPE_SECRET_KEY;
 
     /**
      * プラットフォームから顧客に返金
@@ -25,7 +25,7 @@ public class StripeRefundHelper {
      */
     public Refund refund(@Nonnull final String chargeId) throws StripeException {
 
-        Stripe.apiKey = STRIPE_API_KEY;
+        Stripe.apiKey = STRIPE_SECRET_KEY;
 
         RefundCreateParams params = RefundCreateParams.builder()
             .setCharge(chargeId)

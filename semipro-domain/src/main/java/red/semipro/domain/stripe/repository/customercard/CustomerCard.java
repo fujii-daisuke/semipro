@@ -1,4 +1,4 @@
-package red.semipro.domain.helper.stripe.customercard;
+package red.semipro.domain.stripe.repository.customercard;
 
 
 import java.io.Serializable;
