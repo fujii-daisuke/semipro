@@ -1,4 +1,4 @@
-package red.semipro.domain.helper.stripe.charge;
+package red.semipro.domain.stripe.repository.charge;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -7,14 +7,14 @@ import com.stripe.param.ChargeCreateParams;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
+@Repository
 @RequiredArgsConstructor
-public class StripeChargeHelper {
+public class ChargeRepositoryImpl implements ChargeRepository {
 
-    @Value("${custom.stripe.api.key}")
-    private String STRIPE_API_KEY;
+    @Value("${custom.stripe.secret.key}")
+    private String STRIPE_SECRET_KEY;
 
     /**
      * 顧客からプラットフォームにチャージ
@@ -31,7 +31,7 @@ public class StripeChargeHelper {
         @Nonnull final Long amount,
         @Nonnull final Long seminarEntryId) throws StripeException {
 
-        Stripe.apiKey = STRIPE_API_KEY;
+        Stripe.apiKey = STRIPE_SECRET_KEY;
 
         ChargeCreateParams chargeCreateParams = new ChargeCreateParams.Builder()
             .setAmount(amount)

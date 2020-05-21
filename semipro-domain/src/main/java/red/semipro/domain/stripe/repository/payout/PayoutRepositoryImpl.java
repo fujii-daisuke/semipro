@@ -1,4 +1,4 @@
-package red.semipro.domain.helper.stripe.payout;
+package red.semipro.domain.stripe.repository.payout;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -8,14 +8,14 @@ import com.stripe.param.PayoutCreateParams;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
+@Repository
 @RequiredArgsConstructor
-public class StripePayoutHelper {
+public class PayoutRepositoryImpl implements PayoutRepository {
 
-    @Value("${custom.stripe.api.key}")
-    private String STRIPE_API_KEY;
+    @Value("${custom.stripe.secret.key}")
+    private String STRIPE_SECRET_KEY;
 
     /**
      * プラットフォームから顧客に返金
@@ -27,7 +27,7 @@ public class StripePayoutHelper {
     public Payout payout(@Nonnull final String stripeConnectAccountId, @Nonnull final Long amount)
         throws StripeException {
 
-        Stripe.apiKey = STRIPE_API_KEY;
+        Stripe.apiKey = STRIPE_SECRET_KEY;
 
         PayoutCreateParams params =
             PayoutCreateParams.builder()

@@ -13,8 +13,6 @@ import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import red.semipro.domain.common.constants.MessageId;
 import red.semipro.domain.enums.OpeningStatus;
-import red.semipro.domain.helper.stripe.charge.StripeChargeHelper;
-import red.semipro.domain.helper.stripe.customercard.StripeCardHelper;
 import red.semipro.domain.model.account.Account;
 import red.semipro.domain.model.account.AccountStripeCustomer;
 import red.semipro.domain.model.seminar.Seminar;
@@ -25,6 +23,8 @@ import red.semipro.domain.repository.seminar.SeminarEntryRepository;
 import red.semipro.domain.repository.seminar.SeminarEntrySummaryRepository;
 import red.semipro.domain.repository.seminar.SeminarRepository;
 import red.semipro.domain.service.seminar.SeminarSharedService;
+import red.semipro.domain.stripe.repository.charge.ChargeRepository;
+import red.semipro.domain.stripe.repository.customercard.CardRepository;
 
 /**
  * セミナーエントリー - service
@@ -39,8 +39,8 @@ public class EntrySeminarService {
     private final AccountStripeCustomerRepository accountStripeCustomerRepository;
     private final SeminarEntryRepository seminarEntryRepository;
     private final SeminarEntrySummaryRepository seminarEntrySummaryRepository;
-    private final StripeCardHelper stripeCardHelper;
-    private final StripeChargeHelper stripeChargeHelper;
+    private final CardRepository cardRepository;
+    private final ChargeRepository chargeRepository;
 
     public Seminar findSeminar(
         @Nonnull final Long seminarId,
@@ -82,7 +82,7 @@ public class EntrySeminarService {
         AccountStripeCustomer accountStripeCustomer =
             accountStripeCustomerRepository.findOne(input.getEntryAccountId());
         Card card =
-            stripeCardHelper.retrieve(accountStripeCustomer.getStripeCustomerId(),
+            cardRepository.retrieve(accountStripeCustomer.getStripeCustomerId(),
                 input.getStripeCustomerCardId());
         if (Objects.isNull(card)) {
 
@@ -112,7 +112,7 @@ public class EntrySeminarService {
         }
 
         // stripe charge
-        Charge charge = stripeChargeHelper.charge(
+        Charge charge = chargeRepository.charge(
             accountStripeCustomer.getStripeCustomerId(),
             card.getId(),
             ticket.getPrice(),
