@@ -12,11 +12,11 @@ import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import red.semipro.domain.common.constants.MessageId;
 import red.semipro.domain.model.account.AccountStripeCustomer;
-import red.semipro.domain.helper.stripe.customer.StripeCustomerHelper;
-import red.semipro.domain.helper.stripe.customercard.CustomerCard;
-import red.semipro.domain.helper.stripe.customercard.CustomerCardConverter;
-import red.semipro.domain.helper.stripe.customercard.StripeCardHelper;
 import red.semipro.domain.repository.account.AccountStripeCustomerRepository;
+import red.semipro.domain.stripe.repository.customer.CustomerRepository;
+import red.semipro.domain.stripe.repository.customercard.CardRepository;
+import red.semipro.domain.stripe.repository.customercard.CustomerCard;
+import red.semipro.domain.stripe.repository.customercard.CustomerCardConverter;
 
 /**
  * Stripe顧客クレジットカード追加 - helper
@@ -26,8 +26,8 @@ import red.semipro.domain.repository.account.AccountStripeCustomerRepository;
 @Transactional
 public class StripeAddCardHelper {
 
-    private final StripeCustomerHelper stripeCustomerHelper;
-    private final StripeCardHelper stripeCardHelper;
+    private final CustomerRepository customerRepository;
+    private final CardRepository cardRepository;
     private final AccountStripeCustomerRepository accountStripeCustomerRepository;
     private final CustomerCardConverter customerCardConverter;
 
@@ -38,7 +38,7 @@ public class StripeAddCardHelper {
             accountStripeCustomerRepository.findOne(accountId);
         Customer customer;
         if (Objects.isNull(accountStripeCustomer)) {
-            customer = stripeCustomerHelper.create(accountId);
+            customer = customerRepository.create(accountId);
 
             accountStripeCustomerRepository.insert(AccountStripeCustomer.builder()
                 .accountId(accountId)
@@ -46,14 +46,14 @@ public class StripeAddCardHelper {
                 .build());
         } else {
             try {
-                customer = stripeCustomerHelper.retrieve(accountStripeCustomer.getStripeCustomerId());
+                customer = customerRepository.retrieve(accountStripeCustomer.getStripeCustomerId());
             } catch (StripeException e) {
                 e.printStackTrace();
                 ResultMessages message = ResultMessages.error().add(MessageId.E_WEB_0500);
                 throw new BusinessException(message);
             }
         }
-        Card card = stripeCardHelper.create(customer.getId(), token);
+        Card card = cardRepository.create(customer.getId(), token);
         return customerCardConverter.convert(card);
     }
 }

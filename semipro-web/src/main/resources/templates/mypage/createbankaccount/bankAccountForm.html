@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+    <title>銀行口座登録</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link th:href="@{/css/flatpickr.min.css}" rel="stylesheet">
+    <meta th:name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+<main class="uk-margin" layout:fragment="content">
+    <div class="uk-flex uk-flex-center">
+        <div class="uk-card uk-card-default uk-width-xxlarge">
+            <div class="uk-card-header">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-expand">
+                        <span class="uk-card-title uk-margin-remove-bottom">銀行口座登録</span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-card-body">
+                <div class="uk-text-lead uk-text-bolder uk-text-center uk-margin-medium">銀行口座を設定しましょう</div>
+                <form class="uk-form-horizontal"
+                      th:object="${createBankAccountForm}">
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold">ビジネスタイプ
+                            <span class="uk-label uk-label-danger uk-margin-left uk-text-top">必須</span></label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <label><input type="radio"
+                                          id="individual"
+                                          class="uk-radio"
+                                          th:name="businessType"
+                                          th:checked="*{businessType != null and businessType.value == 'individual'}"
+                                          th:value="individual">個人</label>
+                            <label class="uk-margin-left"><input type="radio"
+                                                                 id="company"
+                                                                 class="uk-radio"
+                                                                 th:name="businessType"
+                                                                 th:checked="*{businessType != null and businessType.value == 'company'}"
+                                                                 th:value="company">法人</label>
+                            <div th:if="${#fields.hasErrors('businessType')}"
+                                 th:errors="*{businessType}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold" for="bankCode">銀行コード
+                            <span class="uk-label uk-label-danger uk-margin-left uk-text-top">必須</span></label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <input type="text"
+                                   id="bankCode"
+                                   class="uk-input uk-form-small uk-form-width-large"
+                                   th:classappend="${#fields.hasErrors('bankCode') ? 'uk-form-danger':''}"
+                                   th:field="*{bankCode}"
+                                   maxlength="4"
+                                   placeholder="0017"
+                                   th:readonly="*{edit}">
+                            <div th:if="${#fields.hasErrors('bankCode')}"
+                                 th:errors="*{bankCode}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold" for="branchCode">支店コード
+                            <span class="uk-label uk-label-danger uk-margin-left uk-text-top">必須</span></label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <input type="text"
+                                   id="branchCode"
+                                   class="uk-input uk-form-small uk-form-width-large"
+                                   th:classappend="${#fields.hasErrors('branchCode') ? 'uk-form-danger':''}"
+                                   th:field="*{branchCode}"
+                                   maxlength="3"
+                                   placeholder="258"
+                                   th:readonly="*{edit}">
+                            <div th:if="${#fields.hasErrors('branchCode')}"
+                                 th:errors="*{branchCode}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold" for="accountNumber">口座番号
+                            <span class="uk-label uk-label-danger uk-margin-left uk-text-top">必須</span></label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <input type="text"
+                                   id="accountNumber"
+                                   class="uk-input uk-form-small uk-form-width-large"
+                                   th:classappend="${#fields.hasErrors('accountNumber') ? 'uk-form-danger':''}"
+                                   th:name="*{accountNumber}"
+                                   maxlength="7"
+                                   placeholder="0001234"
+                                   th:readonly="*{edit}"
+                                   th:value="*{last4 != null ? '***' + last4: ''}">
+                            <div th:if="${#fields.hasErrors('accountNumber')}"
+                                 th:errors="*{accountNumber}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-margin-medium">
+                        <label class="uk-form-label uk-text-bold" for="accountHolderName">口座名義
+                            <span class="uk-label uk-label-danger uk-margin-left uk-text-top">必須</span></label>
+                        <div class="uk-form-controls uk-form-controls-text">
+                            <input type="text"
+                                   id="accountHolderName"
+                                   class="uk-input uk-form-small uk-form-width-large"
+                                   th:classappend="${#fields.hasErrors('accountHolderName') ? 'uk-form-danger':''}"
+                                   th:field="*{accountHolderName}"
+                                   maxlength="20"
+                                   placeholder="ヤマダ　タカシ">
+                            <div th:if="${#fields.hasErrors('accountHolderName')}"
+                                 th:errors="*{accountHolderName}"
+                                 class="uk-text-small uk-text-danger">error
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="uk-text-center uk-margin uk-margin-medium-top">
+                        <button type="button" class="bank-account-create uk-button uk-button-primary uk-margin-right" th:if="*{bankCode == null}">　登　録　</button>
+                        <button type="button" class="bank-account-update uk-button uk-button-primary uk-margin-right" th:if="*{bankCode != null}">　更　新　</button>
+                        <button type="button" class="bank-account-delete uk-button uk-button-secondary uk-margin-left" th:if="*{bankCode != null}">削　除</button>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block th:fragment="script">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="text/javascript" th:inline="javascript">
+
+      const stripe = Stripe(/*[[${stripePublicKey}]]*/ '');
+
+      const header = /*[[${_csrf.headerName}]]*/ '';
+      const token = /*[[${_csrf.token}]]*/ '';
+
+      $(document).ajaxSend(function (e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+      });
+
+      $('.bank-account-create').on('click', function () {
+        stripe.createToken('bank_account', {
+          country: 'JP',
+          currency: 'jpy',
+          account_holder_type: $('input[name="businessType"]:checked').val(),
+          routing_number: $("#bankCode").val() + $("#branchCode").val(),
+          account_number: $("#accountNumber").val(),
+          account_holder_name: $("#accountHolderName").val()
+        }).then(function (result) {
+          if (result.error) {
+
+            alert("入力内容に誤りがあります。");
+            console.log(result.error);
+
+          } else {
+
+            $.ajax({
+              type: "POST",
+              url: "/bankaccount/create",
+              dataType: 'json',
+              data: {
+                'token': result.token.id
+              }
+            }).done(function (data, textStatus, jqXHR) {
+
+              alert("銀行口座を登録しました。");
+              location.reload();
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+              alert("銀行口座の登録に失敗しました。時間を置いて再度登録して下さい。");
+              console.log(textStatus);
+            });
+          }
+        });
+      });
+
+      $('.bank-account-update').on('click', function () {
+
+        $.ajax({
+          type: "POST",
+          url: "/bankaccount/update",
+          dataType: 'json',
+          data: {
+            businessType: $('input[name="businessType"]:checked').val(),
+            accountHolderName: $("#accountHolderName").val()
+          }
+        }).done(function (data, textStatus, jqXHR) {
+
+          alert("銀行口座を登録しました。");
+          location.reload();
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+
+          alert("銀行口座の登録に失敗しました。時間を置いて再度登録して下さい。");
+          console.log(textStatus);
+        });
+      })
+
+      $('.bank-account-delete').on('click', function () {
+
+        $.ajax({
+          type: "POST",
+          url: "/bankaccount/delete",
+          dataType: 'json',
+          data: {
+          }
+        }).done(function (data, textStatus, jqXHR) {
+
+          alert("銀行口座を削除しました。");
+          location.reload();
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+
+          alert("銀行口座の削除に失敗しました。時間を置いて再度操作して下さい。");
+          console.log(textStatus);
+        });
+      })
+
+    </script>
+
+</th:block>
+</body>
+</html>

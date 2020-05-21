@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import red.semipro.domain.enums.OpeningStatus;
-import red.semipro.domain.helper.stripe.customercard.CustomerCard;
+import red.semipro.domain.stripe.repository.customercard.CustomerCard;
 import red.semipro.domain.service.entry.EntrySeminarInput;
 import red.semipro.domain.service.entry.EntrySeminarService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;

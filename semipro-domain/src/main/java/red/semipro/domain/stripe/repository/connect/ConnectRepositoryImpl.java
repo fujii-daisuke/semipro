@@ -1,4 +1,4 @@
-package red.semipro.domain.helper.stripe.connect;
+package red.semipro.domain.stripe.repository.connect;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -11,17 +11,17 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 /**
  * Stripe コネクト - helper
  */
-@Component
+@Repository
 @RequiredArgsConstructor
-public class StripeConnectHelper {
+public class ConnectRepositoryImpl implements ConnectRepository {
 
-    @Value("${custom.stripe.api.key}")
-    private String STRIPE_API_KEY;
+    @Value("${custom.stripe.secret.key}")
+    private String STRIPE_SECRET_KEY;
 
     /**
      * Stripeコネクトアカウントを登録します
@@ -31,7 +31,7 @@ public class StripeConnectHelper {
      */
     public Account create(@Nonnull final AccountCreateParams accountCreateParams)
         throws StripeException {
-        Stripe.apiKey = STRIPE_API_KEY;
+        Stripe.apiKey = STRIPE_SECRET_KEY;
         return Account.create(accountCreateParams);
     }
 
@@ -43,7 +43,7 @@ public class StripeConnectHelper {
      * @throws StripeException Stripe通信エラー時の例外
      */
     public Account retrieve(@Nonnull final String stripeConnectAccountId) throws StripeException {
-        Stripe.apiKey = STRIPE_API_KEY;
+        Stripe.apiKey = STRIPE_SECRET_KEY;
         return Account.retrieve(stripeConnectAccountId);
     }
 
@@ -79,7 +79,7 @@ public class StripeConnectHelper {
      */
     public Account update(@NotNull final String stripeConnectAccountId,
         @Nonnull final AccountUpdateParams accountUpdateParams) throws StripeException {
-        Stripe.apiKey = STRIPE_API_KEY;
+        Stripe.apiKey = STRIPE_SECRET_KEY;
         Account account = retrieve(stripeConnectAccountId);
         return account.update(accountUpdateParams);
     }

@@ -46,7 +46,8 @@ docker-compose up --build
 - SMTP_PASSWORD=別途ご連絡します  
 - DB_USER=root  
 - DB_PASSWORD=別途ご連絡します  
-- STRIPE_API_KEY=別途ご連絡します  
+- STRIPE_SECRET_KEY=別途ご連絡します  
+- STRIPE_PUBLIC_KEY=別途ご連絡します  
 - AWS_SECRET_ACCESS_KEY=別途ご連絡します  
 - AWS_ACCESS_KEY_ID=別途ご連絡します  
 - AWS_DEFAULT_REGION=ap-northeast-1

@@ -10,7 +10,7 @@ import red.semipro.domain.enums.OpeningStatus;
 import red.semipro.domain.model.account.AccountStripeConnect;
 import red.semipro.domain.model.identification.Identification;
 import red.semipro.domain.model.seminar.Seminar;
-import red.semipro.domain.helper.stripe.connect.StripeConnectHelper;
+import red.semipro.domain.stripe.repository.connect.ConnectRepositoryImpl;
 import red.semipro.domain.repository.account.AccountStripeConnectRepository;
 import red.semipro.domain.service.identification.IdentificationSharedService;
 import red.semipro.domain.service.seminar.SeminarSharedService;
@@ -24,7 +24,7 @@ public class RegisterStripeConnectHelper {
     private final SeminarSharedService seminarSharedService;
     private final IdentificationSharedService identificationSharedService;
     private final StripeAccountCreateParamsConverter stripeAccountCreateParamsConverter;
-    private final StripeConnectHelper stripeConnectHelper;
+    private final ConnectRepositoryImpl connectRepository;
 
     /**
      * Stripeコネクトアカウント登録を行います
@@ -42,7 +42,7 @@ public class RegisterStripeConnectHelper {
 
         Identification identification = identificationSharedService.findOneWithDetails(seminarId);
 
-        Account stripeAccount = stripeConnectHelper
+        Account stripeAccount = connectRepository
             .create(stripeAccountCreateParamsConverter.convert(identification));
 
         accountStripeConnectRepository.insert(AccountStripeConnect.builder()

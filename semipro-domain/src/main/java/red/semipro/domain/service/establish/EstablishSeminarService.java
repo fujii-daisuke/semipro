@@ -14,8 +14,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import red.semipro.domain.enums.OpeningStatus;
-import red.semipro.domain.helper.stripe.refund.StripeRefundHelper;
-import red.semipro.domain.helper.stripe.transfer.StripeTransferHelper;
 import red.semipro.domain.model.seminar.Seminar;
 import red.semipro.domain.model.seminar.SeminarEntry;
 import red.semipro.domain.repository.seminar.SeminarEntryRepository;
@@ -24,6 +22,8 @@ import red.semipro.domain.service.email.EmailDocumentType;
 import red.semipro.domain.service.email.EmailInput;
 import red.semipro.domain.service.email.EmailSharedService;
 import red.semipro.domain.service.seminar.SeminarSharedService;
+import red.semipro.domain.stripe.repository.refund.RefundRepository;
+import red.semipro.domain.stripe.repository.transfer.TransferRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +34,8 @@ public class EstablishSeminarService {
     private final SeminarSharedService seminarSharedService;
     private final SeminarRepository seminarRepository;
     private final SeminarEntryRepository seminarEntryRepository;
-    private final StripeTransferHelper stripeTransferHelper;
-    private final StripeRefundHelper stripeRefundHelper;
+    private final TransferRepository transferRepository;
+    private final RefundRepository refundRepository;
     private final EmailSharedService emailSharedService;
 
     @Value("${custom.application.email.fromEmail}")
@@ -64,7 +64,7 @@ public class EstablishSeminarService {
             if (seminar.isEstablish()) {
                 // セミナー開催成立の場合
                 // 主催者の口座へ振込
-                Transfer transfer = stripeTransferHelper.transfer(
+                Transfer transfer = transferRepository.transfer(
                     seminar.getAccount().getStripeConnect().getStripeConnectAccountId(),
                     entry.getTicket().getPrice(),
                     entry.getId());
@@ -83,7 +83,7 @@ public class EstablishSeminarService {
             } else {
                 // セミナー開催非成立の場合
                 // 応募者へキャッシュバック
-                Refund refund = stripeRefundHelper.refund(entry.getStripeChargeId());
+                Refund refund = refundRepository.refund(entry.getStripeChargeId());
 
                 seminarEntryRepository.updateStripeRefundId(entry.getId(), refund.getId());
 
