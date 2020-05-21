@@ -9,12 +9,12 @@ import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import red.semipro.domain.helper.stripe.customercard.CustomerCard;
-import red.semipro.domain.helper.stripe.customercard.CustomerCardConverter;
-import red.semipro.domain.helper.stripe.customercard.StripeCardHelper;
 import red.semipro.domain.model.account.AccountStripeCustomer;
 import red.semipro.domain.repository.account.AccountStripeCustomerRepository;
 import red.semipro.domain.service.entry.EntrySeminarService;
+import red.semipro.domain.stripe.repository.customercard.CardRepository;
+import red.semipro.domain.stripe.repository.customercard.CustomerCard;
+import red.semipro.domain.stripe.repository.customercard.CustomerCardConverter;
 
 /**
  * セミナー予約 - helper
@@ -25,7 +25,7 @@ import red.semipro.domain.service.entry.EntrySeminarService;
 public class EntrySeminarHelper {
 
     private final AccountStripeCustomerRepository accountStripeCustomerRepository;
-    private final StripeCardHelper stripeCardHelper;
+    private final CardRepository cardRepository;
     private final CustomerCardConverter customerCardConverter;
     private final EntrySeminarService entrySeminarService;
 
@@ -39,7 +39,7 @@ public class EntrySeminarHelper {
             return List.of();
         }
 
-        List<Card> cardList = stripeCardHelper.list(accountStripeCustomer.getStripeCustomerId());
+        List<Card> cardList = cardRepository.list(accountStripeCustomer.getStripeCustomerId());
         List<CustomerCard> customerCardList = Lists.newArrayList();
         for (Card card: cardList) {
             customerCardList.add(customerCardConverter.convert(card));

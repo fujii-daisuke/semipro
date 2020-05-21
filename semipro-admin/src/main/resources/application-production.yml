@@ -40,9 +40,8 @@ server:
 logging:
   level:
     root: info
-    org.springframework.web: info
+    org.springframework: info
     red.semipro: info
-    red.semipro.domain.repository: info
 
 mybatis:
   #  mapperLocations: classpath:sqlMapper/*.xml
@@ -69,4 +68,5 @@ custom:
       fromEmail: red.semipro@gmail.com
   aws.s3.bucket: semipro-production
   aws.s3.seminar.path: upload/seminar/
-  stripe.api.key: ${STRIPE_API_KEY}
+  stripe.secret.key: ${STRIPE_SECRET_KEY}
+  stripe.public.key: ${STRIPE_PUBLIC_KEY}

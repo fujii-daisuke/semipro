@@ -37,6 +37,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             "/seminars/created/**",
             "/seminars/**/entry/**",
             "/upload/image/**",
+            "/bankaccount/**"
         };
 
     /**

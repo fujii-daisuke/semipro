@@ -1,4 +1,4 @@
-package red.semipro.domain.helper.stripe.customer;
+package red.semipro.domain.stripe.repository.customer;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -8,14 +8,14 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
+@Repository
 @RequiredArgsConstructor
-public class StripeCustomerHelper {
+public class CustomerRepositoryImpl implements CustomerRepository{
 
-    @Value("${custom.stripe.api.key}")
-    private String STRIPE_API_KEY;
+    @Value("${custom.stripe.secret.key}")
+    private String STRIPE_SECRET_KEY;
 
     /**
      * Stripe顧客を登録します
@@ -23,7 +23,7 @@ public class StripeCustomerHelper {
      * @param semiproAccountId セミプロアカウントID
      */
     public Customer create(@Nonnull final Long semiproAccountId) throws StripeException {
-        Stripe.apiKey = STRIPE_API_KEY;
+        Stripe.apiKey = STRIPE_SECRET_KEY;
 
         Map<String, Object> params = new HashMap<>();
         params.put(
@@ -36,7 +36,7 @@ public class StripeCustomerHelper {
 
     public Customer retrieve(String stripeCustomerId)
         throws StripeException {
-        Stripe.apiKey = STRIPE_API_KEY;
+        Stripe.apiKey = STRIPE_SECRET_KEY;
 
         return Customer.retrieve(stripeCustomerId);
     }

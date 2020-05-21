@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+    namespace="red.semipro.domain.repository.account.StripeBankAccountRepository">
+
+    <resultMap id="stripeBankAccountResultMap" type="red.semipro.domain.model.account.StripeBankAccount">
+        <result property="id" column="id"/>
+        <result property="stripeConnectAccountId" column="stripe_connect_account_id"/>
+        <result property="bankAccountId" column="bank_account_id"/>
+    </resultMap>
+
+    <select id="findByStripeConnectAccountId" resultMap="stripeBankAccountResultMap">
+        SELECT
+            id
+            , stripe_connect_account_id
+            , bank_account_id
+        FROM stripe_bank_account
+        WHERE
+            stripe_connect_account_id = #{stripeConnectAccountId}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO stripe_bank_account (
+            stripe_connect_account_id
+            , bank_account_id
+        ) VALUES (
+            #{stripeConnectAccountId}
+            , #{bankAccountId}
+        )
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM stripe_bank_account WHERE id = #{id}
+    </delete>
+
+</mapper>
