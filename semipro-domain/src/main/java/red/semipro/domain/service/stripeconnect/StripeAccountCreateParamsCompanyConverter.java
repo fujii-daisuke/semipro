@@ -1,4 +1,4 @@
-package red.semipro.admin.app.registerstripeconnect;
+package red.semipro.domain.service.stripeconnect;
 
 import com.stripe.param.AccountCreateParams;
 import com.stripe.param.AccountCreateParams.Company.AddressKana;
