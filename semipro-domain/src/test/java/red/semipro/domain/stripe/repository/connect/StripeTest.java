@@ -20,6 +20,7 @@ import com.stripe.param.TransferCreateParams;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class StripeTest {
@@ -30,6 +31,7 @@ public class StripeTest {
      * @throws StripeException
      */
     @Test
+    @Ignore
     public void createCustomer() throws StripeException {
         Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
 
@@ -49,6 +51,7 @@ public class StripeTest {
      * @throws StripeException
      */
     @Test
+    @Ignore
     public void createCustomerCard() throws StripeException {
         Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
 
@@ -61,6 +64,7 @@ public class StripeTest {
     }
 
     @Test
+    @Ignore
     public void createAccountCompany() throws StripeException {
         RequestOptions requestOptions = new RequestOptions.RequestOptionsBuilder()
             .setApiKey("sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn")
@@ -87,6 +91,7 @@ public class StripeTest {
      * 子アカウントの作成
      */
     @Test
+    @Ignore
     public void create() throws StripeException {
         RequestOptions requestOptions = new RequestOptions.RequestOptionsBuilder()
             .setApiKey("sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn")
@@ -156,6 +161,7 @@ public class StripeTest {
      * 子アカウント情報
      */
     @Test
+    @Ignore
     public void retrieveTest() throws StripeException {
         Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
 
@@ -164,6 +170,7 @@ public class StripeTest {
     }
 
     @Test
+    @Ignore
     public void createTokenTest() throws StripeException {
         Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
 
@@ -187,6 +194,7 @@ public class StripeTest {
      * @see <a href="https://qiita.com/y_toku/items/7bfa42793801dfc5415d#custom-%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">アカウントを作成する</a>
      */
     @Test
+    @Ignore
     public void identityVerificationTest() throws StripeException {
         //TODO pending
         Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
@@ -209,6 +217,7 @@ public class StripeTest {
      * bank account details</a>
      */
     @Test
+    @Ignore
     public void createBank() throws StripeException {
         Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
 
@@ -230,6 +239,7 @@ public class StripeTest {
      * Connect</a>
      */
     @Test
+    @Ignore
     public void chargeTest() throws StripeException {
         Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
 
@@ -249,6 +259,7 @@ public class StripeTest {
      * Separate Charges and Transfers 子アカウントへ送金
      */
     @Test
+    @Ignore
     public void transferTest() throws StripeException {
         Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";
         TransferCreateParams params = TransferCreateParams.builder()
@@ -266,6 +277,7 @@ public class StripeTest {
      * プラットフォームから顧客へ返金
      */
     @Test
+    @Ignore
     public void refundTest() throws StripeException {
         // TODO　プラットフォームへの入金が未完の為、テスト未確認
         Stripe.apiKey = "sk_test_KoBmJmYjEn1OfoBb9b8H1HRB00DojSQMTn";

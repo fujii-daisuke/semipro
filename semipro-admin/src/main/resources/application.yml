@@ -63,6 +63,7 @@ custom:
       eventon: 0 0 3 * * *
     email:
       fromEmail: d.ziifuu@gmail.com
+      operator: semipro.operator@gmail.com
   aws.s3.bucket: semipro-dev
   aws.s3.seminar.path: upload/seminar/
   stripe.secret.key: ${STRIPE_SECRET_KEY}

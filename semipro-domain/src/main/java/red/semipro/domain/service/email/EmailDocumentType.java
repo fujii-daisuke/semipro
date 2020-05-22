@@ -7,6 +7,8 @@ public enum EmailDocumentType {
 
     ACTIVATION("activation"),
     ACTIVATED("activated"),
+    APPLY("apply"),
+    RECRUIT("recruit"),
     ESTABLISH_APPLICANT("establish_applicant"),
     ESTABLISH_SPONSOR("establish_sponsor"),
     NOT_ESTABLISH_APPLICANT("not_establish_applicant"),

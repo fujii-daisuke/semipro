@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import red.semipro.domain.service.approve.ApproveSeminarService;
 
 /**
  * セミナー承認 - controller
@@ -15,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = "/seminars")
 public class ApproveSeminarController {
 
-    private final ApproveSeminarHelper approveSeminarHelper;
+    private final ApproveSeminarService approveSeminarService;
 
     /**
      * セミナー承認を行います
@@ -28,7 +29,7 @@ public class ApproveSeminarController {
     public ModelAndView approve(@PathVariable("seminarId") final Long seminarId,
         ModelAndView model) {
 
-        approveSeminarHelper.approve(seminarId);
+        approveSeminarService.approve(seminarId);
         model.setViewName("redirect:/seminars/" + seminarId + "/detail");
         return model;
     }

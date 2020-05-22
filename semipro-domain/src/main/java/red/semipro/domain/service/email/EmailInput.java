@@ -21,5 +21,7 @@ public class EmailInput {
 
     private String fromEmail;
 
+    private String bcc;
+
     private Locale locale;
 }

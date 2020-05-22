@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import red.semipro.domain.service.stripeconnect.StripeConnectService;
 
 /**
  * セミナー検索 - controller
@@ -16,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = "/seminars")
 public class RegisterStripeConnectController {
 
-    private final RegisterStripeConnectHelper registerStripeConnectHelper;
+    private final StripeConnectService stripeConnectService;
 
     /**
      * Stripe会員登録を行います
@@ -30,7 +31,7 @@ public class RegisterStripeConnectController {
     public ModelAndView registerStripeCustomer(@PathVariable("seminarId") final Long seminarId,
         ModelAndView model) throws StripeException {
 
-        registerStripeConnectHelper.register(seminarId);
+        stripeConnectService.register(seminarId);
         model.setViewName("redirect:/seminars/" + seminarId + "/detail");
         return model;
     }
