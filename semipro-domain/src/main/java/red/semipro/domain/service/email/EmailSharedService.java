@@ -1,8 +1,11 @@
 package red.semipro.domain.service.email;
 
 import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -26,6 +29,9 @@ public class EmailSharedService {
     private final EmailMessageProperty emailMessageProperty;
     private final MailSender mailSender;
 
+    @Value("${custom.application.email.fromEmail}")
+    private String fromEmail;
+
     /**
      * メール送信を行います
      *
@@ -37,11 +43,15 @@ public class EmailSharedService {
         input.getVariableMap().forEach(ctx::setVariable);
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(input.getFromEmail());
+        message.setFrom(Optional.ofNullable(input.getFromEmail()).orElse(fromEmail));
         message.setTo(input.getRecipientEmail());
-        message.setSubject(emailMessageProperty.get(input.getEmailDocumentType().getKey() + ".subject"));
-        message.setText(emailTemplateEngine().process("text/" + input.getEmailDocumentType().getKey(), ctx));
-
+        message.setSubject(
+            emailMessageProperty.get(input.getEmailDocumentType().getKey() + ".subject"));
+        message.setText(
+            emailTemplateEngine().process("text/" + input.getEmailDocumentType().getKey(), ctx));
+        if (Objects.nonNull(input.getBcc())) {
+            message.setBcc(input.getBcc());
+        }
         this.mailSender.send(message);
     }
 

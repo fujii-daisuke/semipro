@@ -1,4 +1,4 @@
-package red.semipro.app.mypage.applyseminar;
+package red.semipro.domain.service.apply;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,9 +36,6 @@ public class EstablishSeminarService {
     private final TransferRepository transferRepository;
     private final RefundRepository refundRepository;
     private final EmailSharedService emailSharedService;
-
-    @Value("${custom.application.email.fromEmail}")
-    private String fromEmail;
 
     public void establish(@Nonnull final Long seminarId, @Nonnull final LocalDate executionDate)
         throws StripeException {
@@ -76,7 +72,6 @@ public class EstablishSeminarService {
                     .emailDocumentType(EmailDocumentType.ESTABLISH_APPLICANT)
                     .variableMap(Map.of("account", entry.getAccount(), "seminar", seminar))
                     .recipientEmail(entry.getAccount().getEmail())
-                    .fromEmail(fromEmail)
                     .locale(LocaleContextHolder.getLocale())
                     .build());
 
@@ -92,7 +87,6 @@ public class EstablishSeminarService {
                     .emailDocumentType(EmailDocumentType.NOT_ESTABLISH_APPLICANT)
                     .variableMap(Map.of("account", entry.getAccount(), "seminar", seminar))
                     .recipientEmail(entry.getAccount().getEmail())
-                    .fromEmail(fromEmail)
                     .locale(LocaleContextHolder.getLocale())
                     .build());
             }
@@ -107,7 +101,6 @@ public class EstablishSeminarService {
                     "entryCounts",
                     seminarEntryRepository.countBySeminarIdGroupBySeminarTicketId(seminarId)))
                 .recipientEmail(seminar.getAccount().getEmail())
-                .fromEmail(fromEmail)
                 .locale(LocaleContextHolder.getLocale())
                 .build());
 
@@ -120,7 +113,6 @@ public class EstablishSeminarService {
                     "entryCounts",
                     seminarEntryRepository.countBySeminarIdGroupBySeminarTicketId(seminarId)))
                 .recipientEmail(seminar.getAccount().getEmail())
-                .fromEmail(fromEmail)
                 .locale(LocaleContextHolder.getLocale())
                 .build());
         }
