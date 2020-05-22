@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import red.semipro.domain.service.apply.ApplySeminarService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 /**
@@ -20,7 +21,7 @@ import red.semipro.domain.service.userdetails.AccountUserDetails;
 @RequiredArgsConstructor
 public class ApplySeminarController {
 
-    private final ApplySeminarHelper applySeminarHelper;
+    private final ApplySeminarService applySeminarService;
 
     /**
      * セミナー申請を受け付けます
@@ -34,7 +35,8 @@ public class ApplySeminarController {
 
         final BindingResult bindingResult;
         try {
-            bindingResult = applySeminarHelper.apply(seminarId, accountUserDetails.getAccount().getId());
+            bindingResult =
+                applySeminarService.apply(seminarId, accountUserDetails.getAccount());
 
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)

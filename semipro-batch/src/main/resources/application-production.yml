@@ -66,6 +66,7 @@ custom:
       endrecruitmentseminar: 0 0 0 * * *
     email:
       fromEmail: red.semipro@gmail.com
+      operator: semipro.operator@gmail.com
   aws.s3.bucket: semipro-production
   aws.s3.seminar.path: upload/seminar/
   stripe.secret.key: ${STRIPE_SECRET_KEY}

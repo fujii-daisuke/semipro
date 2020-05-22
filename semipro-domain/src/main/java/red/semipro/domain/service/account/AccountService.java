@@ -32,8 +32,6 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final EmailSharedService emailSharedService;
 
-    @Value("${custom.application.email.fromEmail}")
-    private String fromEmail;
     @Value("${custom.application.schema}")
     private String schema;
     @Value("${custom.application.domain}")
@@ -83,7 +81,6 @@ public class AccountService {
             .emailDocumentType(EmailDocumentType.ACTIVATION)
             .variableMap(variableMap)
             .recipientEmail(account.getEmail())
-            .fromEmail(fromEmail)
             .locale(LocaleContextHolder.getLocale())
             .build());
 
@@ -109,7 +106,6 @@ public class AccountService {
             .emailDocumentType(EmailDocumentType.ACTIVATED)
             .variableMap(Map.of("account", account))
             .recipientEmail(account.getEmail())
-            .fromEmail(fromEmail)
             .locale(LocaleContextHolder.getLocale())
             .build());
 
