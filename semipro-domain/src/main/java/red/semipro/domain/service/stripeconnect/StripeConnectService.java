@@ -23,7 +23,7 @@ public class StripeConnectService {
     private final AccountStripeConnectRepository accountStripeConnectRepository;
     private final SeminarSharedService seminarSharedService;
     private final IdentificationSharedService identificationSharedService;
-    private final StripeAccountCreateParamsConverter stripeAccountCreateParamsConverter;
+    private final StripeConnectConverter stripeConnectConverter;
     private final ConnectRepositoryImpl connectRepository;
 
     /**
@@ -43,7 +43,7 @@ public class StripeConnectService {
         Identification identification = identificationSharedService.findOneWithDetails(seminarId);
 
         Account stripeAccount = connectRepository
-            .create(stripeAccountCreateParamsConverter.convert(identification));
+            .create(stripeConnectConverter.convert(identification));
 
         accountStripeConnectRepository.insert(AccountStripeConnect.builder()
             .accountId(seminar.getAccount().getId())
