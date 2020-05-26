@@ -15,10 +15,10 @@ import red.semipro.domain.model.identification.Identification;
  */
 @Component
 @RequiredArgsConstructor
-public class StripeAccountCreateParamsConverter {
+public class StripeConnectConverter {
 
-    private final StripeAccountCreateParamsIndividualConverter individualConverter;
-    private final StripeAccountCreateParamsCompanyConverter companyConverter;
+    private final StripeConnectIndividualConverter individualConverter;
+    private final StripeConnectCompanyConverter companyConverter;
 
     public AccountCreateParams convert(@NotNull final Identification identification) {
 
