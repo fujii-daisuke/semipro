@@ -1,46 +1,53 @@
 package red.semipro.domain.service.stripeconnect;
 
-import com.stripe.param.AccountCreateParams;
-import com.stripe.param.AccountCreateParams.Company.AddressKana;
-import com.stripe.param.AccountCreateParams.Company.AddressKanji;
+import com.stripe.param.AccountCreateParams.Individual;
+import com.stripe.param.AccountCreateParams.Individual.AddressKana;
+import com.stripe.param.AccountCreateParams.Individual.AddressKanji;
+import com.stripe.param.AccountCreateParams.Individual.Dob;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import red.semipro.common.PhoneNumberFormatter;
 import red.semipro.domain.model.identification.IdentificationAddress;
-import red.semipro.domain.model.identification.IdentificationCompany;
+import red.semipro.domain.model.identification.IdentificationIndividual;
 
 /**
- * Stripe会員作成パラメーター（法人） - converter
+ * Stripe会員作成パラメーター（個人） - converter
  */
 @Component
 @RequiredArgsConstructor
-public class StripeAccountCreateParamsCompanyConverter {
+public class StripeConnectIndividualConverter {
 
     /**
-     * Stripe法人にコンバートします
+     * Stripe個人にコンバートします
      *
-     * @param company 法人フォーム
-     * @return Stripe法人
+     * @param individual 個人
+     * @return Stripe個人
      */
-    public AccountCreateParams.Company convert(@NotNull final IdentificationCompany company,
+    public Individual convert(@NotNull final IdentificationIndividual individual,
         @NotNull final IdentificationAddress address) {
-        return AccountCreateParams.Company.builder()
-            .setName(company.getCompanyName())
-            .setNameKanji(company.getCompanyName())
-            .setNameKana(company.getCompanyNameKana())
-            .setTaxId(company.getTax())
-            .setPhone(PhoneNumberFormatter.formatE164(company.getPhone()))
+        return Individual.builder()
+            .setLastNameKanji(individual.getLastName())
+            .setFirstNameKanji(individual.getFirstName())
+            .setLastNameKana(individual.getLastNameKana())
+            .setFirstNameKana(individual.getFirstNameKana())
+            .setGender(individual.getGender().getValue())
+            .setPhone(PhoneNumberFormatter.formatE164(individual.getPhone()))
+            .setDob(Dob.builder()
+                .setYear(individual.getDobYear())
+                .setMonth(individual.getDobMonth())
+                .setDay(individual.getDobDay())
+                .build())
             .setAddressKanji(convertKanji(address))
             .setAddressKana(convertKana(address))
             .build();
     }
 
     /**
-     * Stripe法人住所（漢字）にコンバートします
+     * Stripe個人住所（漢字）にコンバートします
      *
-     * @param address 法人住所
-     * @return Stripe法人住所（漢字）
+     * @param address 個人住所
+     * @return Stripe個人住所（漢字）
      */
     private AddressKanji convertKanji(@NotNull final IdentificationAddress address) {
         return AddressKanji.builder()
@@ -56,8 +63,8 @@ public class StripeAccountCreateParamsCompanyConverter {
     /**
      * Stripe個人住所（カタカナ）にコンバートします
      *
-     * @param address 法人住所
-     * @return Stripe法人住所（カタカナ）
+     * @param address 個人住所
+     * @return Stripe個人住所（カタカナ）
      */
     private AddressKana convertKana(@NotNull final IdentificationAddress address) {
         return AddressKana.builder()
