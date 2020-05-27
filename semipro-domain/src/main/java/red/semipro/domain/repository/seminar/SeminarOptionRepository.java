@@ -2,7 +2,6 @@ package red.semipro.domain.repository.seminar;
 
 import javax.annotation.Nonnull;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import red.semipro.domain.model.seminar.SeminarOption;
 
@@ -12,14 +11,6 @@ import red.semipro.domain.model.seminar.SeminarOption;
 @Repository
 @Mapper
 public interface SeminarOptionRepository {
-
-    /**
-     * セミナーオプションを取得する
-     *
-     * @param seminarId セミナーID
-     * @return セミナーサポート
-     */
-    SeminarOption findOne(@Nonnull @Param("seminarId") final Long seminarId);
 
     /**
      * セミナーオプションを登録する

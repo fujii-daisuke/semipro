@@ -32,7 +32,7 @@ public class IdentificationSharedService {
         Identification identification = identificationRepository.findOneWithDetails(seminarId);
         if (Objects.isNull(identification)) {
             ResultMessages message = ResultMessages.error().add(
-                MessageId.E_WEB_0500);
+                MessageId.E_SP_FW_0500);
             throw new BusinessException(message);
         }
         return identification;

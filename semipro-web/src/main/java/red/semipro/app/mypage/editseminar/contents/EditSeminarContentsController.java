@@ -13,8 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenCheck;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenType;
+import red.semipro.domain.enums.OpeningStatus;
+import red.semipro.domain.model.seminar.Seminar;
+import red.semipro.domain.repository.seminar.SeminarCriteria;
+import red.semipro.domain.service.seminar.SeminarContentsService;
+import red.semipro.domain.service.seminar.SeminarSharedService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 /**
@@ -26,7 +32,9 @@ import red.semipro.domain.service.userdetails.AccountUserDetails;
 @RequiredArgsConstructor
 public class EditSeminarContentsController {
 
-    private final EditSeminarContentsHelper editSeminarContentsHelper;
+    private final SeminarSharedService seminarSharedService;
+    private final SeminarContentsService seminarContentsService;
+    private final EditSeminarContentsFormConverter formConverter;
 
     /**
      * セミナーコンテンツフォームを表示します
@@ -42,9 +50,17 @@ public class EditSeminarContentsController {
         @PathVariable(name = "seminarId") final Long seminarId,
         ModelAndView model) {
 
-        EditSeminarContentsForm form =
-            editSeminarContentsHelper
-                .setupForm(seminarId, accountUserDetails.getAccount().getId());
+        final Seminar seminar = seminarSharedService.findOneWithDetails(SeminarCriteria.builder()
+            .id(seminarId)
+            .accountId(accountUserDetails.getAccount().getId())
+            .build());
+
+        if (!OpeningStatus.DRAFT.equals(seminar.getOpeningStatus())) {
+            model.setViewName("redirect:/seminars/" + seminarId + "/preview");
+            return model;
+        }
+
+        final EditSeminarContentsForm form = formConverter.convert(seminar.getContents());
 
         model.addObject("contentsForm", form);
         model.setViewName("mypage/editseminar/contentsForm");
@@ -68,6 +84,7 @@ public class EditSeminarContentsController {
         @RequestParam("action") String action,
         @ModelAttribute("contentsForm") @Validated EditSeminarContentsForm form,
         BindingResult result,
+        RedirectAttributes redirectAttributes,
         ModelAndView model) {
 
         if (!Objects.equals(seminarId, form.getSeminarId())) {
@@ -79,11 +96,13 @@ public class EditSeminarContentsController {
             model.setViewName("mypage/editseminar/contentsForm");
             return model;
         }
-        editSeminarContentsHelper.save(form, accountUserDetails.getAccount().getId());
+
+        seminarContentsService.save(formConverter.convert(form), accountUserDetails.getAccount());
 
         if (Objects.equals(action, "preview")) {
             model.setViewName("redirect:/seminars/edit/" + form.getSeminarId() + "/preview");
         } else {
+            redirectAttributes.addFlashAttribute("saved", true);
             model.setViewName("redirect:/seminars/edit/" + form.getSeminarId() + "/contents");
         }
         return model;

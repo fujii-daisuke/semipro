@@ -35,7 +35,8 @@ public class EditSeminarOverviewImageUploadHelper {
             .getExtension(form.getImage().getOriginalFilename());
 
         seminarOverviewService
-            .saveMainImageExtension(form.getSeminarId(), account.getId(),
+            .saveMainImageExtension(form.getSeminarId(),
+                account,
                 extension);
 
         seminarImageHelper.upload(form.getImage(),

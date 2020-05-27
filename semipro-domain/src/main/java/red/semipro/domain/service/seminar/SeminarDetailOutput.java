@@ -1,4 +1,4 @@
-package red.semipro.domain.service.seminardetail;
+package red.semipro.domain.service.seminar;
 
 import java.io.Serializable;
 import java.util.List;

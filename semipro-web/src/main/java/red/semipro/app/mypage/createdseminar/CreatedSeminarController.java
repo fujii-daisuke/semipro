@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import red.semipro.common.PageWrapper;
 import red.semipro.domain.model.seminar.Seminar;
-import red.semipro.domain.model.seminar.SeminarSearchCriteria;
+import red.semipro.domain.repository.seminar.SearchSeminarCriteria;
 import red.semipro.domain.service.seminar.SeminarService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
 
@@ -49,8 +49,8 @@ public class CreatedSeminarController {
             Pageable pageable,
         ModelAndView model) {
 
-        SeminarSearchCriteria criteria =
-            SeminarSearchCriteria.builder().
+        SearchSeminarCriteria criteria =
+            SearchSeminarCriteria.builder().
                 accountId(accountUserDetails.getAccount().getId())
                 .build();
         Page<Seminar> seminarPage = seminarService.search(criteria, pageable);

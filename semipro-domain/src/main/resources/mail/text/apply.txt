@@ -1,6 +1,6 @@
 [# th:text="${account.username}" /]様
 
-[# th:text="${seminar.title}" /]の申請を受け付けました。
+[# th:text="${seminar.overview.title}" /]の申請を受け付けました。
 内容確認させて頂きますので、今しばらくお待ちください。
 
 今後とも、よろしくお願い致します。

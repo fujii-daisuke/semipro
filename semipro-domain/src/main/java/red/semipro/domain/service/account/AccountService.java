@@ -96,7 +96,7 @@ public class AccountService {
         if (Objects.isNull(account)
             || !RegisterStatus.PROVISIONAL.equals(account.getRegisterStatus())) {
 
-            ResultMessages message = ResultMessages.error().add(MessageId.E_WEB_0500);
+            ResultMessages message = ResultMessages.error().add(MessageId.E_SP_FW_0500);
             throw new BusinessException(message);
         }
 

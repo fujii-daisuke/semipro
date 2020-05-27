@@ -56,6 +56,12 @@ public class Seminar implements Serializable {
     private SeminarContents contents;
 
     /**
+     * オプション
+     */
+    @Valid
+    private SeminarOption option;
+
+    /**
      * セミナーチケット
      */
     @Valid
