@@ -19,10 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 import red.semipro.common.PageWrapper;
 import red.semipro.domain.enums.OpeningStatus;
 import red.semipro.domain.model.seminar.Seminar;
-import red.semipro.domain.model.seminar.SeminarSearchCriteria;
+import red.semipro.domain.repository.seminar.SearchSeminarCriteria;
 import red.semipro.domain.service.seminar.SeminarService;
-import red.semipro.domain.service.seminar.SeminarSharedService;
-import red.semipro.domain.service.seminardetail.SeminarDetailService;
+import red.semipro.domain.service.seminar.SeminarDetailService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 /**
@@ -36,7 +35,6 @@ public class SearchSeminarController {
     private final SeminarService seminarService;
     private final SeminarDetailService seminarDetailService;
     private final SearchSeminarFormConverter seminarFormConverter;
-    private final SeminarSharedService seminarSharedService;
 
     /**
      * セミナーを検索する
@@ -61,7 +59,7 @@ public class SearchSeminarController {
             Pageable pageable,
         ModelAndView model) {
 
-        SeminarSearchCriteria criteria = seminarFormConverter.convert(form);
+        SearchSeminarCriteria criteria = seminarFormConverter.convert(form);
         criteria.setBeforeEntryEndingAt(true);
         criteria.setOpeningStatus(OpeningStatus.OPENING);
         Page<Seminar> seminarPage = seminarService.search(criteria, pageable);

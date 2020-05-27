@@ -15,14 +15,6 @@ import red.semipro.domain.model.seminar.SeminarTicket;
 public interface SeminarTicketRepository {
 
     /**
-     * セミナーチケット一覧を取得する
-     *
-     * @param seminarId セミナーID
-     * @return セミナーチケットリスト
-     */
-    List<SeminarTicket> findAll(@Nonnull @Param("seminarId") final Long seminarId);
-
-    /**
      * セミナーチケットを登録する
      *
      * @param seminarTickets セミナーチケットリスト

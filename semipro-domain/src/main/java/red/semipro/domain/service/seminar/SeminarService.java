@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import red.semipro.domain.enums.OpeningStatus;
 import red.semipro.domain.model.account.Account;
 import red.semipro.domain.model.seminar.Seminar;
-import red.semipro.domain.model.seminar.SeminarSearchCriteria;
 import red.semipro.domain.repository.identification.IdentificationRepository;
+import red.semipro.domain.repository.seminar.SearchSeminarCriteria;
 import red.semipro.domain.repository.seminar.SeminarContentsRepository;
 import red.semipro.domain.repository.seminar.SeminarEntrySummaryRepository;
 import red.semipro.domain.repository.seminar.SeminarGoalRepository;
@@ -22,9 +22,6 @@ import red.semipro.domain.repository.seminar.SeminarOverviewRepository;
 import red.semipro.domain.repository.seminar.SeminarPlaceRepository;
 import red.semipro.domain.repository.seminar.SeminarRepository;
 
-/**
- * セミナー - service
- */
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -68,7 +65,7 @@ public class SeminarService {
      * @param pageable ページネーション
      * @return セミナー一覧
      */
-    public Page<Seminar> search(SeminarSearchCriteria criteria, Pageable pageable) {
+    public Page<Seminar> search(SearchSeminarCriteria criteria, Pageable pageable) {
 
         long total = seminarRepository.countByCriteria(criteria);
         List<Seminar> content;

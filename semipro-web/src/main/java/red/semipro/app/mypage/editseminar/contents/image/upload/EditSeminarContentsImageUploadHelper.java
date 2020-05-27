@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 import red.semipro.domain.model.account.Account;
-import red.semipro.domain.service.seminar.SeminarContentsService;
+import red.semipro.domain.repository.seminar.SeminarCriteria;
+import red.semipro.domain.service.seminar.SeminarSharedService;
 import red.semipro.share.seminar.SeminarImageHelper;
 
 /**
@@ -18,7 +19,7 @@ import red.semipro.share.seminar.SeminarImageHelper;
 public class EditSeminarContentsImageUploadHelper {
 
     private final SeminarImageHelper seminarImageHelper;
-    private final SeminarContentsService seminarContentsService;
+    private final SeminarSharedService seminarSharedService;
 
     /**
      * 画像をアップロードします
@@ -31,8 +32,10 @@ public class EditSeminarContentsImageUploadHelper {
         @NotNull Account account)
         throws IOException {
 
-        seminarContentsService
-            .findOneEditable(form.getSeminarId(), account.getId());
+        seminarSharedService.findOneWithDetails(SeminarCriteria.builder()
+            .id(form.getSeminarId())
+            .accountId(account.getId())
+            .build());
 
         final String path = seminarImageHelper.createContentsImagePath(form.getSeminarId(),
             FilenameUtils.getExtension(form.getImage().getOriginalFilename()));

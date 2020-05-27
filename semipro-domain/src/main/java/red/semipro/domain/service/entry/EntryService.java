@@ -19,9 +19,9 @@ import red.semipro.domain.model.seminar.Seminar;
 import red.semipro.domain.model.seminar.SeminarEntry;
 import red.semipro.domain.model.seminar.SeminarTicket;
 import red.semipro.domain.repository.account.AccountStripeCustomerRepository;
+import red.semipro.domain.repository.seminar.SeminarCriteria;
 import red.semipro.domain.repository.seminar.SeminarEntryRepository;
 import red.semipro.domain.repository.seminar.SeminarEntrySummaryRepository;
-import red.semipro.domain.repository.seminar.SeminarRepository;
 import red.semipro.domain.service.seminar.SeminarSharedService;
 import red.semipro.domain.stripe.repository.charge.ChargeRepository;
 import red.semipro.domain.stripe.repository.customercard.CardRepository;
@@ -32,10 +32,9 @@ import red.semipro.domain.stripe.repository.customercard.CardRepository;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class EntrySeminarService {
+public class EntryService {
 
     private final SeminarSharedService seminarSharedService;
-    private final SeminarRepository seminarRepository;
     private final AccountStripeCustomerRepository accountStripeCustomerRepository;
     private final SeminarEntryRepository seminarEntryRepository;
     private final SeminarEntrySummaryRepository seminarEntrySummaryRepository;
@@ -50,31 +49,30 @@ public class EntrySeminarService {
 
         if (seminarEntryRepository.existsEntry(seminarId, entryAccountId)) {
 
-            ResultMessages message = ResultMessages.error().add(MessageId.E_WEB_0500);
+            ResultMessages message = ResultMessages.error().add(MessageId.E_SP_FW_0500);
             throw new BusinessException(message);
         }
 
-        Seminar seminar =
-            seminarRepository.findOneWithDetailsByIdAndOpeningStatusAndSeminarTicketId(
-                seminarId, openingStatus, seminarTicketId);
-
-        if (Objects.isNull(seminar)) {
-            ResultMessages message = ResultMessages.error().add(
-                MessageId.E_WEB_0404);
-            throw new BusinessException(message);
-        }
-        return seminar;
+        return seminarSharedService.findOneWithDetails(
+            SeminarCriteria.builder()
+                .id(seminarId)
+                .openingStatus(openingStatus)
+                .seminarTicketId(seminarTicketId)
+                .build());
     }
 
-    public void entry(@Nonnull final EntrySeminarInput input) throws StripeException {
+    public void entry(@Nonnull final EntryInput input) throws StripeException {
 
-        Seminar seminar = seminarSharedService
-            .findOneWithDetailsForUpdate(input.getSeminarId(), OpeningStatus.OPENING);
+        final Seminar seminar =  seminarSharedService.findOneWithDetails(
+            SeminarCriteria.builder()
+                .id(input.getSeminarId())
+                .openingStatus(OpeningStatus.OPENING)
+                .build());
 
         // check date
         if (LocalDate.now().isAfter(seminar.getGoal().getEntryEndingAt())) {
 
-            ResultMessages message = ResultMessages.error().add(MessageId.E_WEB_0500);
+            ResultMessages message = ResultMessages.error().add(MessageId.E_SP_FW_0500);
             throw new BusinessException(message);
         }
 
@@ -86,14 +84,14 @@ public class EntrySeminarService {
                 input.getStripeCustomerCardId());
         if (Objects.isNull(card)) {
 
-            ResultMessages message = ResultMessages.error().add(MessageId.E_WEB_0500);
+            ResultMessages message = ResultMessages.error().add(MessageId.E_SP_FW_0500);
             throw new BusinessException(message);
         }
 
         // exists entry
         if (seminarEntryRepository.existsEntry(input.getSeminarId(), input.getEntryAccountId())) {
 
-            ResultMessages message = ResultMessages.error().add(MessageId.E_WEB_0500);
+            ResultMessages message = ResultMessages.error().add(MessageId.E_SP_FW_0500);
             throw new BusinessException(message);
         }
 
@@ -107,7 +105,7 @@ public class EntrySeminarService {
             .countBySeminarIdAndTicketId(input.getSeminarId(), input.getTicketId());
         if (entryCount > ticket.getCapacity()) {
 
-            ResultMessages message = ResultMessages.error().add(MessageId.E_WEB_0500);
+            ResultMessages message = ResultMessages.error().add(MessageId.E_SP_FW_0500);
             throw new BusinessException(message);
         }
 

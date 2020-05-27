@@ -13,8 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenCheck;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenType;
+import red.semipro.domain.enums.OpeningStatus;
+import red.semipro.domain.model.seminar.Seminar;
+import red.semipro.domain.repository.seminar.SeminarCriteria;
+import red.semipro.domain.service.seminar.SeminarSharedService;
+import red.semipro.domain.service.seminar.SeminarTicketService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 /**
@@ -26,7 +32,9 @@ import red.semipro.domain.service.userdetails.AccountUserDetails;
 @RequiredArgsConstructor
 public class EditSeminarTicketController {
 
-    private final EditSeminarTicketHelper editSeminarTicketHelper;
+    private final SeminarSharedService seminarSharedService;
+    private final EditSeminarTicketFromConverter fromConverter;
+    private final SeminarTicketService seminarTicketService;
 
     /**
      * セミナーチケットフォームを表示します
@@ -35,17 +43,25 @@ public class EditSeminarTicketController {
      * @param seminarId          セミナーID
      * @param model              ModelAndView
      * @return ModelAndView
-     * @throws IllegalAccessException
      */
     @GetMapping(value = "{seminarId}/ticket")
     @TransactionTokenCheck(value = "edit", type = TransactionTokenType.BEGIN)
     public ModelAndView input(@AuthenticationPrincipal AccountUserDetails accountUserDetails,
         @PathVariable("seminarId") Long seminarId,
-        ModelAndView model) throws IllegalAccessException {
+        ModelAndView model) {
 
-        EditSeminarTicketForm form =
-            editSeminarTicketHelper
-                .setupForm(seminarId, accountUserDetails.getAccount().getId());
+        final Seminar seminar =
+            seminarSharedService.findOneWithDetails(SeminarCriteria.builder()
+                .id(seminarId)
+                .accountId(accountUserDetails.getAccount().getId())
+                .build());
+
+        if (!OpeningStatus.DRAFT.equals(seminar.getOpeningStatus())) {
+            model.setViewName("redirect:/seminars/" + seminarId + "/preview");
+            return model;
+        }
+
+        EditSeminarTicketForm form = fromConverter.convert(seminarId, seminar.getTicketList());
 
         model.addObject("ticketForm", form);
         model.setViewName("mypage/editseminar/ticketForm");
@@ -69,7 +85,8 @@ public class EditSeminarTicketController {
         @RequestParam("action") String action,
         @ModelAttribute("ticketForm") @Validated EditSeminarTicketForm form,
         BindingResult result,
-        ModelAndView model) throws IllegalAccessException {
+        RedirectAttributes redirectAttributes,
+        ModelAndView model) {
 
         if (!Objects.equals(seminarId, form.getSeminarId())) {
             model.setViewName("redirect:/seminars/edit/" + form.getSeminarId() + "/ticket");
@@ -80,11 +97,14 @@ public class EditSeminarTicketController {
             model.setViewName("mypage/editseminar/ticketForm");
             return model;
         }
-        editSeminarTicketHelper.save(form, accountUserDetails.getAccount().getId());
+
+        seminarTicketService
+            .save(seminarId, fromConverter.convert(form), accountUserDetails.getAccount());
 
         if (Objects.equals(action, "preview")) {
-            model.setViewName("redirect:/seminars/edit/" + form.getSeminarId() + "/preview");
+            model.setViewName("redirect:/seminars/" + form.getSeminarId() + "/preview");
         } else {
+            redirectAttributes.addFlashAttribute("saved", true);
             model.setViewName("redirect:/seminars/edit/" + seminarId + "/ticket");
         }
         return model;

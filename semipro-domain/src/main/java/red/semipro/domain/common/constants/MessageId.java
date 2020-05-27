@@ -23,35 +23,16 @@ public final class MessageId {
     /**
      * <strong>e.web.0404 = ページが見つかりません。</strong>
      */
-    public static final String E_WEB_0404 = "e.web.0404";
+    public static final String E_SP_FW_0404 = "e.sp.fw.0404";
 
     /**
      * <strong>e.web.0500 = システムエラーが発生しました。</strong>
      */
-    public static final String E_WEB_0500 = "e.web.0500";
+    public static final String E_SP_FW_0500 = "e.sp.fw.0500";
 
     /**
-     * <strong>e.tr.0001 = Can not cancel a reservation paid for.</strong>
+     * <strong>e.web.0001 = invalid seminar opening status.</strong>
      */
-    public static final String E_TR_0001 = "e.tr.0001";
+    public static final String E_SP_FW_0001 = "e.sp.fw.0001";
 
-    /**
-     * <strong>e.tr.0002 = Can not cancel the reservation deadline has passed for payment.</strong>
-     */
-    public static final String E_TR_0002 = "e.tr.0002";
-
-    /**
-     * <strong>e.tr.0003 = Could not be canceled. Please try again.</strong>
-     */
-    public static final String E_TR_0003 = "e.tr.0003";
-
-    /**
-     * <strong>e.tr.0004 = Today is after payment limit.</strong>
-     */
-    public static final String E_TR_0004 = "e.tr.0004";
-
-    /**
-     * <strong>e.tr.0005 = Reserved number is larger than available vacancy</strong>
-     */
-    public static final String E_TR_0005 = "e.tr.0005";
 }

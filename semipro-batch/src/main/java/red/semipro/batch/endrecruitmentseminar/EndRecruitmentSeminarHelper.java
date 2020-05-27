@@ -9,8 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import red.semipro.domain.enums.OpeningStatus;
 import red.semipro.domain.model.seminar.Seminar;
+import red.semipro.domain.repository.seminar.SeminarCriteria;
 import red.semipro.domain.repository.seminar.SeminarRepository;
-import red.semipro.domain.service.establish.EstablishSeminarService;
+import red.semipro.domain.service.establish.EstablishService;
 
 @Component
 @RequiredArgsConstructor
@@ -18,18 +19,20 @@ import red.semipro.domain.service.establish.EstablishSeminarService;
 public class EndRecruitmentSeminarHelper {
 
     private final SeminarRepository seminarRepository;
-    private final EstablishSeminarService establishSeminarService;
+    private final EstablishService establishService;
 
     public void execute(@Nonnull final LocalDate executionDate) {
 
         List<Seminar> seminarList =
-            seminarRepository.findAllEndOfRecruitment(OpeningStatus.OPENING, executionDate);
+            seminarRepository.findAll(SeminarCriteria.builder()
+                .openingStatus(OpeningStatus.OPENING)
+                .executionDate(executionDate).build());
 
         log.info("募集終了件数は " + seminarList.size() + "件です");
 
         seminarList.forEach(seminar -> {
             try {
-                establishSeminarService.establish(seminar.getId(), executionDate);
+                establishService.establish(seminar.getId(), executionDate);
             } catch (StripeException e) {
                 e.printStackTrace();
             }

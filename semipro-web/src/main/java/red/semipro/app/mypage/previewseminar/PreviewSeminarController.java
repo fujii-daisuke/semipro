@@ -7,7 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import red.semipro.domain.model.seminar.Seminar;
+import red.semipro.domain.repository.seminar.SeminarCriteria;
+import red.semipro.domain.service.seminar.SeminarSharedService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
+import red.semipro.share.seminar.SeminarImageHelper;
 
 /**
  * セミナープレビュー - controller
@@ -17,7 +21,8 @@ import red.semipro.domain.service.userdetails.AccountUserDetails;
 @RequiredArgsConstructor
 public class PreviewSeminarController {
 
-    private final PreviewSeminarHelper previewSeminarHelper;
+    private final SeminarSharedService seminarSharedService;
+    private final SeminarImageHelper seminarImageHelper;
 
     /**
      * セミナープレビュー画面を表示します
@@ -31,8 +36,16 @@ public class PreviewSeminarController {
         @PathVariable("seminarId") final Long seminarId,
         ModelAndView model) {
 
-        model.addObject("seminar", previewSeminarHelper
-            .findSeminarDetail(seminarId, accountUserDetails.getAccount().getId()));
+        Seminar seminar =
+            seminarSharedService.findOneWithDetails(SeminarCriteria.builder()
+                .id(seminarId)
+                .accountId(accountUserDetails.getAccount().getId())
+                .build());
+
+        seminar.setMainImageUrl(seminarImageHelper
+            .getMainImageUrl(seminar.getId(), seminar.getOverview().getMainImageExtension()));
+
+        model.addObject("seminar", seminar);
 
         model.setViewName("mypage/previewseminar/preview");
         return model;
