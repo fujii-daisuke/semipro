@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import red.semipro.domain.model.account.AccountStripeCustomer;
 import red.semipro.domain.repository.account.AccountStripeCustomerRepository;
-import red.semipro.domain.service.entry.EntrySeminarService;
+import red.semipro.domain.service.entry.EntryService;
 import red.semipro.domain.stripe.repository.customercard.CardRepository;
 import red.semipro.domain.stripe.repository.customercard.CustomerCard;
 import red.semipro.domain.stripe.repository.customercard.CustomerCardConverter;
@@ -27,7 +27,7 @@ public class EntrySeminarHelper {
     private final AccountStripeCustomerRepository accountStripeCustomerRepository;
     private final CardRepository cardRepository;
     private final CustomerCardConverter customerCardConverter;
-    private final EntrySeminarService entrySeminarService;
+    private final EntryService entryService;
 
     public List<CustomerCard> findStripeCustomerCardList(@Nonnull final Long accountId)
         throws StripeException {

@@ -5,25 +5,6 @@
 
 <mapper namespace="red.semipro.domain.repository.seminar.SeminarRepository">
 
-    <resultMap id="findByIdAndOpeningStatusAndAccountIdResultMap" type="red.semipro.domain.model.seminar.Seminar">
-        <id property="id" column="id"/>
-        <result property="openingStatus" column="opening_status"/>
-        <result property="account.id" column="account_id"/>
-    </resultMap>
-
-    <select id="findByIdAndOpeningStatusAndAccountId" resultMap="seminarResultMap">
-        SELECT
-        id
-        , opening_status
-        , account_id
-        FROM
-        seminar
-        WHERE
-        id = #{id}
-        AND opening_status = #{openingStatus.value}
-        AND account_id = #{accountId}
-    </select>
-
     <resultMap id="seminarResultMap" type="red.semipro.domain.model.seminar.Seminar">
         <id property="id" column="seminar_id"/>
         <result property="openingStatus" column="opening_status"/>
@@ -74,6 +55,12 @@
             <id property="seminarId" column="contents_seminar_id"/>
             <result property="contents" column="contents"/>
         </association>
+        <association property="option" javaType="red.semipro.domain.model.seminar.SeminarOption">
+            <id property="seminarId" column="seminar_id"/>
+            <result property="shootingSupport" column="shooting_support"/>
+            <result property="shootingEditSupport" column="shooting_edit_support"/>
+            <result property="movieSalesSupport" column="movie_sales_support"/>
+        </association>
         <association property="entrySummary" javaType="red.semipro.domain.model.seminar.SeminarEntrySummary">
             <id property="seminarId" column="entry_summary_seminar_id"/>
             <result property="entryCount" column="entry_count"/>
@@ -93,56 +80,17 @@
         <include refid="baseWherePhrase"/>
     </select>
 
-    <select id="findOneWithDetailsByIdAndAccountId" resultMap="seminarResultMap">
-        <include refid="baseSelectPhrase"/>
-        <include refid="baseFromPhrase"/>
-        <include refid="baseWherePhrase"/>
-        AND seminar.account_id = #{accountId}
-    </select>
-
-    <select id="findOneWithDetailsByIdAndOpeningStatusAndAccountId" resultMap="seminarResultMap">
-        <include refid="baseSelectPhrase"/>
-        <include refid="baseFromPhrase"/>
-        <include refid="baseWherePhrase"/>
-            AND seminar.opening_status = #{openingStatus.value}
-            AND seminar.account_id = #{accountId}
-    </select>
-
-    <select id="findOneWithDetailsByIdAndOpeningStatusList" resultMap="seminarResultMap">
-        <include refid="baseSelectPhrase"/>
-        <include refid="baseFromPhrase"/>
-        <include refid="baseWherePhrase"/>
-        <if test="openingStatusList != null">
-            AND seminar.opening_status IN
-            <foreach item="openingStatus" collection="openingStatusList"
-                open="(" separator="," close=")">
-                #{openingStatus.value}
-            </foreach>
-        </if>
-    </select>
-
-    <select id="findOneWithDetailsByIdAndOpeningStatusAndSeminarTicketId" resultMap="seminarResultMap">
-        <include refid="baseSelectPhrase"/>
-        <include refid="baseFromPhrase"/>
-        <include refid="baseWherePhrase"/>
-        AND seminar.opening_status = #{openingStatus.value}
-        AND seminar_ticket.id = #{seminarTicketId}
-    </select>
-
     <select id="findOneWithDetailsForUpdate" resultMap="seminarResultMap">
         <include refid="baseSelectPhrase"/>
         <include refid="baseFromPhrase"/>
         <include refid="baseWherePhrase"/>
-        AND seminar.opening_status = #{openingStatus.value}
         FOR UPDATE
     </select>
 
-    <select id="findAllEndOfRecruitment" resultMap="seminarResultMap">
+    <select id="findAll" resultMap="seminarResultMap">
         <include refid="baseSelectPhrase"/>
         <include refid="baseFromPhrase"/>
-        WHERE
-        seminar.opening_status = #{openingStatus.value}
-        AND #{executionDate} <![CDATA[ > ]]> seminar_goal.entry_ending_at
+        <include refid="baseWherePhrase"/>
     </select>
 
     <select id="countByCriteria" resultType="_long">
@@ -200,6 +148,9 @@
         , seminar_overview.main_image_extension
         , seminar_contents.seminar_id contents_seminar_id
         , seminar_contents.contents
+        , seminar_option.shooting_support
+        , seminar_option.shooting_edit_support
+        , seminar_option.movie_sales_support
         , seminar_ticket.id ticket_id
         , seminar_ticket.seminar_id ticket_seminar_id
         , seminar_ticket.name ticket_name
@@ -227,6 +178,7 @@
         LEFT OUTER JOIN seminar_goal ON seminar.id = seminar_goal.seminar_id
         LEFT OUTER JOIN seminar_overview ON seminar.id = seminar_overview.seminar_id
         LEFT OUTER JOIN seminar_contents ON seminar.id = seminar_contents.seminar_id
+        LEFT OUTER JOIN seminar_option ON seminar.id = seminar_option.seminar_id
         LEFT OUTER JOIN seminar_ticket ON seminar.id = seminar_ticket.seminar_id
         LEFT OUTER JOIN seminar_place ON seminar.id = seminar_place.seminar_id
         LEFT OUTER JOIN prefecture ON seminar_place.prefecture_id = prefecture.id
@@ -235,8 +187,30 @@
     </sql>
 
     <sql id="baseWherePhrase">
-        WHERE
-        seminar.id = #{id}
+        <where>
+            <if test="criteria.id != null">
+                seminar.id = #{criteria.id}
+            </if>
+            <if test="criteria.accountId != null">
+                AND seminar.account_id = #{criteria.accountId}
+            </if>
+            <if test="criteria.openingStatus != null">
+                AND seminar.opening_status = #{criteria.openingStatus.value}
+            </if>
+            <if test="criteria.openingStatusList != null">
+                AND seminar.opening_status IN
+                <foreach item="openingStatus" collection="criteria.openingStatusList"
+                    open="(" separator="," close=")">
+                    #{openingStatus.value}
+                </foreach>
+            </if>
+            <if test="criteria.seminarTicketId != null">
+                AND seminar_ticket.id = #{criteria.seminarTicketId}
+            </if>
+            <if test="criteria.executionDate != null">
+                AND #{criteria.executionDate} <![CDATA[ > ]]> seminar_goal.entry_ending_at
+            </if>
+        </where>
     </sql>
 
     <sql id="findPageByCriteriaWherePhrase">

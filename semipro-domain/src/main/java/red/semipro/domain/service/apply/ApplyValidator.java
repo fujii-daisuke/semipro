@@ -10,7 +10,7 @@ import red.semipro.domain.model.seminar.Seminar;
 
 @Component
 @RequiredArgsConstructor
-public class ApplySeminarValidator implements Validator {
+public class ApplyValidator implements Validator {
 
     private final SmartValidator smartValidator;
 

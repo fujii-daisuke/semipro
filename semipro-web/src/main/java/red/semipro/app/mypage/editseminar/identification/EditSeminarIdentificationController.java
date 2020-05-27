@@ -2,7 +2,10 @@ package red.semipro.app.mypage.editseminar.identification;
 
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -15,8 +18,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenCheck;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenType;
+import red.semipro.domain.enums.OpeningStatus;
+import red.semipro.domain.model.seminar.Seminar;
+import red.semipro.domain.repository.seminar.SeminarCriteria;
+import red.semipro.domain.service.identification.IdentificationService;
+import red.semipro.domain.service.seminar.SeminarSharedService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 @Controller
@@ -25,7 +34,9 @@ import red.semipro.domain.service.userdetails.AccountUserDetails;
 @RequiredArgsConstructor
 public class EditSeminarIdentificationController {
 
-    private final EditSeminarIdentificationHelper editSeminarIdentificationHelper;
+    private final SeminarSharedService seminarSharedService;
+    private final IdentificationService identificationService;
+    private final EditSeminarIdentificationFormConverter formConverter;
     private final EditSeminarIdentificationValidator editSeminarIdentificationValidator;
 
     @InitBinder("identificationForm")
@@ -47,11 +58,18 @@ public class EditSeminarIdentificationController {
         @PathVariable(name = "seminarId") final Long seminarId,
         ModelAndView model) {
 
-        EditSeminarIdentificationForm form =
-            editSeminarIdentificationHelper
-                .setupForm(seminarId, accountUserDetails.getAccount().getId());
+        final Seminar seminar = seminarSharedService.findOneWithDetails(SeminarCriteria.builder()
+            .id(seminarId)
+            .accountId(accountUserDetails.getAccount().getId())
+            .build());
 
-        model.addObject("identificationForm", form);
+        if (!OpeningStatus.DRAFT.equals(seminar.getOpeningStatus())) {
+            model.setViewName("redirect:/seminars/" + seminarId + "/preview");
+            return model;
+        }
+
+        model.addObject("identificationForm",
+            formConverter.convert(identificationService.findOne(seminarId)));
         model.setViewName("mypage/editseminar/identificationForm");
         return model;
     }
@@ -73,6 +91,7 @@ public class EditSeminarIdentificationController {
         @RequestParam("action") String action,
         @ModelAttribute("identificationForm") @Validated EditSeminarIdentificationForm form,
         BindingResult result,
+        RedirectAttributes redirectAttributes,
         ModelAndView model) {
 
         if (!Objects.equals(seminarId, form.getSeminarId())) {
@@ -84,13 +103,22 @@ public class EditSeminarIdentificationController {
             model.setViewName("mypage/editseminar/identificationForm");
             return model;
         }
-        editSeminarIdentificationHelper.save(form, accountUserDetails.getAccount().getId());
+
+        form.setIp(getRemoteAddr());
+        identificationService.save(formConverter.convert(form), accountUserDetails.getAccount());
 
         if (Objects.equals(action, "preview")) {
             model.setViewName("redirect:/seminars/edit/" + form.getSeminarId() + "/preview");
         } else {
+            redirectAttributes.addFlashAttribute("saved", true);
             model.setViewName("redirect:/seminars/edit/" + form.getSeminarId() + "/identification");
         }
         return model;
+    }
+
+    private String getRemoteAddr() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        WebAuthenticationDetails details = (WebAuthenticationDetails) authentication.getDetails();
+        return details.getRemoteAddress();
     }
 }

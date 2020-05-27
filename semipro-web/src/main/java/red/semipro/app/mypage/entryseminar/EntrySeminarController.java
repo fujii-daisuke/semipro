@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import red.semipro.domain.enums.OpeningStatus;
 import red.semipro.domain.stripe.repository.customercard.CustomerCard;
-import red.semipro.domain.service.entry.EntrySeminarInput;
-import red.semipro.domain.service.entry.EntrySeminarService;
+import red.semipro.domain.service.entry.EntryInput;
+import red.semipro.domain.service.entry.EntryService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 /**
@@ -28,7 +28,7 @@ import red.semipro.domain.service.userdetails.AccountUserDetails;
 public class EntrySeminarController {
 
     private final EntrySeminarHelper entrySeminarHelper;
-    private final EntrySeminarService entrySeminarService;
+    private final EntryService entryService;
 
 
     /**
@@ -51,7 +51,7 @@ public class EntrySeminarController {
             .findStripeCustomerCardList(accountUserDetails.getAccount().getId());
 
         model.addObject("seminar",
-            entrySeminarService
+            entryService
                 .findSeminar(
                     seminarId, OpeningStatus.OPENING, ticketId,
                     accountUserDetails.getAccount().getId()));
@@ -78,7 +78,7 @@ public class EntrySeminarController {
             .findStripeCustomerCardList(accountUserDetails.getAccount().getId());
 
         model.addObject("seminar",
-            entrySeminarService
+            entryService
                 .findSeminar(
                     seminarId, OpeningStatus.OPENING, ticketId,
                     accountUserDetails.getAccount().getId()));
@@ -108,7 +108,7 @@ public class EntrySeminarController {
         ModelAndView model) throws StripeException {
 
         model.addObject("seminar",
-            entrySeminarService
+            entryService
                 .findSeminar(
                     seminarId, OpeningStatus.OPENING, ticketId,
                     accountUserDetails.getAccount().getId()));
@@ -120,7 +120,7 @@ public class EntrySeminarController {
             return model;
         }
 
-        entrySeminarService.entry(EntrySeminarInput.builder()
+        entryService.entry(EntryInput.builder()
             .seminarId(seminarId)
             .ticketId(ticketId)
             .entryAccountId(accountUserDetails.getAccount().getId())

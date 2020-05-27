@@ -1,15 +1,14 @@
 package red.semipro.domain.service.seminar;
 
-import java.util.Objects;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
-import red.semipro.domain.common.constants.MessageId;
+import red.semipro.domain.enums.OpeningStatus;
+import red.semipro.domain.model.account.Account;
 import red.semipro.domain.model.seminar.SeminarContents;
 import red.semipro.domain.repository.seminar.SeminarContentsRepository;
+import red.semipro.domain.repository.seminar.SeminarCriteria;
 
 /**
  * セミナーコンテンツ - service
@@ -19,45 +18,24 @@ import red.semipro.domain.repository.seminar.SeminarContentsRepository;
 @Transactional
 public class SeminarContentsService {
 
+    private final SeminarSharedService seminarSharedService;
     private final SeminarContentsRepository seminarContentsRepository;
-    private final EditableSeminarSharedService editableSeminarSharedService;
-
-    /**
-     * セミナーコンテンツを取得します
-     *
-     * @param seminarId     　セミナーID
-     * @param accountId     アカウントID
-     * @return セミナーコンテンツ
-     */
-    public SeminarContents findOneEditable(@Nonnull final Long seminarId,
-        @Nonnull final Long accountId) {
-
-        if (Objects
-            .isNull(editableSeminarSharedService.findOne(seminarId, accountId))) {
-            ResultMessages message = ResultMessages.error().add(
-                MessageId.E_WEB_0404);
-            throw new BusinessException(message);
-        }
-
-        SeminarContents seminarContents = seminarContentsRepository.findOne(seminarId);
-        if (Objects.isNull(seminarContents)) {
-            ResultMessages message = ResultMessages.error().add(
-                MessageId.E_WEB_0500);
-            throw new BusinessException(message);
-        }
-        return seminarContents;
-    }
 
     /**
      * セミナーコンテンツを更新します
      *
      * @param seminarContents 　セミナーコンテンツ
+     * @param account         アカウント
      * @return 更新件数
      */
     public int save(@Nonnull final SeminarContents seminarContents,
-        @Nonnull final Long accountId) {
+        @Nonnull final Account account) {
 
-        findOneEditable(seminarContents.getSeminarId(), accountId);
+        seminarSharedService.findOneWithDetailsForUpdate(SeminarCriteria.builder()
+            .id(seminarContents.getSeminarId())
+            .openingStatus(OpeningStatus.DRAFT)
+            .accountId(account.getId())
+            .build());
         return seminarContentsRepository.update(seminarContents);
     }
 }

@@ -2,7 +2,7 @@ package red.semipro.admin.app.searchseminar;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import red.semipro.domain.model.seminar.SeminarSearchCriteria;
+import red.semipro.domain.repository.seminar.SearchSeminarCriteria;
 
 /**
  * セミナー検索フォーム - converter
@@ -17,8 +17,8 @@ public class SearchSeminarFormConverter {
      * @param form 検索条件フォーム
      * @return 検索条件モデル
      */
-    public SeminarSearchCriteria convert(SearchSeminarForm form) {
-        return SeminarSearchCriteria.builder()
+    public SearchSeminarCriteria convert(SearchSeminarForm form) {
+        return SearchSeminarCriteria.builder()
             .build();
     }
 }

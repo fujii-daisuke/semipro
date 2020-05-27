@@ -1,6 +1,6 @@
 [# th:text="${account.username}" /]様
 
-[# th:text="${seminar.title}" /]の内容確認致しました。
+[# th:text="${seminar.overview.title}" /]の内容確認致しました。
 問題ありませんでしたので、セミナー内容をユーザーへ公開し募集を開始致しました。
 
 セミナー開催決定時には、セミナーチケット料金を

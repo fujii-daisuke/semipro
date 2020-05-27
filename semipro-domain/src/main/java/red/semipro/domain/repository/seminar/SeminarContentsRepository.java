@@ -2,7 +2,6 @@ package red.semipro.domain.repository.seminar;
 
 import javax.annotation.Nonnull;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import red.semipro.domain.model.seminar.SeminarContents;
 
@@ -12,14 +11,6 @@ import red.semipro.domain.model.seminar.SeminarContents;
 @Repository
 @Mapper
 public interface SeminarContentsRepository {
-
-    /**
-     * セミナーコンテンツを取得します
-     *
-     * @param seminarId 　セミナーID
-     * @return セミナーコンテンツ
-     */
-    SeminarContents findOne(@Nonnull @Param("seminarId") final Long seminarId);
 
     /**
      * セミナーコンテンツを登録します

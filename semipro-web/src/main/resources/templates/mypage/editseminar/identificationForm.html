@@ -10,6 +10,10 @@
 </head>
 <body>
 <main class="uk-margin" layout:fragment="content">
+    <div class="uk-alert-success" th:if="${saved}" uk-alert>
+        <a class="uk-alert-close" uk-close></a>
+        <p>保存しました。</p>
+    </div>
     <div class="uk-flex uk-flex-center">
         <div class="uk-card uk-card-default uk-width-xxlarge">
             <div class="uk-card-header">
