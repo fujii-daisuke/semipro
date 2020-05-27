@@ -1,16 +1,15 @@
 package red.semipro.domain.service.seminar;
 
-import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
-import red.semipro.domain.common.constants.MessageId;
+import red.semipro.domain.enums.OpeningStatus;
+import red.semipro.domain.model.account.Account;
 import red.semipro.domain.model.seminar.SeminarOverview;
+import red.semipro.domain.repository.seminar.SeminarCriteria;
 import red.semipro.domain.repository.seminar.SeminarOverviewRepository;
 
 /**
@@ -21,44 +20,23 @@ import red.semipro.domain.repository.seminar.SeminarOverviewRepository;
 @Transactional
 public class SeminarOverviewService {
 
+    private final SeminarSharedService seminarSharedService;
     private final SeminarOverviewRepository seminarOverviewRepository;
-    private final EditableSeminarSharedService editableSeminarSharedService;
-
-    /**
-     * セミナー概要を取得します
-     *
-     * @param seminarId 　セミナーID
-     * @param accountId アカウントID
-     * @return セミナー概要
-     */
-    public SeminarOverview findOneEditable(@Nonnull final Long seminarId,
-        @Nonnull final Long accountId) {
-
-        if (Objects
-            .isNull(editableSeminarSharedService.findOne(seminarId, accountId))) {
-            ResultMessages message = ResultMessages.error().add(
-                MessageId.E_WEB_0404);
-            throw new BusinessException(message);
-        }
-
-        SeminarOverview seminarOverview = seminarOverviewRepository.findOne(seminarId);
-        if (Objects.isNull(seminarOverview)) {
-            ResultMessages message = ResultMessages.error().add(
-                MessageId.E_WEB_0500);
-            throw new BusinessException(message);
-        }
-        return seminarOverview;
-    }
 
     /**
      * セミナー概要を更新します
      *
      * @param seminarOverview 　セミナー概要
+     * @param account         アカウント
      */
     public void save(@Nonnull final SeminarOverview seminarOverview,
-        @Nonnull final Long accountId) {
+        @Nonnull final Account account) {
 
-        findOneEditable(seminarOverview.getSeminarId(), accountId);
+        seminarSharedService.findOneWithDetailsForUpdate(SeminarCriteria.builder()
+            .id(seminarOverview.getSeminarId())
+            .openingStatus(OpeningStatus.DRAFT)
+            .accountId(account.getId())
+            .build());
         seminarOverviewRepository.update(seminarOverview);
     }
 
@@ -66,15 +44,18 @@ public class SeminarOverviewService {
      * メイン画像拡張子を更新します
      *
      * @param seminarId          セミナーID
-     * @param accountId          アカウントID
+     * @param account            アカウント
      * @param mainImageExtension メイン画像拡張子
-     * @return 更新件数
      */
     public void saveMainImageExtension(@NotNull final Long seminarId,
-        @Nonnull final Long accountId,
+        @Nonnull final Account account,
         @Nullable final String mainImageExtension) {
 
-        findOneEditable(seminarId, accountId);
+        seminarSharedService.findOneWithDetailsForUpdate(SeminarCriteria.builder()
+            .id(seminarId)
+            .openingStatus(OpeningStatus.DRAFT)
+            .accountId(account.getId())
+            .build());
         seminarOverviewRepository.updateMainImageExtension(seminarId, mainImageExtension);
     }
 }

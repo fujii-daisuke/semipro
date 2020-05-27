@@ -1,4 +1,4 @@
-package red.semipro.domain.model.seminar;
+package red.semipro.domain.repository.seminar;
 
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import red.semipro.domain.enums.OpeningStatus;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SeminarSearchCriteria implements Serializable {
+public class SearchSeminarCriteria implements Serializable {
 
     private static final long serialVersionUID = -4817018217321740139L;
 

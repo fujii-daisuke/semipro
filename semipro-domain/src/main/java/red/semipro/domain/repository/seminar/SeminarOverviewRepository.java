@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import red.semipro.domain.model.seminar.SeminarOverview;
 
@@ -14,14 +13,6 @@ import red.semipro.domain.model.seminar.SeminarOverview;
 @Repository
 @Mapper
 public interface SeminarOverviewRepository {
-
-    /**
-     * セミナー概要を取得します
-     *
-     * @param seminarId 　セミナーID
-     * @return セミナー概要
-     */
-    SeminarOverview findOne(@Nonnull @Param("seminarId") final Long seminarId);
 
     /**
      * セミナー概要を登録します

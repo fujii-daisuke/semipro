@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import red.semipro.domain.enums.OpeningStatus;
 import red.semipro.domain.model.account.Account;
 import red.semipro.domain.model.seminar.Seminar;
+import red.semipro.domain.repository.seminar.SeminarCriteria;
 import red.semipro.domain.service.email.EmailDocumentType;
 import red.semipro.domain.service.email.EmailInput;
 import red.semipro.domain.service.email.EmailSharedService;
@@ -22,10 +23,10 @@ import red.semipro.domain.service.seminar.SeminarSharedService;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class ApplySeminarService {
+public class ApplyService {
 
     private final SeminarSharedService seminarSharedService;
-    private final ApplySeminarValidator applySeminarValidator;
+    private final ApplyValidator applyValidator;
     private final EmailSharedService emailSharedService;
 
     @Value("${custom.application.email.operator}")
@@ -35,17 +36,20 @@ public class ApplySeminarService {
      * セミナー申請を行います
      *
      * @param seminarId セミナーID
-     * @param account アカウント
+     * @param account   アカウント
      */
     public BindingResult apply(@Nonnull final Long seminarId, @Nonnull Account account) {
 
-        Seminar seminar =
-            seminarSharedService.findOneWithDetailsByIdAndOpeningStatusAndAccountId(
-                seminarId, OpeningStatus.DRAFT, account.getId());
+        final Seminar seminar = seminarSharedService.findOneWithDetails(
+            SeminarCriteria.builder()
+                .id(seminarId)
+                .openingStatus(OpeningStatus.DRAFT)
+                .accountId(account.getId())
+                .build());
 
         BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(seminar,
             "seminarDetail");
-        applySeminarValidator.validate(seminar, bindingResult);
+        applyValidator.validate(seminar, bindingResult);
 
         if (!bindingResult.hasErrors()) {
             seminarSharedService.save(seminar.getId(), OpeningStatus.APPLYING);

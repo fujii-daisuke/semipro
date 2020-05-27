@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import red.semipro.domain.enums.OpeningStatus;
 import red.semipro.domain.model.seminar.Seminar;
 import red.semipro.domain.model.seminar.SeminarEntry;
+import red.semipro.domain.repository.seminar.SeminarCriteria;
 import red.semipro.domain.repository.seminar.SeminarEntryRepository;
 import red.semipro.domain.repository.seminar.SeminarRepository;
 import red.semipro.domain.service.email.EmailDocumentType;
@@ -28,7 +29,7 @@ import red.semipro.domain.stripe.repository.transfer.TransferRepository;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class EstablishSeminarService {
+public class EstablishService {
 
     private final SeminarSharedService seminarSharedService;
     private final SeminarRepository seminarRepository;
@@ -42,8 +43,11 @@ public class EstablishSeminarService {
 
         log.info("セミナーID: " + seminarId + "の開催可否処理を開始します");
 
-        Seminar seminar = seminarSharedService
-            .findOneWithDetailsForUpdate(seminarId, OpeningStatus.OPENING);
+        final Seminar seminar = seminarSharedService.findOneWithDetailsForUpdate(
+            SeminarCriteria.builder()
+                .id(seminarId)
+                .openingStatus(OpeningStatus.OPENING)
+                .build());
 
         // check date
         if (executionDate.isBefore(seminar.getGoal().getEntryEndingAt())

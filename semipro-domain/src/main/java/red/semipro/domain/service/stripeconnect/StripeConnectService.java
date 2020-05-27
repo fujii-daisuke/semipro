@@ -11,6 +11,7 @@ import red.semipro.domain.model.account.AccountStripeConnect;
 import red.semipro.domain.model.identification.Identification;
 import red.semipro.domain.model.seminar.Seminar;
 import red.semipro.domain.repository.account.AccountStripeConnectRepository;
+import red.semipro.domain.repository.seminar.SeminarCriteria;
 import red.semipro.domain.service.identification.IdentificationSharedService;
 import red.semipro.domain.service.seminar.SeminarSharedService;
 import red.semipro.domain.stripe.repository.connect.ConnectRepositoryImpl;
@@ -33,8 +34,11 @@ public class StripeConnectService {
      */
     public void register(Long seminarId) throws StripeException {
 
-        Seminar seminar = seminarSharedService
-            .findOneWithDetailsForUpdate(seminarId, OpeningStatus.APPLYING);
+        final Seminar seminar = seminarSharedService.findOneWithDetails(
+            SeminarCriteria.builder()
+                .id(seminarId)
+                .openingStatus(OpeningStatus.APPLYING)
+                .build());
 
         if (Objects.nonNull(accountStripeConnectRepository.findOne(seminar.getAccount().getId()))) {
             seminarSharedService.save(seminar.getId(), OpeningStatus.STRIPE_REGISTERED);

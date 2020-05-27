@@ -2,7 +2,6 @@ package red.semipro.domain.repository.seminar;
 
 import javax.annotation.Nonnull;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import red.semipro.domain.model.seminar.SeminarGoal;
 
@@ -12,14 +11,6 @@ import red.semipro.domain.model.seminar.SeminarGoal;
 @Repository
 @Mapper
 public interface SeminarGoalRepository {
-
-    /**
-     * セミナー目標を取得します
-     *
-     * @param seminarId セミナーID
-     * @return セミナー目標
-     */
-    SeminarGoal findOneWithPlace(@Nonnull @Param("seminarId") final Long seminarId);
 
     /**
      * セミナー目標初期状態を登録します

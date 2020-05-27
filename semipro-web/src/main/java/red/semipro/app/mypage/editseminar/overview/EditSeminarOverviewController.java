@@ -13,8 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenCheck;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenType;
+import red.semipro.domain.enums.OpeningStatus;
+import red.semipro.domain.model.seminar.Seminar;
+import red.semipro.domain.repository.seminar.SeminarCriteria;
+import red.semipro.domain.service.seminar.SeminarOverviewService;
+import red.semipro.domain.service.seminar.SeminarSharedService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 /**
@@ -26,7 +32,9 @@ import red.semipro.domain.service.userdetails.AccountUserDetails;
 @RequiredArgsConstructor
 public class EditSeminarOverviewController {
 
-    private final EditSeminarOverviewHelper editSeminarOverviewHelper;
+    private final SeminarSharedService seminarSharedService;
+    private final EditSeminarOverviewFormConverter formConverter;
+    private final SeminarOverviewService seminarOverviewService;
 
     /**
      * セミナー概要フォームを表示します
@@ -40,11 +48,20 @@ public class EditSeminarOverviewController {
     @TransactionTokenCheck(value = "edit", type = TransactionTokenType.BEGIN)
     public ModelAndView input(@AuthenticationPrincipal final AccountUserDetails accountUserDetails,
         @PathVariable(name = "seminarId") final Long seminarId,
-        ModelAndView model) throws IllegalAccessException {
+        ModelAndView model) {
 
-        EditSeminarOverviewForm form =
-            editSeminarOverviewHelper
-                .setupForm(seminarId, accountUserDetails.getAccount().getId());
+        final Seminar seminar =
+            seminarSharedService.findOneWithDetails(SeminarCriteria.builder()
+                .id(seminarId)
+                .accountId(accountUserDetails.getAccount().getId())
+                .build());
+
+        if (!OpeningStatus.DRAFT.equals(seminar.getOpeningStatus())) {
+            model.setViewName("redirect:/seminars/" + seminarId + "/preview");
+            return model;
+        }
+
+        EditSeminarOverviewForm form = formConverter.convert(seminar.getOverview());
 
         model.addObject("overviewForm", form);
         model.setViewName("mypage/editseminar/overviewForm");
@@ -68,6 +85,7 @@ public class EditSeminarOverviewController {
         @RequestParam("action") String action,
         @ModelAttribute("overviewForm") @Validated EditSeminarOverviewForm form,
         BindingResult result,
+        RedirectAttributes redirectAttributes,
         ModelAndView model) {
 
         if (!Objects.equals(seminarId, form.getSeminarId())) {
@@ -79,11 +97,13 @@ public class EditSeminarOverviewController {
             model.setViewName("mypage/editseminar/overviewForm");
             return model;
         }
-        editSeminarOverviewHelper.save(form, accountUserDetails.getAccount().getId());
+
+        seminarOverviewService.save(formConverter.convert(form), accountUserDetails.getAccount());
 
         if (Objects.equals(action, "preview")) {
-            model.setViewName("redirect:/seminars/edit/" + form.getSeminarId() + "/preview");
+            model.setViewName("redirect:/seminars/" + form.getSeminarId() + "/preview");
         } else {
+            redirectAttributes.addFlashAttribute("saved", true);
             model.setViewName("redirect:/seminars/edit/" + form.getSeminarId() + "/overview");
         }
         return model;

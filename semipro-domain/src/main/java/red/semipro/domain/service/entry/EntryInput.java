@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntrySeminarInput {
+public class EntryInput {
 
     private Long seminarId;
 

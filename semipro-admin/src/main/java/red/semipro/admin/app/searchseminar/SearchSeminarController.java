@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import red.semipro.common.PageWrapper;
 import red.semipro.domain.model.seminar.Seminar;
-import red.semipro.domain.model.seminar.SeminarSearchCriteria;
+import red.semipro.domain.repository.seminar.SearchSeminarCriteria;
+import red.semipro.domain.repository.seminar.SeminarCriteria;
 import red.semipro.domain.service.seminar.SeminarService;
 import red.semipro.domain.service.seminar.SeminarSharedService;
 
@@ -58,7 +59,7 @@ public class SearchSeminarController {
             }) Pageable pageable,
         ModelAndView model) {
 
-        SeminarSearchCriteria criteria = seminarFormConverter.convert(form);
+        SearchSeminarCriteria criteria = seminarFormConverter.convert(form);
         Page<Seminar> seminarPage = seminarService.search(criteria, pageable);
         PageWrapper<Seminar> page = new PageWrapper<>(seminarPage, "/seminars");
 
@@ -78,7 +79,8 @@ public class SearchSeminarController {
     public ModelAndView detail(@PathVariable("seminarId") final Long seminarId,
         ModelAndView model) {
 
-        model.addObject("seminar", seminarSharedService.findOneWithDetails(seminarId));
+        model.addObject("seminar", seminarSharedService
+            .findOneWithDetails(SeminarCriteria.builder().id(seminarId).build()));
         model.addObject("previewUrl", getPreviewUrl(seminarId));
         model.setViewName("searchseminar/detail");
         return model;
