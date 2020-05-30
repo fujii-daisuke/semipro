@@ -1,4 +1,4 @@
-package red.semipro.share.seminar;
+package red.semipro.domain.aws.service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -7,19 +7,19 @@ import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import red.semipro.domain.aws.repository.S3Repository;
 import red.semipro.domain.enums.SeminarImageType;
-import red.semipro.share.aws.S3Helper;
 
 /**
  * セミナー画像 - helper
  */
-@Component
+@Service
 @RequiredArgsConstructor
-public class SeminarImageHelper {
+public class SeminarImageService {
 
-    private final S3Helper s3Helper;
+    private final S3Repository s3Repository;
 
     @Value("${custom.aws.s3.seminar.path}")
     private String SEMINAR_PATH;
@@ -46,7 +46,7 @@ public class SeminarImageHelper {
      */
     public String getMainImageUrl(@NotNull final Long seminarId,
         @NotNull final String extension) {
-        return s3Helper.getImageUrl(createMainImagePath(seminarId, extension));
+        return s3Repository.getImageUrl(createMainImagePath(seminarId, extension));
     }
 
     /**
@@ -58,7 +58,7 @@ public class SeminarImageHelper {
      */
     public void upload(@NotNull final MultipartFile file, @NotNull final String key)
         throws IOException {
-        s3Helper.upload(file, key);
+        s3Repository.upload(file, key);
     }
 
     /**
@@ -82,7 +82,7 @@ public class SeminarImageHelper {
      * @return コンテンツ画像URL
      */
     public String getContentsImageUrl(@NotNull final String path) {
-        return s3Helper.getImageUrl(path);
+        return s3Repository.getImageUrl(path);
     }
 
     /**
@@ -91,7 +91,7 @@ public class SeminarImageHelper {
      * @param key キー
      */
     public void delete(@NotNull final String key) {
-        s3Helper.delete(key);
+        s3Repository.delete(key);
     }
 
 }

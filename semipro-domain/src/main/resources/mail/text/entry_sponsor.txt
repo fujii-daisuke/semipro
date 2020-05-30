@@ -1,0 +1,15 @@
+[# th:text="${account.username}" /]様
+
+[# th:text="${seminar.overview.title}" /]に申し込みがありました。
+
+申し込みチケット
+[# th:text="${ticket.name}" /]: [# th:text="${ticket.price}" /]円
+
+現在の参加者数：[# th:text="${entryCounts}" /]
+
+よろしくお願い致します。
+
+----------------------------------------------
+『 誰でもノーリスクでセミナーが開催できるサービス 』
+セミプロ
+http://www.semipro.red

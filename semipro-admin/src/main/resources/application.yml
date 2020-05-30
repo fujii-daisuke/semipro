@@ -55,7 +55,7 @@ cloud:
 # application settings
 custom:
   application:
-    web-root: http://localhost:8081/
+    web-root: http://localhost:8080/
     schema: http
     domain: localhost:8081
     # 秒/分/時/日/月/曜日

@@ -11,7 +11,7 @@ import red.semipro.domain.model.seminar.Seminar;
 import red.semipro.domain.repository.seminar.SeminarCriteria;
 import red.semipro.domain.service.seminar.SeminarSharedService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
-import red.semipro.share.seminar.SeminarImageHelper;
+import red.semipro.domain.aws.service.SeminarImageService;
 
 /**
  * セミナープレビュー - controller
@@ -22,7 +22,7 @@ import red.semipro.share.seminar.SeminarImageHelper;
 public class PreviewSeminarController {
 
     private final SeminarSharedService seminarSharedService;
-    private final SeminarImageHelper seminarImageHelper;
+    private final SeminarImageService seminarImageService;
 
     /**
      * セミナープレビュー画面を表示します
@@ -41,9 +41,6 @@ public class PreviewSeminarController {
                 .id(seminarId)
                 .accountId(accountUserDetails.getAccount().getId())
                 .build());
-
-        seminar.setMainImageUrl(seminarImageHelper
-            .getMainImageUrl(seminar.getId(), seminar.getOverview().getMainImageExtension()));
 
         model.addObject("seminar", seminar);
 

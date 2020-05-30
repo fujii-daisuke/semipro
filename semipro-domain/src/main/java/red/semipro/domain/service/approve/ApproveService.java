@@ -3,6 +3,7 @@ package red.semipro.domain.service.approve;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,9 @@ public class ApproveService {
     private final SeminarSharedService seminarSharedService;
     private final EmailSharedService emailSharedService;
 
+    @Value("${custom.application.web-root}")
+    private String WEB_ROOT;
+
     /**
      * セミナーを承認します
      *
@@ -41,7 +45,10 @@ public class ApproveService {
         // セミナー主催者へメール送信
         emailSharedService.sendMail(EmailInput.builder()
             .emailDocumentType(EmailDocumentType.RECRUIT)
-            .variableMap(Map.of("account", seminar.getAccount(), "seminar", seminar))
+            .variableMap(
+                Map.of("account", seminar.getAccount(),
+                    "seminar", seminar,
+                    "web_root", WEB_ROOT))
             .recipientEmail(seminar.getAccount().getEmail())
             .locale(LocaleContextHolder.getLocale())
             .build());

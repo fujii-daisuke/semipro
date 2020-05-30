@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,9 @@ public class EstablishService {
     private final TransferRepository transferRepository;
     private final RefundRepository refundRepository;
     private final EmailSharedService emailSharedService;
+
+    @Value("${custom.application.web-root}")
+    private String WEB_ROOT;
 
     public void establish(@Nonnull final Long seminarId, @Nonnull final LocalDate executionDate)
         throws StripeException {
@@ -102,8 +106,8 @@ public class EstablishService {
                 .emailDocumentType(EmailDocumentType.ESTABLISH_SPONSOR)
                 .variableMap(Map.of("account", seminar.getAccount(),
                     "seminar", seminar,
-                    "entryCounts",
-                    seminarEntryRepository.countBySeminarIdGroupBySeminarTicketId(seminarId)))
+                    "entryCounts", seminarEntryRepository.countBySeminarIdGroupBySeminarTicketId(seminarId),
+                    "web_root", WEB_ROOT))
                 .recipientEmail(seminar.getAccount().getEmail())
                 .locale(LocaleContextHolder.getLocale())
                 .build());

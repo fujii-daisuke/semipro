@@ -1,4 +1,4 @@
-package red.semipro.app.mypage.entryseminar;
+package red.semipro.app.entryseminar;
 
 import java.io.Serializable;
 import javax.validation.constraints.NotNull;
