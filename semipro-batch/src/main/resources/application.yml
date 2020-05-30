@@ -55,6 +55,7 @@ cloud:
 # application settings
 custom:
   application:
+    web-root: http://localhost:8080/
     schema:
       http
     domain:

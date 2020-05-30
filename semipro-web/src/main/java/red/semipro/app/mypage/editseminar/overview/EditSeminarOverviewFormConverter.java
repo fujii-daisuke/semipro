@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import red.semipro.domain.model.seminar.SeminarOverview;
-import red.semipro.share.seminar.SeminarImageHelper;
+import red.semipro.domain.aws.service.SeminarImageService;
 
 /**
  * セミナー概要 - converter
@@ -15,7 +15,7 @@ import red.semipro.share.seminar.SeminarImageHelper;
 @RequiredArgsConstructor
 public class EditSeminarOverviewFormConverter {
 
-    private final SeminarImageHelper seminarImageHelper;
+    private final SeminarImageService seminarImageService;
 
     /**
      * セミナー概要フォームにコンバートします
@@ -30,7 +30,7 @@ public class EditSeminarOverviewFormConverter {
             .summary(seminarOverview.getSummary())
             .lecturerProfile(seminarOverview.getLecturerProfile())
             .mainImageUrl(
-                Objects.nonNull(seminarOverview.getMainImageExtension()) ? seminarImageHelper
+                Objects.nonNull(seminarOverview.getMainImageExtension()) ? seminarImageService
                     .getMainImageUrl(seminarOverview.getSeminarId(),
                         seminarOverview.getMainImageExtension()) : null)
             .build();

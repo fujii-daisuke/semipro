@@ -4,6 +4,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Account;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import red.semipro.domain.enums.OpeningStatus;
@@ -19,6 +20,7 @@ import red.semipro.domain.stripe.repository.connect.ConnectRepositoryImpl;
 @Component
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class StripeConnectService {
 
     private final AccountStripeConnectRepository accountStripeConnectRepository;
@@ -41,7 +43,9 @@ public class StripeConnectService {
                 .build());
 
         if (Objects.nonNull(accountStripeConnectRepository.findOne(seminar.getAccount().getId()))) {
-            seminarSharedService.save(seminar.getId(), OpeningStatus.STRIPE_REGISTERED);
+            log.debug("Stripe Connect Accountは既に登録済みの為、登録処理はスキップします");
+            seminarSharedService.save(seminarId, OpeningStatus.STRIPE_REGISTERED);
+            return;
         }
 
         Identification identification = identificationSharedService.findOneWithDetails(seminarId);

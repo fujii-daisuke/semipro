@@ -1,4 +1,4 @@
-package red.semipro.app.mypage.entryseminar;
+package red.semipro.app.entryseminar;
 
 import com.stripe.exception.StripeException;
 import java.util.List;

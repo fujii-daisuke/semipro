@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
+import red.semipro.domain.aws.service.SeminarImageService;
 import red.semipro.domain.common.constants.MessageId;
 import red.semipro.domain.enums.OpeningStatus;
 import red.semipro.domain.model.seminar.Seminar;
@@ -23,6 +24,7 @@ import red.semipro.domain.repository.seminar.SeminarRepository;
 public class SeminarSharedService {
 
     private final SeminarRepository seminarRepository;
+    private final SeminarImageService seminarImageService;
 
     public Seminar findOneWithDetails(@Nonnull final SeminarCriteria criteria) {
 
@@ -32,6 +34,12 @@ public class SeminarSharedService {
             ResultMessages message = ResultMessages.error().add(MessageId.E_SP_FW_0404);
             throw new BusinessException(message);
         }
+
+        if (Objects.nonNull(seminar.getOverview().getMainImageExtension())) {
+            seminar.setMainImageUrl(seminarImageService
+                .getMainImageUrl(seminar.getId(), seminar.getOverview().getMainImageExtension()));
+        }
+
         return seminar;
     }
 

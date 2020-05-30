@@ -20,6 +20,7 @@ import red.semipro.common.PageWrapper;
 import red.semipro.domain.enums.OpeningStatus;
 import red.semipro.domain.model.seminar.Seminar;
 import red.semipro.domain.repository.seminar.SearchSeminarCriteria;
+import red.semipro.domain.service.seminar.SeminarDetailOutput;
 import red.semipro.domain.service.seminar.SeminarService;
 import red.semipro.domain.service.seminar.SeminarDetailService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
@@ -84,14 +85,14 @@ public class SearchSeminarController {
         @PathVariable("seminarId") final Long seminarId,
         ModelAndView model) {
 
-        model.addObject("output",
-            seminarDetailService.findDetail(
-                seminarId,
+        final SeminarDetailOutput output =
+            seminarDetailService.findDetail(seminarId,
                 List.of(OpeningStatus.OPENING, OpeningStatus.CLOSED),
                 Optional.ofNullable(accountUserDetails)
-                    .map(a -> a.getAccount().getId())
-                    .orElse(null)));
+                    .map(AccountUserDetails::getAccount)
+                    .orElse(null));
 
+        model.addObject("output", output);
         model.setViewName("searchseminar/detail");
         return model;
     }

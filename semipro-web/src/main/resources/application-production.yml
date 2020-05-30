@@ -60,6 +60,7 @@ cloud:
 # application settings
 custom:
   application:
+    web-root: https://www.semipro.red/
     schema: https
     domain: www.semipro.red
     # 秒/分/時/日/月/曜日

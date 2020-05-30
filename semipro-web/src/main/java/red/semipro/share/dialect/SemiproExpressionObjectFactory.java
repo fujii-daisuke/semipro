@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.IExpressionContext;
 import org.thymeleaf.expression.IExpressionObjectFactory;
-import red.semipro.share.seminar.SeminarImageHelper;
+import red.semipro.domain.aws.service.SeminarImageService;
 
 @Component
 @RequiredArgsConstructor
@@ -14,7 +14,7 @@ public class SemiproExpressionObjectFactory implements IExpressionObjectFactory 
 
     private static final String seminarImageExpression = "seminarImageHelper";
 
-    private final SeminarImageHelper seminarImageHelper;
+    private final SeminarImageService seminarImageService;
 
     private static final Set<String> expressionSet = new HashSet<String>() {
         {
@@ -31,7 +31,7 @@ public class SemiproExpressionObjectFactory implements IExpressionObjectFactory 
     public Object buildObject(IExpressionContext iExpressionContext, String expressionObjectName) {
         switch (expressionObjectName) {
             case seminarImageExpression:
-                return seminarImageHelper;
+                return seminarImageService;
             default:
                 return null;
         }
