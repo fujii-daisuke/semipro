@@ -5,7 +5,7 @@
 
 セミナー開催決定時には、セミナーチケット料金を
 入金致しますので、以下ページより銀行口座を登録して下さい。
-[# th:text="${schema}" /]://[# th:text="${domain}" /]/bankaccount
+[# th:text="${web_root}" /]bankaccount
 
 今後とも、よろしくお願い致します。
 

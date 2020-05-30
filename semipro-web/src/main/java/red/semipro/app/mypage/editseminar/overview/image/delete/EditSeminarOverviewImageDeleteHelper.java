@@ -10,7 +10,7 @@ import red.semipro.domain.model.seminar.Seminar;
 import red.semipro.domain.repository.seminar.SeminarCriteria;
 import red.semipro.domain.service.seminar.SeminarOverviewService;
 import red.semipro.domain.service.seminar.SeminarSharedService;
-import red.semipro.share.seminar.SeminarImageHelper;
+import red.semipro.domain.aws.service.SeminarImageService;
 
 /**
  * メイン画像削除 - helper
@@ -21,7 +21,7 @@ public class EditSeminarOverviewImageDeleteHelper {
 
     private final SeminarSharedService seminarSharedService;
     private final SeminarOverviewService seminarOverviewService;
-    private final SeminarImageHelper seminarImageHelper;
+    private final SeminarImageService seminarImageService;
 
     /**
      * メイン画像を削除します
@@ -38,7 +38,7 @@ public class EditSeminarOverviewImageDeleteHelper {
                 .accountId(account.getId())
                 .build());
 
-        seminarImageHelper.delete(seminarImageHelper
+        seminarImageService.delete(seminarImageService
             .createMainImagePath(seminar.getId(),
                 seminar.getOverview().getMainImageExtension()));
 

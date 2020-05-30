@@ -8,7 +8,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 import red.semipro.domain.model.account.Account;
 import red.semipro.domain.service.seminar.SeminarOverviewService;
-import red.semipro.share.seminar.SeminarImageHelper;
+import red.semipro.domain.aws.service.SeminarImageService;
 
 /**
  * メイン画像アップロード - helper
@@ -17,7 +17,7 @@ import red.semipro.share.seminar.SeminarImageHelper;
 @RequiredArgsConstructor
 public class EditSeminarOverviewImageUploadHelper {
 
-    private final SeminarImageHelper seminarImageHelper;
+    private final SeminarImageService seminarImageService;
     private final SeminarOverviewService seminarOverviewService;
 
     /**
@@ -39,9 +39,9 @@ public class EditSeminarOverviewImageUploadHelper {
                 account,
                 extension);
 
-        seminarImageHelper.upload(form.getImage(),
-            seminarImageHelper.createMainImagePath(form.getSeminarId(), extension));
+        seminarImageService.upload(form.getImage(),
+            seminarImageService.createMainImagePath(form.getSeminarId(), extension));
 
-        return seminarImageHelper.getMainImageUrl(form.getSeminarId(), extension);
+        return seminarImageService.getMainImageUrl(form.getSeminarId(), extension);
     }
 }
