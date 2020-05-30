@@ -4,9 +4,11 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Card;
 import com.stripe.model.Charge;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terasoluna.gfw.common.exception.BusinessException;
@@ -18,10 +20,14 @@ import red.semipro.domain.model.account.AccountStripeCustomer;
 import red.semipro.domain.model.seminar.Seminar;
 import red.semipro.domain.model.seminar.SeminarEntry;
 import red.semipro.domain.model.seminar.SeminarTicket;
+import red.semipro.domain.repository.account.AccountRepository;
 import red.semipro.domain.repository.account.AccountStripeCustomerRepository;
 import red.semipro.domain.repository.seminar.SeminarCriteria;
 import red.semipro.domain.repository.seminar.SeminarEntryRepository;
 import red.semipro.domain.repository.seminar.SeminarEntrySummaryRepository;
+import red.semipro.domain.service.email.EmailDocumentType;
+import red.semipro.domain.service.email.EmailInput;
+import red.semipro.domain.service.email.EmailSharedService;
 import red.semipro.domain.service.seminar.SeminarSharedService;
 import red.semipro.domain.stripe.repository.charge.ChargeRepository;
 import red.semipro.domain.stripe.repository.customercard.CardRepository;
@@ -40,6 +46,8 @@ public class EntryService {
     private final SeminarEntrySummaryRepository seminarEntrySummaryRepository;
     private final CardRepository cardRepository;
     private final ChargeRepository chargeRepository;
+    private final AccountRepository accountRepository;
+    private final EmailSharedService emailSharedService;
 
     public Seminar findSeminar(
         @Nonnull final Long seminarId,
@@ -63,7 +71,7 @@ public class EntryService {
 
     public void entry(@Nonnull final EntryInput input) throws StripeException {
 
-        final Seminar seminar =  seminarSharedService.findOneWithDetails(
+        final Seminar seminar = seminarSharedService.findOneWithDetails(
             SeminarCriteria.builder()
                 .id(input.getSeminarId())
                 .openingStatus(OpeningStatus.OPENING)
@@ -126,6 +134,31 @@ public class EntryService {
             .build());
 
         seminarEntrySummaryRepository.countUp(input.getSeminarId());
+
+        //申し込み者へメール送信
+        final Account entryAccount = accountRepository.findOne(input.getEntryAccountId());
+        emailSharedService.sendMail(EmailInput.builder()
+            .emailDocumentType(EmailDocumentType.ENTRY_APPLICANT)
+            .variableMap(Map.of("account", entryAccount,
+                "seminar", seminar,
+                "ticket", ticket,
+                "entryCounts",
+                seminarEntrySummaryRepository.findOne(seminar.getId()).getEntryCount()))
+            .recipientEmail(entryAccount.getEmail())
+            .locale(LocaleContextHolder.getLocale())
+            .build());
+
+        //主催者へメール送信
+        emailSharedService.sendMail(EmailInput.builder()
+            .emailDocumentType(EmailDocumentType.ENTRY_SPONSOR)
+            .variableMap(Map.of("account", seminar.getAccount(),
+                "seminar", seminar,
+                "ticket", ticket,
+                "entryCounts",
+                seminarEntrySummaryRepository.findOne(seminar.getId()).getEntryCount()))
+            .recipientEmail(seminar.getAccount().getEmail())
+            .locale(LocaleContextHolder.getLocale())
+            .build());
 
     }
 }

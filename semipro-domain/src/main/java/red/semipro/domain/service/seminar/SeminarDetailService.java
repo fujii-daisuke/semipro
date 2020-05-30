@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import red.semipro.domain.enums.OpeningStatus;
+import red.semipro.domain.model.account.Account;
 import red.semipro.domain.model.seminar.Seminar;
 import red.semipro.domain.repository.seminar.SeminarEntryRepository;
 import red.semipro.domain.repository.seminar.SeminarCriteria;
@@ -26,21 +27,20 @@ public class SeminarDetailService {
     public SeminarDetailOutput findDetail(
         @Nonnull final Long seminarId,
         @Nonnull final List<OpeningStatus> openingStatusList,
-        @Nullable final Long accountId) {
+        @Nullable final Account loginUserAccount) {
 
         final Seminar seminar =
             seminarSharedService.findOneWithDetails(SeminarCriteria.builder()
                 .id(seminarId)
                 .openingStatusList(openingStatusList)
-                .accountId(accountId)
                 .build());
 
         SeminarDetailOutput.SeminarDetailOutputBuilder builder =
             SeminarDetailOutput.builder().seminar(seminar);
 
-        if (Objects.nonNull(accountId)) {
+        if (Objects.nonNull(loginUserAccount)) {
             builder.enteredTicketIds(
-                seminarEntryRepository.findAllBySeminarIdAndAccountId(seminarId, accountId));
+                seminarEntryRepository.findAllBySeminarIdAndAccountId(seminarId, loginUserAccount.getId()));
         }
 
         return builder.build();
