@@ -208,7 +208,7 @@
                 AND seminar_ticket.id = #{criteria.seminarTicketId}
             </if>
             <if test="criteria.executionDate != null">
-                AND #{criteria.executionDate} <![CDATA[ > ]]> seminar_goal.entry_ending_at
+                AND seminar_goal.entry_ending_at <![CDATA[ < ]]> #{criteria.executionDate}
             </if>
         </where>
     </sql>
