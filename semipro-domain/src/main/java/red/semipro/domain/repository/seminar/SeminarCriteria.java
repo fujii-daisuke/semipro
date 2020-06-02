@@ -1,7 +1,7 @@
 package red.semipro.domain.repository.seminar;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,5 +27,5 @@ public class SeminarCriteria implements Serializable {
 
     private Long seminarTicketId;
 
-    private LocalDate executionDate;
+    private LocalDateTime executionDate;
 }
