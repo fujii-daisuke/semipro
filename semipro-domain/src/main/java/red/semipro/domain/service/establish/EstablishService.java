@@ -4,6 +4,8 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Refund;
 import com.stripe.model.Transfer;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -42,7 +44,26 @@ public class EstablishService {
     @Value("${custom.application.web-root}")
     private String WEB_ROOT;
 
-    public void establish(@Nonnull final Long seminarId, @Nonnull final LocalDate executionDate)
+    public void execute(@Nonnull final LocalDate executionDate) {
+
+        List<Seminar> seminarList =
+            seminarRepository.findAll(SeminarCriteria.builder()
+                .openingStatus(OpeningStatus.OPENING)
+                .executionDate(LocalDateTime.of(executionDate, LocalTime.MIN))
+                .build());
+
+        log.info("募集終了件数は " + seminarList.size() + "件です");
+
+        seminarList.forEach(seminar -> {
+            try {
+                establish(seminar.getId(), executionDate);
+            } catch (StripeException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void establish(@Nonnull final Long seminarId, @Nonnull final LocalDate executionDate)
         throws StripeException {
 
         log.info("セミナーID: " + seminarId + "の開催可否処理を開始します");
@@ -61,11 +82,15 @@ public class EstablishService {
         }
 
         // エントリー一覧取得
-        List<SeminarEntry> entryList = seminarEntryRepository
-            .findAllWithTicketsBySeminarId(seminarId);
+        List<SeminarEntry> entryList =
+            seminarEntryRepository.findAllWithTicketsBySeminarId(seminarId);
         for (SeminarEntry entry : entryList) {
+            log.info("seminar_entry_id = " + entry.getId());
+
             // 開催可否判定
             if (seminar.isEstablish()) {
+                log.info("開催成立処理を行います");
+
                 // セミナー開催成立の場合
                 // 主催者の口座へ振込
                 Transfer transfer = transferRepository.transfer(
@@ -84,6 +109,8 @@ public class EstablishService {
                     .build());
 
             } else {
+                log.info("開催非成立処理を行います");
+
                 // セミナー開催非成立の場合
                 // 応募者へキャッシュバック
                 Refund refund = refundRepository.refund(entry.getStripeChargeId());
@@ -106,7 +133,8 @@ public class EstablishService {
                 .emailDocumentType(EmailDocumentType.ESTABLISH_SPONSOR)
                 .variableMap(Map.of("account", seminar.getAccount(),
                     "seminar", seminar,
-                    "entryCounts", seminarEntryRepository.countBySeminarIdGroupBySeminarTicketId(seminarId),
+                    "entryCounts",
+                    seminarEntryRepository.countBySeminarIdGroupBySeminarTicketId(seminarId),
                     "web_root", WEB_ROOT))
                 .recipientEmail(seminar.getAccount().getEmail())
                 .locale(LocaleContextHolder.getLocale())
