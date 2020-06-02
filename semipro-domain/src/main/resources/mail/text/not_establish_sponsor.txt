@@ -1,7 +1,7 @@
 [# th:text="${account.username}" /]様
 
 [# th:text="${seminar.overview.title}" /]の募集が終了しました。
-最低開催人数に達しませんでたので、セミナー開催は否決となりました。
+最低開催人数に達しませんでたので、セミナー開催は非成立となりました。
 
 チケット申し込み者数は以下のようになっております。
 [# th:each="entryCount : ${entryCounts}"]
