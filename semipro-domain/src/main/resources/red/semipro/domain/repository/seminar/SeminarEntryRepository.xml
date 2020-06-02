@@ -113,7 +113,7 @@
 
     <update id="updateStripeTransferId">
         UPDATE seminar_entry
-        SET stripe_transfer_id = ${stripeTransferId}
+        SET stripe_transfer_id = #{stripeTransferId}
             , updated_at = CURRENT_TIMESTAMP
         WHERE
             id = ${id}
@@ -121,7 +121,7 @@
 
     <update id="updateStripeRefundId">
         UPDATE seminar_entry
-        SET stripe_refund_id = ${stripeRefundId}
+        SET stripe_refund_id = #{stripeRefundId}
             , updated_at = CURRENT_TIMESTAMP
         WHERE
             id = ${id}
