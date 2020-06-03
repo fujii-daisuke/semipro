@@ -75,7 +75,7 @@
         seminar_id = #{seminarId}
     </select>
 
-    <insert id="initialize" useGeneratedKeys="true" keyProperty="id">
+    <insert id="initialize" useGeneratedKeys="true">
         INSERT INTO identification (
             seminar_id
         ) VALUES (
