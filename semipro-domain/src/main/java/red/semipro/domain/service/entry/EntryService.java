@@ -3,7 +3,7 @@ package red.semipro.domain.service.entry;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Card;
 import com.stripe.model.Charge;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
@@ -78,7 +78,7 @@ public class EntryService {
                 .build());
 
         // check date
-        if (LocalDate.now().isAfter(seminar.getGoal().getEntryEndingAt())) {
+        if (LocalDateTime.now().isAfter(seminar.getGoal().getEntryEndingAt())) {
 
             ResultMessages message = ResultMessages.error().add(MessageId.E_SP_FW_0500);
             throw new BusinessException(message);
