@@ -56,7 +56,7 @@ public class SeminarGoal implements Serializable {
      * 申し込み終了日
      */
     @NotNull
-    private LocalDate entryEndingAt;
+    private LocalDateTime entryEndingAt;
 
     /**
      * 募集方式
