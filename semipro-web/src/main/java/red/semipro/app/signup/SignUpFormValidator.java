@@ -32,7 +32,7 @@ public class SignUpFormValidator implements Validator {
         }
         
         if (accountService.isExistsUsername(form.getUsername(), null)) {
-            errors.rejectValue("userame", "AalreadyExists.username");
+            errors.rejectValue("username", "AalreadyExists.username");
         }
     }
 }
