@@ -126,11 +126,11 @@
                         </div>
                     </div>
                     <div class="uk-margin-medium">
-                        <label class="uk-form-label uk-text-bold" for="seminarGoal-starting-date">セミナー開始日時</label>
+                        <label class="uk-form-label uk-text-bold" for="seminar-starting-date">セミナー開始日時</label>
                         <div class="uk-form-controls uk-form-controls-text">
                             <input type="text"
                                    data-uk
-                                   id="seminarGoal-starting-date"
+                                   id="seminar-starting-date"
                                    class="uk-input uk-form-small uk-width-1-2"
                                    th:classappend="${#fields.hasErrors('seminarStartingAt') ? 'uk-form-danger':''}"
                                    th:field="*{seminarStartingAt}"
@@ -142,11 +142,11 @@
                         </div>
                     </div>
                     <div class="uk-margin-medium">
-                        <label class="uk-form-label uk-text-bold" for="seminarGoal-ending-date">セミナー終了日時</label>
+                        <label class="uk-form-label uk-text-bold" for="seminar-ending-date">セミナー終了日時</label>
                         <div class="uk-form-controls uk-form-controls-text">
                             <input type="text"
                                    data-uk
-                                   id="seminarGoal-ending-date"
+                                   id="seminar-ending-date"
                                    class="uk-input uk-form-small uk-width-1-2"
                                    th:classappend="${#fields.hasErrors('seminarEndingAt') ? 'uk-form-danger':''}"
                                    th:field="*{seminarEndingAt}"
@@ -157,7 +157,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="uk-margin-medium seminarGoal-type-offline-area"
+                    <div class="uk-margin-medium seminar-type-offline-area"
                          th:classappend="*{(seminarType != null and seminarType.value == 'offline')? '' : 'uk-hidden' }">
                         <div class="uk-margin">
                             <label class="uk-form-label uk-text-bold">会場</label>
@@ -272,14 +272,17 @@
         });
 
         flatpickr('#entry-ending-date');
-        flatpickr('#seminarGoal-starting-date', {enableTime: true});
-        flatpickr('#seminarGoal-ending-date', {enableTime: true});
+        const datetimeConfig = {
+          enableTime: true
+        }
+        flatpickr('#seminar-starting-date', datetimeConfig);
+        flatpickr('#seminar-ending-date', datetimeConfig);
 
         $('[name=seminarType]').on('change', function () {
           if ($('input[name=seminarType]:checked').val() === 'offline') {
-            $('.seminarGoal-type-offline-area').removeClass('uk-hidden');
+            $('.seminar-type-offline-area').removeClass('uk-hidden');
           } else {
-            $('.seminarGoal-type-offline-area').addClass('uk-hidden');
+            $('.seminar-type-offline-area').addClass('uk-hidden');
             $('.place-input-area').addClass('uk-hidden');
           }
         });

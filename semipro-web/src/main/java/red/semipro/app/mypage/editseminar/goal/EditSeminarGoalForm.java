@@ -45,9 +45,11 @@ public class  EditSeminarGoalForm implements Serializable {
     private SuccessCondition successCondition;
 
     @Future
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime seminarStartingAt;
 
     @Future
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime seminarEndingAt;
 
     private EditSeminarPlaceForm placeForm;

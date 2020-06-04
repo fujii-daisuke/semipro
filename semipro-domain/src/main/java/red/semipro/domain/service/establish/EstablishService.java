@@ -75,8 +75,7 @@ public class EstablishService {
                 .build());
 
         // check date
-        if (executionDate.isBefore(seminar.getGoal().getEntryEndingAt())
-            || executionDate.isEqual(seminar.getGoal().getEntryEndingAt())) {
+        if (LocalDateTime.of(executionDate, LocalTime.MIN).isBefore(seminar.getGoal().getEntryEndingAt())) {
             log.info("now date is before seminar entry ending at. seminar_id = " + seminarId);
             return;
         }
