@@ -9,6 +9,7 @@ services:
       MYSQL_USER: semipro
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: semipro
+      TZ: "Asia/Tokyo"
     ports:
       - "3306:3306"
     volumes:
