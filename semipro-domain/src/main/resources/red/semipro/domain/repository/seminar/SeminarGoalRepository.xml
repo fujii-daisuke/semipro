@@ -68,6 +68,7 @@
             , minimum_number = #{minimumNumber}
             , entry_ending_at = #{entryEndingAt}
             , success_condition = #{successCondition.value}
+            , seminar_starting_at = #{seminarStartingAt}
             , seminar_ending_at = #{seminarEndingAt}
             , updated_at = CURRENT_TIMESTAMP
         WHERE
