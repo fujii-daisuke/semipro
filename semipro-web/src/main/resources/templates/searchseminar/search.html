@@ -31,7 +31,7 @@
                                     <h3 th:text="${seminar.overview.title}">title</h3>
                                 </a>
                                 <p>
-                                    <div th:text="${seminar.overview.summary}">summary</div>
+                                    <div th:utext="${seminar.overview.displaySummary()}">summary</div>
                                     <div class="uk-margin">
                                         <span th:text="${'残り' + seminar.goal.entryRemainingDays + '日'}">残り20日</span>
                                     </div>
