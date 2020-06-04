@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.unbescape.html.HtmlEscape;
 
 /**
  * セミナー概要 - model
@@ -45,5 +46,10 @@ public class SeminarOverview implements Serializable {
      */
     @NotNull
     private String mainImageExtension;
+
+    public String displaySummary() {
+        return HtmlEscape.escapeHtml4Xml(this.summary)
+            .replaceAll("\r\n|\r|\n", "<br/>");
+    }
 
 }
