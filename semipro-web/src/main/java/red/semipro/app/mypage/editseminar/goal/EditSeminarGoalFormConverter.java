@@ -3,6 +3,7 @@ package red.semipro.app.mypage.editseminar.goal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
@@ -32,7 +33,8 @@ public class EditSeminarGoalFormConverter {
             .seminarId(seminarGoal.getSeminarId())
             .seminarType(seminarGoal.getSeminarType())
             .minimumNumber(seminarGoal.getMinimumNumber())
-            .entryEndingAt(seminarGoal.getEntryEndingAt().toLocalDate())
+            .entryEndingAt(Objects.isNull(seminarGoal.getEntryEndingAt()) ? null
+                : seminarGoal.getEntryEndingAt().toLocalDate())
             .successCondition(seminarGoal.getSuccessCondition())
             .seminarStartingAt(seminarGoal.getSeminarStartingAt())
             .seminarEndingAt(seminarGoal.getSeminarEndingAt())
