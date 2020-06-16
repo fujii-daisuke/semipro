@@ -61,7 +61,7 @@ public class EntrySeminarController {
             .selectedStripeCustomerCardId(
                 customerCards.isEmpty() ? null : customerCards.get(0).getId())
             .build());
-        model.setViewName("mypage/entryseminar/entryForm");
+        model.setViewName("entryseminar/entryForm");
         return model;
     }
 
@@ -85,7 +85,7 @@ public class EntrySeminarController {
 
         if (result.hasErrors()) {
             model.addObject("customerCards", customerCards);
-            model.setViewName("mypage/entryseminar/entryForm");
+            model.setViewName("entryseminar/entryForm");
             return model;
         }
 
@@ -94,7 +94,7 @@ public class EntrySeminarController {
                 .filter(c -> c.getId().equals(form.getSelectedStripeCustomerCardId()))
                 .findFirst()
                 .orElseThrow());
-        model.setViewName("mypage/entryseminar/confirm");
+        model.setViewName("entryseminar/confirm");
         return model;
     }
 
@@ -116,7 +116,7 @@ public class EntrySeminarController {
         if (result.hasErrors()) {
             model.addObject("customerCards", entrySeminarHelper
                 .findStripeCustomerCardList(accountUserDetails.getAccount().getId()));
-            model.setViewName("mypage/entryseminar/entryForm");
+            model.setViewName("entryseminar/entryForm");
             return model;
         }
 
