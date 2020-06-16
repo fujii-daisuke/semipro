@@ -26,18 +26,18 @@
       </div>
       <div class="uk-width-2-5">
         <div class="uk-card uk-card-default uk-card-body">
-          <div class="uk-text-small">現在の参加者数</div>
           <div class="uk-margin-medium-bottom">
-            <div>
-              <span class="uk-heading-small uk-text-bold uk-margin-small" th:text="*{entrySummary.entryCount}">10</span>
-              <span class="uk-heading-small uk-text-bold">人</span>
+            <div class="uk-text-small">現在の参加者数</div>
+            <div class="uk-heading-small uk-text-bold uk-margin-small">
+              <span th:text="*{entrySummary.entryCount}">10</span>
+              <span>人</span>
             </div>
             <div>最低開催人数は<span th:text="*{goal.minimumNumber}">20</span>人</div>
           </div>
           <div class="uk-text-small">募集終了まで残り</div>
-          <div>
-            <span class="uk-heading-small uk-text-bold uk-margin-small" th:text="*{goal.entryRemainingDays}">10</span>
-            <span class="uk-heading-small uk-text-bold">日</span>
+          <div class="uk-heading-small uk-text-bold uk-margin-small">
+            <span th:text="*{goal.entryRemainingDays}">10</span>
+            <span>日</span>
           </div>
         </div>
         <div class="uk-margin-medium">
