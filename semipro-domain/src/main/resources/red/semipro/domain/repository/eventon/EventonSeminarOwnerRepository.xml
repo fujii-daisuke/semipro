@@ -5,19 +5,24 @@
 
 <mapper namespace="red.semipro.domain.repository.eventon.EventonSeminarOwnerRepository">
 
-    <update id="insertOrUpdate">
+    <insert id="insert">
         INSERT INTO eventon_seminar_owner (
-            id
+            event_id
+            , id
             , name
             , url
-        ) VALUES (
-            #{id}
-            , #{name}
-            , #{url}
-        ) ON DUPLICATE KEY UPDATE
-            id = #{id}
-            , name = #{name}
-            , url = #{url}
-    </update>
+        ) VALUES
+        <foreach item="i" collection="owners" separator=",">
+            (#{i.eventId}
+            , #{i.id}
+            , #{i.name}
+            , #{i.url})
+        </foreach>
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM eventon_seminar_owner
+        WHERE event_id = #{eventId}
+    </delete>
 
 </mapper>

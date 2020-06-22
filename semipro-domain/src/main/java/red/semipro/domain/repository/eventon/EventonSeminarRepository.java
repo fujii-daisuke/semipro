@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import red.semipro.domain.model.eventon.EventonSeminar;
+import red.semipro.domain.model.eventon.EventonSeminarCriteria;
 
 @Repository
 @Mapper
@@ -16,5 +17,6 @@ public interface EventonSeminarRepository {
 
     int update(@Nonnull final EventonSeminar eventonSeminar);
 
-    List<EventonSeminar> findAll();
+    List<EventonSeminar> findAllByCriteria(@Nonnull final EventonSeminarCriteria criteria);
+
 }
