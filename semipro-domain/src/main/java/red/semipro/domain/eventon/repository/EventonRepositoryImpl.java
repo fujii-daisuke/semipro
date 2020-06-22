@@ -31,12 +31,12 @@ public class EventonRepositoryImpl implements EventonRepository {
             log.debug("start: " + response.getStart());
             log.debug("limit: " + response.getLimit());
             log.debug("size: " + response.getEvents().size());
-            for (Event event : response.getEvents()) {
-                log.debug("event_id: " + event.getEvent_id());
+//            for (Event event : response.getEvents()) {
+//                log.debug("event_id: " + event.getEvent_id());
 //                Seminar seminar = new Seminar(event);
 //                log.debug("seminar_id: " + seminar.getProviderSeminarId());
 //                seminarService.registerByProvider(seminar);
-            }
+//            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -14,6 +14,6 @@ public class EventonSearchProcess {
     private final EventonRepository eventonRepository;
 
     public List<Event> execute() {
-        return eventonRepository.search(EventonCriteria.builder().build());
+        return eventonRepository.search(new EventonCriteria());
     }
 }

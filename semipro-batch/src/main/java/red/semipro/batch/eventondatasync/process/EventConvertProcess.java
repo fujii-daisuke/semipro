@@ -4,8 +4,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import red.semipro.batch.eventondatasync.process.subprocess.OwnerConvertSubProcess;
 import red.semipro.batch.eventondatasync.process.subprocess.TicketConvertSubProcess;
 import red.semipro.domain.eventon.model.Event;
@@ -27,30 +29,12 @@ public class EventConvertProcess {
             .summary(event.getSummary())
             .contents(event.getContents())
             .imagePath(event.getImage_path())
-            .startedAt(Optional.ofNullable(event.getStarted_at())
-                .map(startedAt -> LocalDateTime
-                    .parse(startedAt, DateTimeFormatter.ISO_OFFSET_DATE_TIME))
-                .orElse(null))
-            .endedAt(Optional.ofNullable(event.getEnded_at())
-                .map(
-                    endedAt -> LocalDateTime.parse(endedAt, DateTimeFormatter.ISO_OFFSET_DATE_TIME))
-                .orElse(null))
-            .openedAt(Optional.ofNullable(event.getOpened_at())
-                .map(openedAt -> LocalDateTime
-                    .parse(openedAt, DateTimeFormatter.ISO_OFFSET_DATE_TIME))
-                .orElse(null))
-            .entryStartedAt(Optional.ofNullable(event.getEntry_started_at())
-                .map(entryStartedAt -> LocalDateTime
-                    .parse(entryStartedAt, DateTimeFormatter.ISO_OFFSET_DATE_TIME))
-                .orElse(null))
-            .entryEndedAt(Optional.ofNullable(event.getEntry_ended_at())
-                .map(entryEndedAt -> LocalDateTime
-                    .parse(entryEndedAt, DateTimeFormatter.ISO_OFFSET_DATE_TIME))
-                .orElse(null))
-            .cancelAt(Optional.ofNullable(event.getCancel_at())
-                .map(cancelAt -> LocalDateTime
-                    .parse(cancelAt, DateTimeFormatter.ISO_OFFSET_DATE_TIME))
-                .orElse(null))
+            .startedAt(dateTimeFormatter(event.getStarted_at()))
+            .endedAt(dateTimeFormatter(event.getEnded_at()))
+            .openedAt(dateTimeFormatter(event.getOpened_at()))
+            .entryStartedAt(dateTimeFormatter(event.getEntry_started_at()))
+            .entryEndedAt(dateTimeFormatter(event.getEntry_ended_at()))
+            .cancelAt(dateTimeFormatter(event.getCancel_at()))
             .capacity(event.getCapacity())
             .eventUrl(event.getEvent_url())
             .url(event.getUrl())
@@ -65,13 +49,17 @@ public class EventConvertProcess {
             .accepted(event.getAccepted())
             .waiting(event.getWaiting())
             .embedCode(event.getEmbed_code())
-            .updatedAt(Optional.ofNullable(event.getUpdated_at())
-                .map(updatedAt -> LocalDateTime
-                    .parse(updatedAt, DateTimeFormatter.ISO_OFFSET_DATE_TIME))
-                .orElse(null))
-            .tickets(ticketConvertSubProcess.execute(event.getTickets()))
-            .owners(ownerConvertSubProcess.execute(event.getOwners()))
+            .updatedAt(dateTimeFormatter(event.getUpdated_at()))
+            .tickets(ticketConvertSubProcess.execute(event.getEvent_id(), event.getTickets()))
+            .owners(ownerConvertSubProcess.execute(event.getEvent_id(), event.getOwners()))
             .build();
 
+    }
+
+    private LocalDateTime dateTimeFormatter(@Nullable final String value) {
+        if (StringUtils.isEmpty(value)) {
+            return null;
+        }
+        return LocalDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 }

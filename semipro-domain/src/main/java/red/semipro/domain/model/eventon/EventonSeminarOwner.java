@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class EventonSeminarOwner implements Serializable {
 
     private static final long serialVersionUID = 284432630319337697L;
+    private Integer eventId;
     private Integer id;
     private String name;
     private String url;
