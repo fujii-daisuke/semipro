@@ -1,9 +1,11 @@
 package red.semipro.domain.service.seminar;
 
+import com.google.common.collect.Lists;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import red.semipro.domain.enums.OpeningStatus;
 import red.semipro.domain.model.account.Account;
+import red.semipro.domain.model.eventon.EventonSeminar;
+import red.semipro.domain.model.eventon.EventonSeminarCriteria;
 import red.semipro.domain.model.seminar.Seminar;
+import red.semipro.domain.repository.eventon.EventonSeminarRepository;
 import red.semipro.domain.repository.identification.IdentificationRepository;
 import red.semipro.domain.repository.seminar.SearchSeminarCriteria;
 import red.semipro.domain.repository.seminar.SeminarContentsRepository;
@@ -35,6 +40,7 @@ public class SeminarService {
     private final SeminarOptionRepository seminarOptionRepository;
     private final IdentificationRepository identificationRepository;
     private final SeminarEntrySummaryRepository seminarEntrySummaryRepository;
+    private final EventonSeminarRepository eventonSeminarRepository;
 
     /**
      * セミナー初期状態を登録します
@@ -65,16 +71,32 @@ public class SeminarService {
      * @param pageable ページネーション
      * @return セミナー一覧
      */
-    public Page<Seminar> search(SearchSeminarCriteria criteria, Pageable pageable) {
+    public Page<Seminar> search(@Nonnull final SearchSeminarCriteria criteria,
+        @Nonnull final Pageable pageable) {
 
         long total = seminarRepository.countByCriteria(criteria);
         List<Seminar> content;
         if (0 < total) {
-            content = seminarRepository.findPageByCriteria(criteria, pageable);
+            content = seminarRepository.findPageBySearchCriteria(criteria, pageable);
         } else {
             content = Collections.emptyList();
         }
         return new PageImpl<Seminar>(content, pageable, total);
+    }
+
+    public PagedListHolder<SeminarSearchOutput> search(@Nonnull final SearchSeminarCriteria criteria) {
+
+        List<SeminarSearchOutput> list = Lists.newArrayList();
+
+        List<Seminar> seminarList = seminarRepository.findAllBySearchCriteria(criteria);
+        seminarList.forEach(s -> list.add(SeminarSearchOutput.builder().seminar(s).build()));
+
+        List<EventonSeminar> eventonSeminarList =
+            eventonSeminarRepository.findAllByCriteria(EventonSeminarCriteria.builder().build());
+        eventonSeminarList
+            .forEach(e -> list.add(SeminarSearchOutput.builder().eventonSeminar(e).build()));
+
+        return new PagedListHolder<>(list);
     }
 
 }
