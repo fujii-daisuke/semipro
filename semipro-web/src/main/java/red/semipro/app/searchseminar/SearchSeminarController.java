@@ -3,6 +3,7 @@ package red.semipro.app.searchseminar;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -15,12 +16,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import red.semipro.common.PageWrapper;
 import red.semipro.domain.enums.OpeningStatus;
 import red.semipro.domain.model.seminar.Seminar;
 import red.semipro.domain.repository.seminar.SearchSeminarCriteria;
 import red.semipro.domain.service.seminar.SeminarDetailOutput;
+import red.semipro.domain.service.seminar.SeminarSearchOutput;
 import red.semipro.domain.service.seminar.SeminarService;
 import red.semipro.domain.service.seminar.SeminarDetailService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
@@ -46,7 +49,8 @@ public class SearchSeminarController {
      * @param model    ModelAndView
      * @return ModelAndView
      */
-    @GetMapping
+//    @GetMapping
+    @Deprecated
     public ModelAndView search(SearchSeminarForm form,
         BindingResult result,
         @PageableDefault(size = 20)
@@ -68,6 +72,23 @@ public class SearchSeminarController {
 
         model.addObject("page", page);
 
+        model.setViewName("searchseminar/search");
+        return model;
+    }
+
+    @GetMapping
+    public ModelAndView search(SearchSeminarForm form,
+        @RequestParam(required = false,defaultValue = "0") int page,
+        ModelAndView model) {
+
+        SearchSeminarCriteria criteria = seminarFormConverter.convert(form);
+        criteria.setBeforeEntryEndingAt(true);
+        criteria.setOpeningStatus(OpeningStatus.OPENING);
+        PagedListHolder<SeminarSearchOutput> pagedListHolder = seminarService.search(criteria);
+        pagedListHolder.setPage(page);
+        pagedListHolder.setPageSize(20);
+
+        model.addObject("pagedListHolder", pagedListHolder);
         model.setViewName("searchseminar/search");
         return model;
     }
