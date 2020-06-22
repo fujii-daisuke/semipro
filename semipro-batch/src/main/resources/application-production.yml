@@ -63,7 +63,7 @@ custom:
     domain: www.semipro.red
     # 秒/分/時/日/月/曜日
     cron:
-#      eventon: 0 0 3 * * 0
+      eventondatasync: 0 0 3 * * *
       endrecruitmentseminar: 0 0 0 * * *
     email:
       fromEmail: red.semipro@gmail.com
