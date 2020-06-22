@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="red.semipro.domain.repository.eventon.EventonSeminarRepository">
+
+    <resultMap id="eventonSeminarResultMap" type="red.semipro.domain.model.eventon.EventonSeminar">
+        <id property="eventId" column="event_id"/>
+        <result property="title" column="title"/>
+        <result property="summary" column="summary"/>
+        <result property="contents" column="contents"/>
+        <result property="imagePath" column="image_path"/>
+        <result property="startedAt" column="started_at"/>
+        <result property="endedAt" column="ended_at"/>
+        <result property="openedAt" column="opened_at"/>
+        <result property="entryStartedAt" column="entry_started_at"/>
+        <result property="entryEndedAt" column="entry_ended_at"/>
+        <result property="cancelAt" column="cancel_at"/>
+        <result property="capacity" column="capacity"/>
+        <result property="eventUrl" column="event_url"/>
+        <result property="url" column="url"/>
+        <result property="cancelPolicy" column="cancel_policy"/>
+        <result property="prefecture.id" column="prefecture_id"/>
+        <result property="prefecture.name" column="prefecture_name"/>
+        <result property="address" column="address"/>
+        <result property="place" column="place"/>
+        <result property="lat" column="lat"/>
+        <result property="lng" column="lng"/>
+        <result property="accepted" column="accepted"/>
+        <result property="waiting" column="waiting"/>
+        <result property="embedCode" column="embed_code"/>
+        <result property="updatedAt" column="updated_at"/>
+        <collection property="tickets" ofType="red.semipro.domain.model.eventon.EventonSeminarTicket">
+            <id column="eventId" property="event_id"/>
+            <result column="name" property="name"/>
+            <result column="price" property="price"/>
+        </collection>
+        <collection property="owners" ofType="red.semipro.domain.model.eventon.EventonSeminarOwner">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="url" column="url"/>
+        </collection>
+    </resultMap>
+
+    <sql id="baseSelectPhrase">
+        SELECT
+            eventon_seminar.event_id
+            , eventon_seminar.title
+            , eventon_seminar.summary
+            , eventon_seminar.contents
+            , eventon_seminar.image_path
+            , eventon_seminar.started_at
+            , eventon_seminar.ended_at
+            , eventon_seminar.opened_at
+            , eventon_seminar.entry_started_at
+            , eventon_seminar.entry_ended_at
+            , eventon_seminar.cancel_at
+            , eventon_seminar.capacity
+            , eventon_seminar.event_url
+            , eventon_seminar.url
+            , eventon_seminar.cancel_policy
+            , eventon_seminar.prefecture_id
+            , eventon_seminar.address
+            , eventon_seminar.place
+            , eventon_seminar.lat
+            , eventon_seminar.lng
+            , eventon_seminar.accepted
+            , eventon_seminar.waiting
+            , eventon_seminar.embed_code
+            , eventon_seminar.updated_at
+    </sql>
+
+    <select id="findOne" resultMap="eventonSeminarResultMap">
+        <include refid="baseSelectPhrase"/>
+        FROM
+        eventon_seminar
+        WHERE
+        event_id = #{eventId}
+    </select>
+
+    <select id="findAllByCriteria" resultMap="eventonSeminarResultMap">
+        <include refid="baseSelectPhrase"/>
+        , prefecture.name prefecture_name
+        , eventon_seminar_ticket.name ticket_name
+        , eventon_seminar_ticket.price ticket_price
+        , eventon_seminar_owner.id owner_id
+        , eventon_seminar_owner.name owner_name
+        , eventon_seminar_owner.url owner_url
+        FROM
+        eventon_seminar
+        LEFT OUTER JOIN prefecture ON eventon_seminar.prefecture_id = prefecture.id
+        LEFT OUTER JOIN eventon_seminar_ticket ON eventon_seminar.event_id = eventon_seminar_ticket.event_id
+        LEFT OUTER JOIN eventon_seminar_owner ON eventon_seminar.event_id = eventon_seminar_owner.event_id
+        ORDER BY
+        eventon_seminar.event_id DESC
+    </select>
+
+    <select id="findOneWithDetails" resultMap="eventonSeminarResultMap">
+        <include refid="baseSelectPhrase"/>
+        , prefecture.name prefecture_name
+        , eventon_seminar_ticket.name ticket_name
+        , eventon_seminar_ticket.price ticket_price
+        , eventon_seminar_owner.id owner_id
+        , eventon_seminar_owner.name owner_name
+        , eventon_seminar_owner.url owner_url
+        FROM
+        eventon_seminar
+        LEFT OUTER JOIN prefecture ON eventon_seminar.prefecture_id = prefecture.id
+        LEFT OUTER JOIN eventon_seminar_ticket ON eventon_seminar.event_id = eventon_seminar_ticket.event_id
+        LEFT OUTER JOIN eventon_seminar_owner ON eventon_seminar.event_id = eventon_seminar_owner.event_id
+        WHERE
+        eventon_seminar.event_id = #{eventId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO eventon_seminar (
+        event_id
+        , title
+        , summary
+        , contents
+        , image_path
+        , started_at
+        , ended_at
+        , opened_at
+        , entry_started_at
+        , entry_ended_at
+        , cancel_at
+        , capacity
+        , event_url
+        , url
+        , cancel_policy
+        , prefecture_id
+        , address
+        , place
+        , lat
+        , lng
+        , accepted
+        , waiting
+        , embed_code
+        , created_at
+        , updated_at
+        )
+        VALUES (
+        #{eventId}
+        , #{title}
+        , #{summary}
+        , #{contents}
+        , #{imagePath}
+        , #{startedAt}
+        , #{endedAt}
+        , #{openedAt}
+        , #{entryStartedAt}
+        , #{entryEndedAt}
+        , #{cancelAt}
+        , #{capacity}
+        , #{eventUrl}
+        , #{url}
+        , #{cancelPolicy}
+        , #{prefecture.id}
+        , #{address}
+        , #{place}
+        , #{lat}
+        , #{lng}
+        , #{accepted}
+        , #{waiting}
+        , #{embedCode}
+        , CURRENT_TIMESTAMP
+        <if test="updatedAt != null">
+            , #{updatedAt}
+        </if>
+        <if test="updatedAt == null">
+            , CURRENT_TIMESTAMP
+        </if>
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE eventon_seminar SET
+        title = #{title}
+        , summary = #{summary}
+        , contents = #{contents}
+        , image_path = #{imagePath}
+        , started_at = #{startingAt}
+        , ended_at = #{endingAt}
+        , opened_at = #{openingAt}
+        , entry_started_at = #{entryStartingAt}
+        , entry_ended_at = #{entryEndingAt}
+        , cancel_at = #{cancelAt}
+        , capacity = #{capacity}
+        , event_url = #{eventUrl}
+        , url = #{url}
+        , cancel_policy = #{cancelPolicy}
+        , prefecture_id = #{prefecture.id}
+        , address = #{address}
+        , place = #{place}
+        , lat = #{lat}
+        , lng = #{lng}
+        , accepted = #{accepted}
+        , waiting = #{waiting}
+        , embed_code = #{embedCode}
+        <if test="updatedAt != null">
+            , updated_at = #{updatedAt}
+        </if>
+        <if test="updatedAt == null">
+            , updated_at = CURRENT_TIMESTAMP
+        </if>
+        WHERE
+        event_id = #{eventId}
+    </update>
+
+</mapper>

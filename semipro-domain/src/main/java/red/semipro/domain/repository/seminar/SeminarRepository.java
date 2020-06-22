@@ -16,8 +16,20 @@ import red.semipro.domain.model.seminar.Seminar;
 @Mapper
 public interface SeminarRepository {
 
+    /**
+     * セミナー詳細を取得します
+     *
+     * @param criteria 検索条件
+     * @return セミナー
+     */
     Seminar findOneWithDetails(@Nonnull @Param("criteria") final SeminarCriteria criteria);
 
+    /**
+     * セミナー詳細を取得します
+     *
+     * @param criteria 検索条件
+     * @return セミナー
+     */
     Seminar findOneWithDetailsForUpdate(@Nonnull @Param("criteria") final SeminarCriteria criteria);
 
     /**
@@ -54,9 +66,18 @@ public interface SeminarRepository {
      * @param pageable ページネーション
      * @return セミナーサマリー一覧
      */
-    List<Seminar> findPageByCriteria(
+    List<Seminar> findPageBySearchCriteria(
         @Nonnull @Param("criteria") final SearchSeminarCriteria criteria,
         @Nonnull @Param("pageable") final Pageable pageable);
 
-    List<Seminar> findAll(@Nonnull @Param("criteria") final SeminarCriteria criteria);
+    List<Seminar> findAllBySearchCriteria(
+        @Nonnull @Param("criteria") final SearchSeminarCriteria criteria);
+
+    /**
+     * セミナーを検索します
+     *
+     * @param criteria 検索条件
+     * @return セミナーリスト
+     */
+    List<Seminar> findAllByCriteria(@Nonnull @Param("criteria") final SeminarCriteria criteria);
 }
