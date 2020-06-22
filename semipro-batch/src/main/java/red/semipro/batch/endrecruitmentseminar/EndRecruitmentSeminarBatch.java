@@ -10,7 +10,7 @@ import red.semipro.domain.service.establish.EstablishService;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class EndRecruitmentSeminarTask {
+public class EndRecruitmentSeminarBatch {
 
     private final EstablishService establishService;
 

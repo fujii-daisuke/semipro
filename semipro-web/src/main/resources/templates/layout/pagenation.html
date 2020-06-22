@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <body>
+        <ul class="uk-pagination uk-flex-center uk-margin" layout:fragment="pagenation(page)">
+        <li th:classappend="${page.firstPage}?'uk-disabled':''">
+            <a th:href="@{${page.url}(page=0,size=${page.size})}"><span uk-pagination-previous></span></a>
+        </li>
+        <li class= "page-item" th:classappend="${item.current}? 'uk-active' : ''" th:each="item : ${page.items}">
+            <a th:href='@{${page.url}(page=${item.number-1},size=${page.size})}' th:text="${item.number}">1</a>
+        </li>
+        <li th:classappend="${page.lastPage}? 'uk-disabled' : ''">
+            <a th:href="@{${page.url}(page=${page.totalPages - 1},size=${page.size})}"><span uk-pagination-next></span></a>
+        </li>
+    </ul>
+    </body>
+</html>

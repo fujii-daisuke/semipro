@@ -87,7 +87,7 @@
         FOR UPDATE
     </select>
 
-    <select id="findAll" resultMap="seminarResultMap">
+    <select id="findAllByCriteria" resultMap="seminarResultMap">
         <include refid="baseSelectPhrase"/>
         <include refid="baseFromPhrase"/>
         <include refid="baseWherePhrase"/>
@@ -96,13 +96,13 @@
     <select id="countByCriteria" resultType="_long">
         SELECT COUNT(*)
         <include refid="baseFromPhrase"/>
-        <include refid="findPageByCriteriaWherePhrase"/>
+        <include refid="searchCriteriaWherePhrase"/>
     </select>
 
-    <select id="findPageByCriteria" resultMap="seminarResultMap">
+    <select id="findPageBySearchCriteria" resultMap="seminarResultMap">
         <include refid="baseSelectPhrase"/>
         <include refid="baseFromPhrase"/>
-        <include refid="findPageByCriteriaWherePhrase"/>
+        <include refid="searchCriteriaWherePhrase"/>
         <choose>
             <when test="!pageable.sort.isUnsorted()">
                 ORDER BY
@@ -119,6 +119,13 @@
         #{pageable.pageSize}
         OFFSET
         #{pageable.offset}
+    </select>
+
+    <select id="findAllBySearchCriteria" resultMap="seminarResultMap">
+        <include refid="baseSelectPhrase"/>
+        <include refid="baseFromPhrase"/>
+        <include refid="searchCriteriaWherePhrase"/>
+        ORDER BY entry_ending_at DESC
     </select>
 
     <sql id="baseSelectPhrase">
@@ -213,7 +220,7 @@
         </where>
     </sql>
 
-    <sql id="findPageByCriteriaWherePhrase">
+    <sql id="searchCriteriaWherePhrase">
         <where>
             <if test="criteria.beforeEntryEndingAt">
                 CURRENT_TIMESTAMP <![CDATA[ <= ]]> seminar_goal.entry_ending_at
