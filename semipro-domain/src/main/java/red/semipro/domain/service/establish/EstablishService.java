@@ -47,7 +47,7 @@ public class EstablishService {
     public void execute(@Nonnull final LocalDate executionDate) {
 
         List<Seminar> seminarList =
-            seminarRepository.findAll(SeminarCriteria.builder()
+            seminarRepository.findAllByCriteria(SeminarCriteria.builder()
                 .openingStatus(OpeningStatus.OPENING)
                 .executionDate(LocalDateTime.of(executionDate, LocalTime.MIN))
                 .build());

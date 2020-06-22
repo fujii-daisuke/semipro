@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="red.semipro.domain.repository.eventon.EventonSeminarTicketRepository">
+
+    <insert id="insert">
+        INSERT INTO eventon_seminar_ticket (
+        event_id,
+        name,
+        price
+        ) VALUES
+        <foreach item="i" collection="tickets" separator=",">
+            (#{i.eventId}, #{i.name}, #{i.price})
+        </foreach>
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM eventon_seminar_ticket
+        WHERE event_id = #{eventId}
+    </delete>
+
+</mapper>
