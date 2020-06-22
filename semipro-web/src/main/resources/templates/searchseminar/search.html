@@ -12,29 +12,55 @@
 <body>
 <main class="uk-margin" layout:fragment="content">
     <div class="uk-container-small uk-align-center">
-        <div th:if="${page != null and !#lists.isEmpty(page.content)}" th:remove="tag">
+        <div th:if="${pagedListHolder != null and !#lists.isEmpty(pagedListHolder.pageList)}" th:remove="tag">
             <ul class="uk-list uk-list-large uk-list-divider">
-                <th:block th:each="seminar, parentStat:${page.content}">
-                    <li>
+                <th:block th:each="output, parentStat:${pagedListHolder.pageList}">
+                    <li th:if="${output.isSemipro()}">
                         <div uk-grid>
-                            <div class="uk-width-auto">
+                            <div class="uk-width-2-5">
                                 <div class="uk-card uk-card-default uk-card-body">
-                                    <a th:href="@{/seminars/{seminarId}/detail(seminarId=${seminar.id})}">
-                                        <img th:src="${#seminarImageHelper.getMainImageUrl(seminar.id, seminar.overview.mainImageExtension)}"
-                                             th:alt="${seminar.overview.title}"
+                                    <a th:href="@{/seminars/{seminarId}/detail(seminarId=${output.seminar.id})}">
+                                        <img th:src="${#seminarImageHelper.getMainImageUrl(output.seminar.id, output.seminar.overview.mainImageExtension)}"
+                                             th:alt="${output.seminar.overview.title}"
                                              style="max-width: 200px;">
                                     </a>
                                 </div>
                             </div>
-                            <div class="uk-width-auto">
-                                <a th:href="@{/seminars/{seminarId}/detail(seminarId=${seminar.id})}">
-                                    <h3 th:text="${seminar.overview.title}">title</h3>
+                            <div class="uk-width-3-5">
+                                <a th:href="@{/seminars/{seminarId}/detail(seminarId=${output.seminar.id})}">
+                                    <h4 th:text="${output.seminar.overview.title}">title</h4>
                                 </a>
                                 <p>
-                                    <div th:utext="${seminar.overview.displaySummary()}">summary</div>
+                                    <div th:utext="${output.seminar.overview.displaySummary()}">summary</div>
                                     <div class="uk-margin">
-                                        <span th:text="${'残り' + seminar.goal.entryRemainingDays + '日'}">残り20日</span>
+                                        <span th:text="${'残り' + output.seminar.goal.entryRemainingDays + '日'}">残り20日</span>
                                     </div>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li th:unless="${output.isSemipro()}">
+                        <div uk-grid>
+                            <div class="uk-width-2-5">
+                                <div class="uk-card uk-card-default uk-card-body">
+                                    <a th:href="${output.eventonSeminar.eventUrl}">
+                                        <img th:src="${output.eventonSeminar.imagePath}"
+                                             th:alt="${output.eventonSeminar.title}"
+                                             style="max-width: 200px;">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="uk-width-3-5">
+                                <a th:href="${output.eventonSeminar.eventUrl}">
+                                    <h4 th:text="${output.eventonSeminar.title}">title</h4>
+                                </a>
+                                <p>
+                                <div th:utext="${output.eventonSeminar.summary}">summary</div>
+                                <!--
+                                <div class="uk-margin">
+                                    <span th:text="${'残り' + output.seminar.goal.entryRemainingDays + '日'}">残り20日</span>
+                                </div>
+                                -->
                                 </p>
                             </div>
                         </div>
@@ -42,14 +68,16 @@
                 </th:block>
             </ul>
             <ul class="uk-pagination uk-flex-center uk-margin">
-                <li th:classappend="${page.firstPage}?'uk-disabled':''">
-                    <a th:href="@{${page.url}(page=0,size=${page.size})}"><span uk-pagination-previous></span></a>
+                <li th:classappend="${pagedListHolder.firstPage}?'uk-disabled':''">
+                    <a th:href="@{/(page=0)}"><span uk-pagination-previous></span></a>
                 </li>
-                <li class= "page-item" th:classappend="${item.current}? 'uk-active' : ''" th:each="item : ${page.items}">
-                    <a th:href='@{${page.url}(page=${item.number-1},size=${page.size})}' th:text="${item.number}">1</a>
+                <li th:each="i : ${#numbers.sequence(pagedListHolder.firstLinkedPage, pagedListHolder.lastLinkedPage)}"
+                    class= "page-item"
+                    th:classappend="${i == pagedListHolder.page}? 'uk-active' : ''">
+                    <a th:href='@{/(page=${i})}' th:text="${i+1}">1</a>
                 </li>
-                <li th:classappend="${page.lastPage}? 'uk-disabled' : ''">
-                    <a th:href="@{${page.url}(page=${page.totalPages - 1},size=${page.size})}"><span uk-pagination-next></span></a>
+                <li th:classappend="${pagedListHolder.lastPage}? 'uk-disabled' : ''">
+                    <a th:href="@{/(page=${pagedListHolder.pageCount - 1})}"><span uk-pagination-next></span></a>
                 </li>
             </ul>
         </div>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+    <title th:text="${output.seminarGoal.title}">title</title>
+    <meta name="keywords" th:content="${output.seminarGoal.title}" />
+    <meta name="description" th:content="${output.seminarGoal.summary}" />
+    <link th:href="@{/css/eventon.style.css}" rel="stylesheet">
+<style>
+ #map {
+   width: 800px;
+   height: 400px;
+ }
+</style>
+</head>
+<body>
+<main class="uk-margin" layout:fragment="content">
+  <div class="uk-container">
+    <div class="uk-card uk-card-default">
+      <div class="uk-card-body">
+        <h1 class="uk-card-title uk-text-center"><a class="uk-link-reset" href="" th:text="${output.seminarGoal.title}">title</a></h1>
+        <p th:text="${output.seminarGoal.summary}">summary</p>
+      </div>
+      <div class="uk-card-media-top uk-text-center">
+        <img th:src="${output.mainImagePath}" th:alt="${output.seminarGoal.title}" style="max-width: 848px; max-height: 428px;">
+      </div>
+    </div>
+    <p th:utext="${output.seminarGoal.contents}">contents</p>
+    <hr>
+    <table class="uk-table uk-table-striped">
+        <caption>チケット販売状況</caption>
+        <tbody>
+          <tr th:each="ticket, stat: ${output.seminarGoal.tickets}">
+            <td class="uk-table-shrink uk-text-nowrap" th:text="${ticket.name}">ticket name</td>
+            <td>[[${#numbers.formatInteger(ticket.price,1,'DEFAULT')}]] 円</td>
+          </tr>
+        </tbody>
+    </table>
+    <hr>
+    <dl class="uk-description-list uk-description-list-divider">
+      <dt>受付期間</dt>
+      <dd>[[${#temporals.format(output.seminarGoal.entryStartingAt, 'yyyy年MM月dd日 HH時mm分')}]] 〜 [[${#temporals.format(output.seminarGoal.entryEndingAt, 'yyyy年MM月dd日 HH時mm分')}]]</dd>
+      <dt>開催日時</dt>
+      <dd>[[${#temporals.format(output.seminarGoal.startingAt, 'yyyy年MM月dd日 HH時mm分')}]] 〜 [[${#temporals.format(output.seminarGoal.endingAt, 'yyyy年MM月dd日 HH時mm分')}]]</dd>
+      <dt>開催地</dt>
+      <dd>
+        <div>[[${output.seminarGoal.getHoldPlace()}]]</div>
+        <div id="map"></div></dd>
+      <dt>主催</dt>
+      <dd>
+        <div th:each="owner, stat: ${output.seminarGoal.owners}">
+          <span th:text="${owner.name}">owner name</span><br>
+          <a th:href="${owner.url}" target="_blank" th:text="${owner.url}">url</a>
+        </div>
+      </dd>
+    </dl>
+
+    <p uk-margin class="uk-text-center" th:if="${output.seminarGoal.providerId.isEventon()}">
+      <a th:href="${'https://eventon.jp/' + output.seminarGoal.providerSeminarId}" target="_blank">
+        <button class="uk-button uk-button-primary uk-button-large">申し込みはこちら</button>
+      </a>
+    </p>
+  </div>
+</main>
+<th:block th:fragment="script">
+  <script src="http://maps.google.com/maps/api/js?key=AIzaSyAMGqMClEinLYUXhIy1L35bRvEffjUQ4Uk&language=ja"></script>
+  <script th:inline="javascript">
+    var latlng = {lat: 35.383575, lng: 139.344170};
+    var Options = {
+      zoom: 15,      //地図の縮尺値
+      center: latlng,    //地図の中心座標
+      mapTypeId: 'roadmap'   //地図の種類
+    };
+    var map = new google.maps.Map(document.getElementById('map'), Options);
+    // マーカーを表示
+    var marker = new google.maps.Marker({
+      position: latlng,
+      map: map,
+      title: 'where' // マーカーの名前
+    });
+    var infoWindow = new google.maps.InfoWindow({ // 吹き出しの追加
+      content: /*[[${output.seminarGoal.address}]]*/ // 吹き出しに表示する内容
+    });
+    marker.addListener('mouseover', function() { // マーカーをクリックしたとき
+      infoWindow.open(map, marker); // 吹き出しの表示
+    });
+    // mouseoutイベントを取得するListenerを追加
+    google.maps.event.addListener(marker, 'mouseout', function(){
+      infoWindow.close();
+    });
+  </script>
+</th:block>
+</body>
+</html>
