@@ -1,0 +1,73 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/semipro?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driverClassName: com.mysql.jdbc.Driver
+    tomcat:
+      maxActive: 4
+      maxIdle: 4
+      minIdle: 0
+      initialSize: 4
+  messages:
+    basename: i18n/messages
+    cacheDuration: -1
+    encoding: UTF-8
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SMTP_USER}
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+    thymeleaf:
+      cache: false
+  servlet:
+    multipart:
+      enabled: true
+      maxFileSize: 10MB
+      maxRequestSize: 10MB
+
+server:
+  port: 8082
+  address: 127.0.0.1
+logging:
+  level:
+    root: info
+    org.springframework: debug
+    red.semipro: debug
+
+mybatis:
+  #  mapperLocations: classpath:sqlMapper/*.xml
+  type-handlers-package: red.semipro.domain.typehandler
+
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      auto: false
+      static: ap-northeast-1
+
+# application settings
+custom:
+  application:
+    web-root: http://localhost:8080/
+    schema:
+      http
+    domain:
+      localhost:8082
+    # 秒/分/時/日/月/曜日
+    cron:
+      eventondatasync: 0 */1 * * * *
+      endrecruitmentseminar: 0 0 */1 * * *
+    email:
+      fromEmail: d.ziifuu@gmail.com
+      operator: semipro.operator@gmail.com
+  aws.s3.bucket: semipro-dev
+  aws.s3.seminar.path: upload/seminar/
+  stripe.secret.key: ${STRIPE_SECRET_KEY}
+  stripe.public.key: ${STRIPE_PUBLIC_KEY}
