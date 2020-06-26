@@ -32,14 +32,15 @@
         <result property="embedCode" column="embed_code"/>
         <result property="updatedAt" column="updated_at"/>
         <collection property="tickets" ofType="red.semipro.domain.model.eventon.EventonSeminarTicket">
-            <id column="eventId" property="event_id"/>
-            <result column="name" property="name"/>
-            <result column="price" property="price"/>
+            <result column="eventId" property="event_id"/>
+            <result column="name" property="ticket_name"/>
+            <result column="price" property="ticket_price"/>
         </collection>
         <collection property="owners" ofType="red.semipro.domain.model.eventon.EventonSeminarOwner">
-            <id property="id" column="id"/>
-            <result property="name" column="name"/>
-            <result property="url" column="url"/>
+            <result column="eventId" property="event_id"/>
+            <result property="id" column="owner_id"/>
+            <result property="name" column="owner_name"/>
+            <result property="url" column="owner_url"/>
         </collection>
     </resultMap>
 
@@ -92,8 +93,29 @@
         LEFT OUTER JOIN prefecture ON eventon_seminar.prefecture_id = prefecture.id
         LEFT OUTER JOIN eventon_seminar_ticket ON eventon_seminar.event_id = eventon_seminar_ticket.event_id
         LEFT OUTER JOIN eventon_seminar_owner ON eventon_seminar.event_id = eventon_seminar_owner.event_id
-        ORDER BY
-        eventon_seminar.event_id DESC
+        <where>
+            <choose>
+                <when test="criteria.isOpening">
+                    eventon_seminar.entry_ended_at <![CDATA[ >= ]]> CURRENT_TIMESTAMP
+                </when>
+                <otherwise>
+                    eventon_seminar.entry_ended_at <![CDATA[ < ]]> CURRENT_TIMESTAMP
+                </otherwise>
+            </choose>
+        </where>
+        <choose>
+            <when test="!sort.isUnsorted()">
+                ORDER BY
+                <foreach item="order" collection="sort" separator=",">
+                    ${order.property}
+                    ${order.direction}
+                </foreach>
+            </when>
+            <otherwise>
+                ORDER BY eventon_seminar.entry_ended_at ASC
+            </otherwise>
+        </choose>
+
     </select>
 
     <select id="findOneWithDetails" resultMap="eventonSeminarResultMap">

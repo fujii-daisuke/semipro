@@ -1,8 +1,11 @@
 package red.semipro.domain.model.eventon;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,5 +47,17 @@ public class EventonSeminar implements Serializable {
     private List<EventonSeminarOwner> owners;
     private String embedCode;
     private LocalDateTime updatedAt;
+
+    /**
+     * 募集終了日までの残日数を取得します
+     *
+     * @return 残日数
+     */
+    public Long getEntryRemainingDays() {
+        if (Objects.isNull(entryEndedAt)) {
+            return 0L;
+        }
+        return ChronoUnit.DAYS.between(LocalDate.now(), entryEndedAt);
+    }
 
 }

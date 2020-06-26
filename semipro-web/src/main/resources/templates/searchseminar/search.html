@@ -43,7 +43,7 @@
                         <div uk-grid>
                             <div class="uk-width-2-5">
                                 <div class="uk-card uk-card-default uk-card-body">
-                                    <a th:href="${output.eventonSeminar.eventUrl}">
+                                    <a th:href="@{/seminars/eventon/{eventId}/detail(eventId=${output.eventonSeminar.eventId})}">
                                         <img th:src="${output.eventonSeminar.imagePath}"
                                              th:alt="${output.eventonSeminar.title}"
                                              style="max-width: 200px;">
@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                             <div class="uk-width-3-5">
-                                <a th:href="${output.eventonSeminar.eventUrl}">
+                                <a th:href="@{/seminars/eventon/{eventId}/detail(eventId=${output.eventonSeminar.eventId})}">
                                     <h4 th:text="${output.eventonSeminar.title}">title</h4>
                                 </a>
                                 <p>

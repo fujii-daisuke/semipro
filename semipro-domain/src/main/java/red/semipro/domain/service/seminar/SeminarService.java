@@ -9,6 +9,8 @@ import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import red.semipro.domain.enums.OpeningStatus;
@@ -92,7 +94,18 @@ public class SeminarService {
         seminarList.forEach(s -> list.add(SeminarSearchOutput.builder().seminar(s).build()));
 
         List<EventonSeminar> eventonSeminarList =
-            eventonSeminarRepository.findAllByCriteria(EventonSeminarCriteria.builder().build());
+            eventonSeminarRepository.findAllByCriteria(
+                EventonSeminarCriteria.builder()
+                    .isOpening(true)
+                    .build(),
+                Sort.by(Direction.ASC, "eventon_seminar.entry_ended_at"));
+
+        eventonSeminarList.addAll(eventonSeminarRepository.findAllByCriteria(
+            EventonSeminarCriteria.builder()
+                .isOpening(false)
+                .build(),
+            Sort.by(Direction.DESC, "eventon_seminar.entry_ended_at")));
+
         eventonSeminarList
             .forEach(e -> list.add(SeminarSearchOutput.builder().eventonSeminar(e).build()));
 

@@ -73,3 +73,4 @@ custom:
   aws.s3.seminar.path: upload/seminar/
   stripe.secret.key: ${STRIPE_SECRET_KEY}
   stripe.public.key: ${STRIPE_PUBLIC_KEY}
+  google.api.key: ${GOOGLE_API_KEY}

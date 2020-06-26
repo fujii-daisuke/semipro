@@ -11,6 +11,8 @@ import red.semipro.domain.model.eventon.EventonSeminarTicket;
 @Mapper
 public interface EventonSeminarTicketRepository {
 
+    List<EventonSeminarTicket> findAllByEventId(@Nonnull final Integer eventId);
+
     int insert(@Nonnull @Param("tickets") final List<EventonSeminarTicket> tickets);
 
     int delete(@Nonnull final Integer eventId);

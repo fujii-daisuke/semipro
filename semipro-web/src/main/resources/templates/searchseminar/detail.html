@@ -6,6 +6,8 @@
       th:lang="${#locale.language}">
 <head>
   <title>セミナー詳細</title>
+  <meta name="keywords" th:content="${output.seminar.overview.title}" />
+  <meta name="description" th:content="${output.seminar.overview.summary}" />
 </head>
 <body>
 <main class="uk-margin" layout:fragment="content">
