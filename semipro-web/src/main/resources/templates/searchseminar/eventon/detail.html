@@ -85,7 +85,7 @@
     </div>
 </main>
 <th:block th:fragment="script">
-    <script th:src="${'http://maps.google.com/maps/api/js?key=' + googleApiKey + '&language=ja'}"></script>
+    <script th:src="${'https://maps.google.com/maps/api/js?key=' + googleApiKey + '&language=ja'}"></script>
     <script th:inline="javascript">
       var latlng = {lat: /*[[${seminar.lat}]]*/, lng: /*[[${seminar.lng}]]*/};
       var Options = {
