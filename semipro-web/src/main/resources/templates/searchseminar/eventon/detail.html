@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      th:lang="${#locale.language}">
+<head>
+    <title>セミナー詳細</title>
+    <meta name="keywords" th:content="${seminar.title}" />
+    <meta name="description" th:content="${seminar.summary}" />
+    <link th:href="@{/css/eventon.style.css}" rel="stylesheet">
+    <style>
+        #map {
+            width: 800px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+<main class="uk-margin" layout:fragment="content">
+    <div class="uk-alert-danger" th:if="${seminar.entryRemainingDays < 0}" uk-alert>
+        <p>このセミナーは終了しました。</p>
+    </div>
+    <div class="uk-container" th:object="${seminar}">
+        <div class="uk-margin uk-text-center">
+            <h1 class="uk-heading-small" th:text="*{title}">title</h1>
+            <div class="uk-text-meta" th:each="owner, stat: *{owners}">
+                <span uk-icon="user"></span>
+                <span class="uk-margin-small-left" th:text="${owner.name}">username</span>
+            </div>
+        </div>
+        <div uk-grid>
+            <div class="uk-width-3-5">
+                <p><img th:src="*{imagePath}"></p>
+                <p th:text="*{summary}">summary</p>
+                <h2>セミナー本文</h2>
+                <p th:utext="*{contents}">contents</p>
+                <h2>開催場所</h2>
+                <p>
+                    <div th:text="*{address}">東京都渋谷区</div>
+                    <div th:text="*{place}">渋谷ビル５F</div>
+                </p>
+                <div id="map"></div>
+            </div>
+            <div class="uk-width-2-5">
+                <div class="uk-card uk-card-default uk-card-body">
+                    <div class="uk-margin-medium-bottom">
+                        <div class="uk-text-small">現在の参加者数</div>
+                        <div class="uk-heading-small uk-text-bold uk-margin-small">
+                            <span th:text="*{accepted}">10</span>
+                            <span>人</span>
+                        </div>
+                        <div>定員<span th:text="*{capacity}">20</span>人</div>
+                    </div>
+                    <div class="uk-text-small">募集終了まで残り</div>
+                    <div class="uk-heading-small uk-text-bold uk-margin-small">
+                        <span th:text="*{entryRemainingDays}">10</span>
+                        <span>日</span>
+                    </div>
+                </div>
+                <div class="uk-margin-medium">
+                    <h4>チケットを選ぶ</h4>
+                    <table class="uk-table uk-table-middle uk-table-divider">
+                        <thead>
+                        <tr>
+                            <th>チケット名</th>
+                            <th>価格</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="ticket: *{tickets}">
+                            <td th:text="${ticket.name}">ticket name</td>
+                            <td><span th:text="${ticket.price}">5000</span>円</td>
+                            <td>
+                                <a class="uk-button uk-button-danger"
+                                   th:href="*{eventUrl}">申し込み</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block th:fragment="script">
+    <script th:src="${'http://maps.google.com/maps/api/js?key=' + googleApiKey + '&language=ja'}"></script>
+    <script th:inline="javascript">
+      var latlng = {lat: /*[[${seminar.lat}]]*/, lng: /*[[${seminar.lng}]]*/};
+      var Options = {
+        zoom: 15,      //地図の縮尺値
+        center: latlng,    //地図の中心座標
+        mapTypeId: 'roadmap'   //地図の種類
+      };
+      var map = new google.maps.Map(document.getElementById('map'), Options);
+      // マーカーを表示
+      var marker = new google.maps.Marker({
+        position: latlng,
+        map: map,
+        title: '開催地' // マーカーの名前
+      });
+      var infoWindow = new google.maps.InfoWindow({ // 吹き出しの追加
+        content: /*[[${seminar.address + ' ' +  seminar.place}]]*/'' // マーカーに表示する名称
+      });
+      marker.addListener('mouseover', function() { // マーカーをクリックしたとき
+        infoWindow.open(map, marker); // 吹き出しの表示
+      });
+      // mouseoutイベントを取得するListenerを追加
+      google.maps.event.addListener(marker, 'mouseout', function(){
+        infoWindow.close();
+      });
+    </script>
+</th:block>
+</body>
+</html>

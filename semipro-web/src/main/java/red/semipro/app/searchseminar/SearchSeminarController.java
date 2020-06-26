@@ -3,6 +3,7 @@ package red.semipro.app.searchseminar;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,10 +23,11 @@ import red.semipro.common.PageWrapper;
 import red.semipro.domain.enums.OpeningStatus;
 import red.semipro.domain.model.seminar.Seminar;
 import red.semipro.domain.repository.seminar.SearchSeminarCriteria;
+import red.semipro.domain.service.eventon.EventonSeminarService;
 import red.semipro.domain.service.seminar.SeminarDetailOutput;
+import red.semipro.domain.service.seminar.SeminarDetailService;
 import red.semipro.domain.service.seminar.SeminarSearchOutput;
 import red.semipro.domain.service.seminar.SeminarService;
-import red.semipro.domain.service.seminar.SeminarDetailService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
 
 /**
@@ -39,6 +41,10 @@ public class SearchSeminarController {
     private final SeminarService seminarService;
     private final SeminarDetailService seminarDetailService;
     private final SearchSeminarFormConverter seminarFormConverter;
+    private final EventonSeminarService eventonSeminarService;
+
+    @Value("${custom.google.api.key}")
+    private String GOOGLE_API_KEY;
 
     /**
      * セミナーを検索する
@@ -115,6 +121,17 @@ public class SearchSeminarController {
 
         model.addObject("output", output);
         model.setViewName("searchseminar/detail");
+        return model;
+    }
+
+    @GetMapping(value = "seminars/eventon/{eventId}/detail")
+    public ModelAndView eventonDetail(
+        @PathVariable("eventId") final Integer eventId,
+        ModelAndView model) {
+
+        model.addObject("seminar", eventonSeminarService.findOneWithDetails(eventId));
+        model.addObject("googleApiKey", GOOGLE_API_KEY);
+        model.setViewName("searchseminar/eventon/detail");
         return model;
     }
 }

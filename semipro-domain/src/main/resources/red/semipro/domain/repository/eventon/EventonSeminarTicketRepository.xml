@@ -5,6 +5,23 @@
 
 <mapper namespace="red.semipro.domain.repository.eventon.EventonSeminarTicketRepository">
 
+    <resultMap id="resultMap" type="red.semipro.domain.model.eventon.EventonSeminarTicket">
+        <result property="eventId" column="event_id"/>
+        <result column="name" property="name"/>
+        <result column="price" property="price"/>
+    </resultMap>
+
+    <select id="findAllByEventId" resultMap="resultMap">
+        SELECT
+            event_id
+            , name
+            , price
+        FROM
+        eventon_seminar_ticket
+        WHERE
+        event_id = #{eventId}
+    </select>
+
     <insert id="insert">
         INSERT INTO eventon_seminar_ticket (
         event_id,
