@@ -6,7 +6,9 @@ import com.stripe.model.Charge;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
@@ -49,7 +51,7 @@ public class EntryService {
     private final AccountRepository accountRepository;
     private final EmailSharedService emailSharedService;
 
-    public Seminar findSeminar(
+    public EntrySeminar findEntrySeminar(
         @Nonnull final Long seminarId,
         @Nonnull final OpeningStatus openingStatus,
         @Nonnull final Long seminarTicketId,
@@ -61,12 +63,28 @@ public class EntryService {
             throw new BusinessException(message);
         }
 
-        return seminarSharedService.findOneWithDetails(
+        final Seminar seminar = seminarSharedService.findOneWithDetails(
             SeminarCriteria.builder()
                 .id(seminarId)
                 .openingStatus(openingStatus)
                 .seminarTicketId(seminarTicketId)
                 .build());
+
+        return EntrySeminar.builder()
+            .seminar(seminar)
+            .selectedTicket(seminar.getTicketList().get(0))
+            .build();
+    }
+
+    public boolean validate(@Nullable final String stripeCustomerCardId,
+        @Nonnull final SeminarTicket ticket) {
+
+        // チケット料金が1円以上の場合、支払い方法は必須項目とする
+        if (!ticket.isFreeTicket()
+            && Objects.isNull(stripeCustomerCardId)) {
+            return false;
+        }
+        return true;
     }
 
     public void entry(@Nonnull final EntryInput input) throws StripeException {
@@ -77,20 +95,18 @@ public class EntryService {
                 .openingStatus(OpeningStatus.OPENING)
                 .build());
 
-        // check date
-        if (LocalDateTime.now().isAfter(seminar.getGoal().getEntryEndingAt())) {
+        final SeminarTicket ticket = seminar.getTicketList().stream()
+            .filter(t -> t.getId().equals(input.getTicketId()))
+            .findFirst()
+            .orElseThrow();
 
+        if (!validate(input.getStripeCustomerCardId(), ticket)) {
             ResultMessages message = ResultMessages.error().add(MessageId.E_SP_FW_0500);
             throw new BusinessException(message);
         }
 
-        // card id check
-        AccountStripeCustomer accountStripeCustomer =
-            accountStripeCustomerRepository.findOne(input.getEntryAccountId());
-        Card card =
-            cardRepository.retrieve(accountStripeCustomer.getStripeCustomerId(),
-                input.getStripeCustomerCardId());
-        if (Objects.isNull(card)) {
+        // check date
+        if (LocalDateTime.now().isAfter(seminar.getGoal().getEntryEndingAt())) {
 
             ResultMessages message = ResultMessages.error().add(MessageId.E_SP_FW_0500);
             throw new BusinessException(message);
@@ -104,11 +120,6 @@ public class EntryService {
         }
 
         //check capacity
-        SeminarTicket ticket = seminar.getTicketList().stream()
-            .filter(t -> t.getId().equals(input.getTicketId()))
-            .findFirst()
-            .orElseThrow();
-
         int entryCount = seminarEntryRepository
             .countBySeminarIdAndTicketId(input.getSeminarId(), input.getTicketId());
         if (entryCount > ticket.getCapacity()) {
@@ -117,12 +128,28 @@ public class EntryService {
             throw new BusinessException(message);
         }
 
-        // stripe charge
-        Charge charge = chargeRepository.charge(
-            accountStripeCustomer.getStripeCustomerId(),
-            card.getId(),
-            ticket.getPrice(),
-            ticket.getId());
+        Charge charge = null;
+        if (Objects.nonNull(input.getStripeCustomerCardId())) {
+
+            // card id check
+            AccountStripeCustomer accountStripeCustomer =
+                accountStripeCustomerRepository.findOne(input.getEntryAccountId());
+            Card card =
+                cardRepository.retrieve(accountStripeCustomer.getStripeCustomerId(),
+                    input.getStripeCustomerCardId());
+
+            if (Objects.isNull(card)) {
+                ResultMessages message = ResultMessages.error().add(MessageId.E_SP_FW_0500);
+                throw new BusinessException(message);
+            }
+
+            // stripe charge
+            charge = chargeRepository.charge(
+                accountStripeCustomer.getStripeCustomerId(),
+                card.getId(),
+                ticket.getPrice(),
+                ticket.getId());
+        }
 
         // entry
         seminarEntryRepository.insert(SeminarEntry.builder()
@@ -130,7 +157,7 @@ public class EntryService {
             .account(Account.builder().id(input.getEntryAccountId()).build())
             .ticket(SeminarTicket.builder().id(input.getTicketId()).build())
             .stripeCustomerCardId(input.getStripeCustomerCardId())
-            .stripeChargeId(charge.getId())
+            .stripeChargeId(Optional.ofNullable(charge).map(Charge::getId).orElse(null))
             .build());
 
         seminarEntrySummaryRepository.countUp(input.getSeminarId());

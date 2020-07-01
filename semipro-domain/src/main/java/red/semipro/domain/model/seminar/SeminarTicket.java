@@ -38,4 +38,8 @@ public class SeminarTicket implements Serializable {
     /** 定員 */
     @NotNull
     private Integer capacity;
+
+    public boolean isFreeTicket() {
+        return price == 0;
+    }
 }
