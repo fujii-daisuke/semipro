@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -91,13 +92,15 @@ public class EstablishService {
                 log.info("開催成立処理を行います");
 
                 // セミナー開催成立の場合
-                // 主催者の口座へ振込
-                Transfer transfer = transferRepository.transfer(
-                    seminar.getAccount().getStripeConnect().getStripeConnectAccountId(),
-                    entry.getTicket().getPrice(),
-                    entry.getId());
+                if (Objects.nonNull(entry.getStripeChargeId())) {
+                    // 主催者の口座へ振込
+                    Transfer transfer = transferRepository.transfer(
+                        seminar.getAccount().getStripeConnect().getStripeConnectAccountId(),
+                        entry.getTicket().getPrice(),
+                        entry.getId());
 
-                seminarEntryRepository.updateStripeTransferId(entry.getId(), transfer.getId());
+                    seminarEntryRepository.updateStripeTransferId(entry.getId(), transfer.getId());
+                }
 
                 //応募者へセミナー成立メール送信
                 emailSharedService.sendMail(EmailInput.builder()
@@ -111,10 +114,12 @@ public class EstablishService {
                 log.info("開催非成立処理を行います");
 
                 // セミナー開催非成立の場合
-                // 応募者へキャッシュバック
-                Refund refund = refundRepository.refund(entry.getStripeChargeId());
+                if (Objects.nonNull(entry.getStripeChargeId())) {
+                    // 応募者へキャッシュバック
+                    Refund refund = refundRepository.refund(entry.getStripeChargeId());
 
-                seminarEntryRepository.updateStripeRefundId(entry.getId(), refund.getId());
+                    seminarEntryRepository.updateStripeRefundId(entry.getId(), refund.getId());
+                }
 
                 //応募者へセミナー非成立メール送信
                 emailSharedService.sendMail(EmailInput.builder()

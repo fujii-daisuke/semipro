@@ -203,11 +203,11 @@
         , summary = #{summary}
         , contents = #{contents}
         , image_path = #{imagePath}
-        , started_at = #{startingAt}
-        , ended_at = #{endingAt}
-        , opened_at = #{openingAt}
-        , entry_started_at = #{entryStartingAt}
-        , entry_ended_at = #{entryEndingAt}
+        , started_at = #{startedAt}
+        , ended_at = #{endedAt}
+        , opened_at = #{openedAt}
+        , entry_started_at = #{entryStartedAt}
+        , entry_ended_at = #{entryEndedAt}
         , cancel_at = #{cancelAt}
         , capacity = #{capacity}
         , event_url = #{eventUrl}

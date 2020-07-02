@@ -9,7 +9,7 @@
 </head>
 <body>
 <main class="uk-margin" layout:fragment="content">
-    <div class="uk-container">
+    <div class="uk-container" th:object="${entrySeminar}">
         <div uk-grid>
             <div class="uk-width-3-5">
                 <h4>申し込まれるチケット</h4>
@@ -22,36 +22,39 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="ticket: ${seminar.ticketList}">
-                        <td th:text="${ticket.name}">ticket name</td>
-                        <td><span th:text="${ticket.price}">5000</span>円</td>
-                        <td><span th:text="${ticket.capacity}">10</span>人</td>
+                    <tr>
+                        <td th:text="${entrySeminar.selectedTicket.name}">ticket name</td>
+                        <td><span th:text="${entrySeminar.selectedTicket.price}">5000</span>円</td>
+                        <td><span th:text="${entrySeminar.selectedTicket.capacity}">10</span>人</td>
                     </tr>
                     </tbody>
                 </table>
-                <h4>支払い方法</h4>
-                <form th:action="@{/seminars/{seminarId}/entry/{ticketId}/complete(seminarId=${seminar.id}, ticketId=${seminar.ticketList.get(0).id})}"
+                <h4 th:unless="*{selectedTicket.freeTicket}">支払い方法</h4>
+                <form th:action="@{/seminars/{seminarId}/entry/{ticketId}/complete(seminarId=${entrySeminar.seminar.id}, ticketId=${entrySeminar.selectedTicket.id})}"
                       th:object="${entrySeminarForm}"
                       method="post">
-                    <input type="hidden" name="selectedStripeCustomerCardId" th:value="${selectedCard.id}">
-                    <table class="uk-table uk-table-middle uk-table-divider">
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th class="uk-width-small">カード種別</th>
-                            <th class="uk-width-small">有効期限</th>
-                            <th class="uk-width-auto">カード番号</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><input type="hidden" th:field="${selectedCard.id}"></td>
-                            <td><span th:text="${selectedCard.brand}">visa</span></td>
-                            <td><span th:text="${selectedCard.expMonth}">10</span>月/<span th:text="${selectedCard.expYear}">2020</span>年</td>
-                            <td><span th:text="${'************' + selectedCard.last4}">************4343</span></td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <th:block th:if="${selectedCard != null}">
+                        <input type="hidden" name="selectedStripeCustomerCardId"
+                               th:value="${selectedCard.id}">
+                        <table class="uk-table uk-table-middle uk-table-divider">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th class="uk-width-small">カード種別</th>
+                                <th class="uk-width-small">有効期限</th>
+                                <th class="uk-width-auto">カード番号</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><input type="hidden" th:field="${selectedCard.id}"></td>
+                                <td><span th:text="${selectedCard.brand}">visa</span></td>
+                                <td><span th:text="${selectedCard.expMonth}">10</span>月/<span th:text="${selectedCard.expYear}">2020</span>年</td>
+                                <td><span th:text="${'************' + selectedCard.last4}">************4343</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </th:block>
                     <p class="uk-text-center uk-margin uk-margin-medium-top">
                         <button type="button" class="uk-button uk-button-secondary uk-margin-right"
                                 th:onclick="|location.href='@{/seminars/__${seminar.id}__/entry/__${seminar.ticketList.get(0).id}__}'|">戻 る</button>
@@ -61,29 +64,29 @@
             </div>
             <div class="uk-width-2-5">
                 <div class="uk-card uk-card-default uk-card-body">
-                    <p><img th:src="${seminar.mainImageUrl}"></p>
+                    <p><img th:src="*{seminar.mainImageUrl}"></p>
                     <div class="uk-margin-medium-bottom">
                         <div class="uk-text-small">現在の参加者数</div>
                         <div class="uk-heading-small uk-text-bold uk-margin-small">
-                            <span th:text="${seminar.entrySummary.entryCount}">10</span>
+                            <span th:text="*{seminar.entrySummary.entryCount}">10</span>
                             <span>人</span>
                         </div>
-                        <div>最低開催人数は<span th:text="${seminar.goal.minimumNumber}">20</span>人</div>
+                        <div>最低開催人数は<span th:text="*{seminar.goal.minimumNumber}">20</span>人</div>
                     </div>
                     <div class="uk-text-small">募集終了まで残り</div>
                     <div class="uk-heading-small uk-text-bold uk-margin-small">
-                        <span th:text="${seminar.goal.entryRemainingDays}">10</span>
+                        <span th:text="*{seminar.goal.entryRemainingDays}">10</span>
                         <span>日</span>
                     </div>
                 </div>
                 <div class="uk-margin-medium">
                     <div class="uk-tile uk-tile-muted uk-padding-small">
-                        <p th:if="${seminar.goal.successCondition.isAllIn()}">
+                        <p th:if="*{seminar.goal.successCondition.isAllIn()}">
                             このセミナーは、All-In方式です。<br/>
-                            最低開催人数に関わらず、<span th:text="${seminar.goal.formattedEntryEndingAt()}">2020/03/01 23:59:59</span>
+                            最低開催人数に関わらず、<span th:text="*{seminar.goal.formattedEntryEndingAt()}">2020/03/01 23:59:59</span>
                             までに集まった金額がファンディングされます。
                         </p>
-                        <p th:if="${seminar.goal.successCondition.isAllOrNothing()}">
+                        <p th:if="*{seminar.goal.successCondition.isAllOrNothing()}">
                             このセミナーは、All-or-Nothing方式です。<br/>
                             最低開催人数を達成した場合にのみ、2020/02/28 23:59:59までに集まった金額がファンディングされます。
                         </p>

@@ -11,6 +11,9 @@
 </head>
 <body>
 <main class="uk-margin" layout:fragment="content">
+  <div class="uk-alert-danger" th:if="${output.seminar.goal.entryRemainingDays < 0}" uk-alert>
+    <p>このセミナーは終了しました。</p>
+  </div>
   <div class="uk-container" th:object="${output.seminar}">
     <div class="uk-margin uk-text-center">
       <h1 class="uk-heading-small" th:text="*{overview.title}">title</h1>

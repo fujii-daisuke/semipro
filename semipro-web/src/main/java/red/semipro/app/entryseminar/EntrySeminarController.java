@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import red.semipro.domain.enums.OpeningStatus;
-import red.semipro.domain.stripe.repository.customercard.CustomerCard;
 import red.semipro.domain.service.entry.EntryInput;
+import red.semipro.domain.service.entry.EntrySeminar;
 import red.semipro.domain.service.entry.EntryService;
 import red.semipro.domain.service.userdetails.AccountUserDetails;
+import red.semipro.domain.stripe.repository.customercard.CustomerCard;
 
 /**
  * セミナー予約 - controller
@@ -29,7 +30,6 @@ public class EntrySeminarController {
 
     private final EntrySeminarHelper entrySeminarHelper;
     private final EntryService entryService;
-
 
     /**
      * セミナー申し込みクレジットカード情報入力画面を表示します
@@ -50,9 +50,9 @@ public class EntrySeminarController {
         List<CustomerCard> customerCards = entrySeminarHelper
             .findStripeCustomerCardList(accountUserDetails.getAccount().getId());
 
-        model.addObject("seminar",
+        model.addObject("entrySeminar",
             entryService
-                .findSeminar(
+                .findEntrySeminar(
                     seminarId, OpeningStatus.OPENING, ticketId,
                     accountUserDetails.getAccount().getId()));
 
@@ -77,11 +77,14 @@ public class EntrySeminarController {
         List<CustomerCard> customerCards = entrySeminarHelper
             .findStripeCustomerCardList(accountUserDetails.getAccount().getId());
 
-        model.addObject("seminar",
-            entryService
-                .findSeminar(
-                    seminarId, OpeningStatus.OPENING, ticketId,
-                    accountUserDetails.getAccount().getId()));
+        final EntrySeminar entrySeminar = entryService.findEntrySeminar(seminarId,
+            OpeningStatus.OPENING,
+            ticketId,
+            accountUserDetails.getAccount().getId());
+
+        model.addObject("entrySeminar", entrySeminar);
+
+        result = entrySeminarHelper.validate(form, entrySeminar.getSelectedTicket(), result);
 
         if (result.hasErrors()) {
             model.addObject("customerCards", customerCards);
@@ -93,7 +96,7 @@ public class EntrySeminarController {
             customerCards.stream()
                 .filter(c -> c.getId().equals(form.getSelectedStripeCustomerCardId()))
                 .findFirst()
-                .orElseThrow());
+                .orElse(null));
         model.setViewName("entryseminar/confirm");
         return model;
     }
@@ -106,19 +109,6 @@ public class EntrySeminarController {
         @ModelAttribute("entrySeminarForm") @Validated EntrySeminarForm form,
         BindingResult result,
         ModelAndView model) throws StripeException {
-
-        model.addObject("seminar",
-            entryService
-                .findSeminar(
-                    seminarId, OpeningStatus.OPENING, ticketId,
-                    accountUserDetails.getAccount().getId()));
-
-        if (result.hasErrors()) {
-            model.addObject("customerCards", entrySeminarHelper
-                .findStripeCustomerCardList(accountUserDetails.getAccount().getId()));
-            model.setViewName("entryseminar/entryForm");
-            return model;
-        }
 
         entryService.entry(EntryInput.builder()
             .seminarId(seminarId)
