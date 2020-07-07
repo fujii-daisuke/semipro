@@ -22,7 +22,7 @@ public class Ticket implements Serializable {
     private String name;
 
     @NotNull
-    @Min(value = 0)
+    @TicketPrice
     private Long price;
 
     @NotNull
